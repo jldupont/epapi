@@ -160,7 +160,7 @@ PktHandler::rx(Pkt **p) {
 		return 1;
 	}
 
-	unsigned char *buf = (*p)->getBuf();
+	unsigned char (*buf)[] = (unsigned char (*)[])(*p)->getBuf();
 	int l = ((*buf)[0] << 8) | (*buf)[1];
 
 	// the packet length gave us
