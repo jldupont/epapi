@@ -13,11 +13,11 @@ d = env.Dictionary()
 #no difference at this point
 if d.get('_DEBUG', False):
 	#DEBUG
-	libs=['ei',]
+	libs=['ei','epapi_debug']
 	pr = env.Program('decho', Glob("src/*.cc"), LIBS=libs )	
 else:
 	#RELEASE
-	libs=['ei',]
+	libs=['ei','epapi']
 	pr = env.Program('echo', Glob("src/*.cc"), LIBS=libs )
 	
 Default(pr)

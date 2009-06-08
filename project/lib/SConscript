@@ -25,3 +25,6 @@ else:
 Default(pr)
 	
 env.Alias('install', '/usr/lib')
+
+env.Install('/usr/include', '#lib/include/epapi.h')
+env.Alias('installh', '/usr/include')
