@@ -169,9 +169,9 @@ MsgHandler::registerType(	msg_type type,
 							msg_type_text ttype,
 							const char *signature) {
 
-	 tmap.insert( PairTypeMap(     type, signature) );
-	ttmap.insert( PairTypeTextMap( type, ttype) );
-	tsmap.insert( PairTextSigMap(  type, signature));
+	 tmap.insert( PairTypeMap(     type,  signature) );
+	ttmap.insert( PairTypeTextMap( type,  ttype) );
+	tsmap.insert( PairTextSigMap(  ttype, signature));
 
 }//
 
@@ -483,19 +483,19 @@ MsgHandler::rx(Msg **m) {
 		switch(sig[i]) {
 		case 's':
 		case 'S':
-			m->setParam(i, 's', string);
+			(*m)->setParam(i, 's', string);
 			break;
 		case 'a':
 		case 'A':
-			m->setParam(i,'a', atom);
+			(*m)->setParam(i,'a', atom);
 			break;
 		case 'd':
 		case 'D':
-			m->setParam(i,'d', d);
+			(*m)->setParam(i,'d', d);
 			break;
 		case 'l':
 		case 'L':
-			m->setParam(i,'l', lint);
+			(*m)->setParam(i,'l', lint);
 			break;
 		}//switch
 
