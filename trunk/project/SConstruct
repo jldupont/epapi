@@ -26,6 +26,7 @@ Help("""\
 includes = ['#lib/include',]
 
 list_modules = [	'#lib',
+					'#test/echo',
 				]
 
 
