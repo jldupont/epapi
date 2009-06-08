@@ -8,7 +8,7 @@
 #include "epapi.h"
 
 const char *
-epapiErr::errors[] = {
+epapiBase::errors[] = {
 	"OK",            //EEPAPI_OK
 	"???",           //EEPAPI_ERR
 	"check errno",   //EEPAPI_ERRNO
@@ -25,24 +25,19 @@ epapiErr::errors[] = {
 
 };
 
-static const char *
-epapiErr::strerror(epapiBase *o) {
+const char *
+epapiBase::strerror(void) {
 
-	if (NULL==o)
-		return NULL;
-
-	if (num>(sizeof(epapiErr::errors)/sizeof(int)))
-		return epapiErr::errors[1];
-
-	int num=o->last_error;
+	if (last_error>(sizeof(errors)/sizeof(int)))
+		return errors[1];
 
 	//if we need to look-up system errno
-	if (EEPAPI_ERRNO==num) {
+	if (EEPAPI_ERRNO==last_error) {
 
-		return strerror(num);
+		return std::strerror(last_error);
 	}
 
-	return epapiErr::errors[num];
+	return errors[last_error];
 }//
 
 

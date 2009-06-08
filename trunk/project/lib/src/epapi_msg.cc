@@ -17,6 +17,7 @@
 
 
 Msg::Msg(void) {
+	last_error=0;
 	type = 0;
 	size = 0;
 
@@ -153,18 +154,19 @@ Msg::setParam(int index, char format, ...) {
 // MsgHandler class
 // =========================================
 MsgHandler::MsgHandler(PktHandler *_ph) {
+	last_error=0;
 	ph  = _ph;
 }//
 
 MsgHandler::~MsgHandler() {
 	if (NULL!=ph) {
-		delete *ph;
+		delete ph;
 	}
 }//
 
 	void
 MsgHandler::registerType(	msg_type type,
-							msg_type_text *ttype,
+							msg_type_text ttype,
 							const char *signature) {
 
 	map.insert( PairTypeMap(type, signature) );
@@ -188,11 +190,11 @@ MsgHandler::getSignature(msg_type type) {
 }//
 
 	const char *
-MsgHandler::getSignatureFromTypeText(msg_type_text *ttype) {
+MsgHandler::getSignatureFromTypeText(msg_type_text ttype) {
 
 	TypeTextMap::iterator it;
 
-	it = tmap.find(type);
+	it = tmap.find(ttype);
 	if (it!=tmap.end()) {
 
 		return it->second;
@@ -224,7 +226,7 @@ MsgHandler::send(msg_type type, ...) {
 	Pkt *p = new Pkt();
 	ei_x_buff *b = p->getTxBuf();
 	if (NULL==b) {
-		delete *p;
+		delete p;
 		last_error = EEPAPI_MALLOC;
 		return 1;
 	}
@@ -234,14 +236,14 @@ MsgHandler::send(msg_type type, ...) {
 
 	if (len<=0) {
 		last_error = EEPAPI_BADFORMAT;
-		delete *p;
+		delete p;
 		ei_x_free(b);
 		return 1;
 	}
 
 	 if (ei_x_new_with_version(b)) {
 		 last_error = EEPAPI_NEWEIBUF;
-		 delete *p;
+		 delete p;
 		 ei_x_free(b);
 		 return 1;
 	 }
@@ -249,7 +251,7 @@ MsgHandler::send(msg_type type, ...) {
 
 	 if (ei_x_encode_tuple_header(b, len)) {
 		 last_error = EEPAPI_EIENCODE;
-		 delete *p;
+		 delete p;
 		 ei_x_free(b);
 		 return 1; //<===================
 	 }
@@ -258,7 +260,7 @@ MsgHandler::send(msg_type type, ...) {
 	int result=0; //optimistic
 	va_list args;
 
-	va_start(args, format);
+	va_start(args, type);
 
 	for(;index<len;index++) {
 		switch(sig[index]) {
@@ -277,14 +279,14 @@ MsgHandler::send(msg_type type, ...) {
 			break;
 		case 'd':
 		case 'D':
-			double *d;
-			d = va_arg(args, double *);
+			double d;
+			d = va_arg(args, double);
 			result = ei_x_encode_double(b, d);
 			break;
 		case 'l':
 		case 'L':
-			long lint;
-			lint = va_arg(args, long);
+			long int lint;
+			lint = va_arg(args, long int);
 			result = ei_x_encode_long(b, lint);
 			break;
 		default:
@@ -313,7 +315,7 @@ MsgHandler::send(msg_type type, ...) {
 		}
 	}
 
-	delete *p;
+	delete p;
 	ei_x_free( b );
 
 	return result;
@@ -327,7 +329,7 @@ MsgHandler::rx(Msg **m) {
 	int r = ph->rx(&p);
 	if (r) {
 		last_error = ph->last_error;
-		delete *p;
+		delete p;
 		return 1;
 	}
 
@@ -335,7 +337,6 @@ MsgHandler::rx(Msg **m) {
 	char stype[MAX_TYPE_LENGTH];
 	int version;
 	int arity;
-	msg_type type;
 
 	int index;
 	char *b = (char *) p->getBuf();
@@ -343,36 +344,36 @@ MsgHandler::rx(Msg **m) {
 	//we count on the first element of the
 	//received tuple to contain an ATOM
 	//which corresponds to the message type
-	if (ei_decode_version((const char *) b, &index, version)) {
-		delete *p;
+	if (ei_decode_version((const char *) b, &index, &version)) {
+		delete p;
 		last_error=EEPAPI_EIDECODE;
 		return 1;
 	}
-	if (ei_decode_tuple_header((const char *)b, &index, arity)) {
-		delete *p;
+	if (ei_decode_tuple_header((const char *)b, &index, &arity)) {
+		delete p;
 		last_error=EEPAPI_EIDECODE;
 		return 1;
 	}
 
-	if (ei_decode_atom((const char *)b, &index, &stype)) {
-		delete *p;
+	if (ei_decode_atom((const char *)b, &index, stype)) {
+		delete p;
 		last_error=EEPAPI_EIDECODE;
 		return 1;
 	}
 
 	if (arity>Msg::MAX_PARAMS) {
 		last_error = EEPAPI_TOOBIG;
-		delete *p;
+		delete p;
 		return 1;
 	}
 
-	Msg m = new Msg();
+	*m = new Msg();
 
 	//find a corresponding msg_type
 	//so that we can decode the message
-	const char *sig = getSignatureFromTypeText(stype);
+	const char *sig = getSignatureFromTypeText((const char *) stype);
 	if (NULL==sig) {
-		delete *p;
+		delete p;
 		//last_error already set
 		return 1;
 	}
@@ -380,11 +381,15 @@ MsgHandler::rx(Msg **m) {
 	int len = strlen( sig );
 	int result;
 
+	char *string, *atom;
+	double d;
+	long lint;
+
 	for (int i=0;i<len;i++) {
 		switch(sig[i]) {
 		case 's':
 		case 'S':
-			char *string = (char *)malloc(MAX_STRING_SIZE);
+			string = (char *)malloc(MAX_STRING_SIZE);
 			if (NULL==string) {
 				last_error = EEPAPI_MALLOC;
 				result = 1;
@@ -394,7 +399,7 @@ MsgHandler::rx(Msg **m) {
 			break;
 		case 'a':
 		case 'A':
-			char *atom = (char *)malloc(MAX_ATOM_SIZE);
+			atom = (char *)malloc(MAX_ATOM_SIZE);
 			if (NULL==atom) {
 				last_error = EEPAPI_MALLOC;
 				result=1;
@@ -404,12 +409,10 @@ MsgHandler::rx(Msg **m) {
 			break;
 		case 'd':
 		case 'D':
-			double d;
 			result = ei_decode_double(b, &index, &d);
 			break;
 		case 'l':
 		case 'L':
-			long lint;
 			result = ei_decode_long(b, &index, &lint);
 			break;
 		default:
@@ -426,7 +429,7 @@ MsgHandler::rx(Msg **m) {
 		switch(sig[i]) {
 		case 's':
 		case 'S':
-			m.
+
 			break;
 		case 'a':
 		case 'A':

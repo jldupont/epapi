@@ -132,7 +132,7 @@
 		 * @param signature (combination of [A|L|S])
 		 */
 		void registerType(	msg_type type,
-							msg_type_text *ttype,
+							msg_type_text ttype,
 							const char *signature);
 
 		/**
@@ -151,7 +151,7 @@
 		 *
 		 * Used during message reception/decoding.
 		 */
-		const char *getSignatureFromTypeText(msg_type_text *ttype);
+		const char *getSignatureFromTypeText(msg_type_text ttype);
 		/**
 		 * Generic send message
 		 *
