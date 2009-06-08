@@ -13,15 +13,15 @@ d = env.Dictionary()
 #no difference at this point
 if d.get('_DEBUG', False):
 	#DEBUG
-	libs=['ei', 'phidget21']
-	pr = env.SharedLibrary('pem_drv_common_debug', Glob("src/*.cc"), LIBS=libs )	
-	env.Install('/usr/local/lib', '#drivers/common/debug/libpem_drv_common_debug.so')
+	libs=['ei',]
+	pr = env.SharedLibrary('epapi_debug', Glob("src/*.cc"), LIBS=libs )	
+	env.Install('/usr/lib', '#lib/debug/libepapi_debug.so')
 else:
 	#RELEASE
-	libs=['ei', 'phidget21']
-	pr = env.SharedLibrary('pem_drv_common', Glob("src/*.cc"), LIBS=libs )
-	env.Install('/usr/local/lib', '#drivers/common/release/libpem_drv_common.so')
+	libs=['ei',]
+	pr = env.SharedLibrary('epapi', Glob("src/*.cc"), LIBS=libs )
+	env.Install('/usr/lib', '#lib/release/libepapi.so')
 	
 Default(pr)
 	
-env.Alias('installlib', '/usr/local/lib')
+env.Alias('install', '/usr/lib')

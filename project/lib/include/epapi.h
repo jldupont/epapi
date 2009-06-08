@@ -56,25 +56,20 @@ void doLog(int priority, const char *message, ...);
 
 	class epapiBase {
 
-	protected:
-		int last_error=0;
-
-	};
-
-	class epapiErr {
+	public:
+		int last_error;
 
 	public:
 		static const char *errors[];
 
-	public:
 		/**
 		 * Returns a human readable string
 		 * corresponding to the last error
 		 * set in the supplied object
 		 */
-		static const char *strerror(epapiBase *o);
-	};
+		const char *strerror(void);
 
+	};
 
 	#include "epapi_pkt.h"
 	#include "epapi_msg.h"

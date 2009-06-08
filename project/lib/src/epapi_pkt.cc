@@ -15,6 +15,7 @@
  * Creates RX packet type
  */
 Pkt::Pkt() {
+	last_error=0;
 	sz=0;
 	buf=NULL;
 }//
@@ -33,7 +34,7 @@ ei_x_buff *
 Pkt::getTxBuf(void) {
 
 	if (NULL==tbuf) {
-		tbuf = (ei_x_buf *) malloc(sizeof(ei_x_buff));
+		tbuf = (ei_x_buff *) malloc(sizeof(ei_x_buff));
 	}
 
 	if (NULL==tbuf) {
@@ -48,10 +49,10 @@ unsigned char *
 Pkt::getBuf(void) {
 
 	if (NULL!=buf)
-		return buf;
+		return (unsigned char *)buf;
 
 	if (0==sz) {
-		buf = (unsigned char *) malloc(Pkt::DSZ);
+		buf = (char *) malloc(Pkt::DSZ);
 	}
 	if (NULL!=buf) {
 		sz = Pkt::DSZ;
@@ -59,14 +60,14 @@ Pkt::getBuf(void) {
 		last_error = EEPAPI_MALLOC;
 	}
 
-	return buf;
+	return (unsigned char *)buf;
 }//
 
 unsigned char *
 Pkt::getBuf(int size) {
 
 	if (0==sz) {
-		buf = (unsigned char *) malloc(size);
+		buf = (char *) malloc(size);
 		if (NULL!=buf)
 			sz=size;
 		else {
@@ -82,12 +83,12 @@ Pkt::getBuf(int size) {
 		tmp = (unsigned char *) realloc(buf, size);
 		if (NULL!=tmp) {
 			sz = size;
-			buf=tmp;
+			buf=(char *)tmp;
 		} else {
 			last_error = EEPAPI_REALLOC;
 		}
 	}
-	return buf;
+	return (unsigned char *)buf;
 }//
 
 void
@@ -105,11 +106,13 @@ Pkt::getLength(void) {
 // =========================================
 
 PktHandler::PktHandler() {
+	last_error=0;
 	ifd = 0; //usually stdin
 	ofd = 1; //usually stdout
 }//
 
 PktHandler::PktHandler(int _ifd, int _ofd) {
+	last_error=0;
 	ifd = _ifd;
 	ofd = _ofd;
 }
@@ -151,7 +154,7 @@ PktHandler::rx(Pkt **p) {
 	*p = new Pkt();
 
 	//read length field first
-	int result=PktHandler::rx_exact(p, sz);
+	int result=PktHandler::rx_exact(p, 2);
 	if (result<0) {
 		last_error = EEPAPI_ERRNO; //check errno
 		return 1;

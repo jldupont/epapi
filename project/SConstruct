@@ -4,13 +4,13 @@ scons build file
 @author: Jean-Lou Dupont
 """
 import os
-import shutil
+#import shutil
 
-try:
-	from pyjld.os import recursive_chmod, safe_copytree
-except:
-	print "*** Missing package: use easy_install pyjld.os"
-	exit(1)
+#try:
+#	from pyjld.os import recursive_chmod, safe_copytree
+#except:
+#	print "*** Missing package: use easy_install pyjld.os"
+#	exit(1)
 
 
 Help("""\
@@ -23,11 +23,9 @@ Help("""\
 
 # LIST MODULES
 # ============
-includes = ['#drivers/common/include',]
+includes = ['#lib/include',]
 
-list_modules = [	'#drivers/common',
-					'#drivers/drv_mng',
-					'#drivers/drv_ifk',
+list_modules = [	'#lib',
 				]
 
 
