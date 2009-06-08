@@ -169,8 +169,9 @@ MsgHandler::registerType(	msg_type type,
 							msg_type_text ttype,
 							const char *signature) {
 
-	map.insert( PairTypeMap(type, signature) );
-	tmap.insert( PairTypeTextMap(ttype, signature) );
+	 tmap.insert( PairTypeMap(     type, signature) );
+	ttmap.insert( PairTypeTextMap( type, ttype) );
+	tsmap.insert( PairTextSigMap(  type, signature));
 
 }//
 
@@ -179,8 +180,8 @@ MsgHandler::getSignature(msg_type type) {
 
 	TypeMap::iterator it;
 
-	it = map.find(type);
-	if (it!=map.end()) {
+	it = tmap.find(type);
+	if (it!=tmap.end()) {
 
 		return it->second;
 	}
@@ -192,10 +193,25 @@ MsgHandler::getSignature(msg_type type) {
 	const char *
 MsgHandler::getSignatureFromTypeText(msg_type_text ttype) {
 
+	TextSigMap::iterator it;
+
+	it = tsmap.find(ttype);
+	if (it!=tsmap.end()) {
+
+		return it->second;
+	}
+
+	last_error = EEPAPI_NOTFOUND;
+	return NULL;
+}//
+
+	const char *
+MsgHandler::getTextFromType(msg_type type) {
+
 	TypeTextMap::iterator it;
 
-	it = tmap.find(ttype);
-	if (it!=tmap.end()) {
+	it = ttmap.find(type);
+	if (it!=ttmap.end()) {
 
 		return it->second;
 	}
@@ -219,8 +235,10 @@ MsgHandler::send(msg_type type, ...) {
 
 	//retrieve signature
 	const char *sig = getSignature(type);
-	if (NULL==sig)
+	if (NULL==sig) {
+		last_error=EEPAPI_BADTYPE;
 		return 1;
+	}
 
 	//get ourselves a Tx packet
 	Pkt *p = new Pkt();
@@ -248,7 +266,28 @@ MsgHandler::send(msg_type type, ...) {
 		 return 1;
 	 }
 
+	 // {msg_type, {Msg}} , arity = 2
+	 if (ei_x_encode_tuple_header(b, 2)) {
+		 last_error = EEPAPI_EIENCODE;
+		 delete p;
+		 ei_x_free(b);
+		 return 1; //<===================
+	 }
 
+	 // send 'msg_type'
+	 const char *ttext = getTextFromType(type);
+	 if (NULL==ttext) {
+		 delete p;
+		 last_error=EEPAPI_BADTYPE;
+		 return 1;
+	 }
+	if( ei_x_encode_atom(b, ttext)) {
+		delete p;
+		last_error = EEPAPI_EIENCODE;
+		return 1;
+	}
+
+	 // open tuple for {msg}}
 	 if (ei_x_encode_tuple_header(b, len)) {
 		 last_error = EEPAPI_EIENCODE;
 		 delete p;
@@ -349,13 +388,28 @@ MsgHandler::rx(Msg **m) {
 		last_error=EEPAPI_EIDECODE;
 		return 1;
 	}
+	// arity should be 2 - {msg_type,{Msg}}
 	if (ei_decode_tuple_header((const char *)b, &index, &arity)) {
 		delete p;
 		last_error=EEPAPI_EIDECODE;
 		return 1;
 	}
+	if (arity!=2) {
+		last_error=EEPAPI_ARITY;
+		delete p;
+		return 1;
+	}
 
+	//msg_type
 	if (ei_decode_atom((const char *)b, &index, stype)) {
+		delete p;
+		last_error=EEPAPI_EIDECODE;
+		return 1;
+	}
+
+	// {msg_type, {Msg}}
+	//            ^
+	if (ei_decode_tuple_header((const char *)b, &index, &arity)) {
 		delete p;
 		last_error=EEPAPI_EIDECODE;
 		return 1;
@@ -429,25 +483,27 @@ MsgHandler::rx(Msg **m) {
 		switch(sig[i]) {
 		case 's':
 		case 'S':
-
+			m->setParam(i, 's', string);
 			break;
 		case 'a':
 		case 'A':
+			m->setParam(i,'a', atom);
 			break;
 		case 'd':
 		case 'D':
+			m->setParam(i,'d', d);
 			break;
 		case 'l':
 		case 'L':
+			m->setParam(i,'l', lint);
 			break;
 		}//switch
 
-
-
 	}//for
 
+	delete p;
 
-	return 0;
+	return result;
 }//
 
 

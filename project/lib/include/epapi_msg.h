@@ -89,12 +89,12 @@
 
 
 	typedef std::pair<msg_type, const char *> PairTypeMap;
-	typedef std::pair<msg_type_text, const char *> PairTypeTextMap;
+	typedef std::pair<msg_type_text, const char *> PairTextSigMap;
+	typedef std::pair<msg_type, const char *> PairTypeTextMap;
 
 	typedef std::map<msg_type, const char*> TypeMap;
-	typedef std::map<msg_type_text, const char*> TypeTextMap;
-
-
+	typedef std::map<msg_type_text, const char*> TextSigMap;
+	typedef std::map<msg_type, const char*> TypeTextMap;
 
 
 	/**
@@ -108,17 +108,15 @@
 		 * field can be.
 		 */
 		static const int MAX_TYPE_LENGTH = 32;
-
 		static const int MAX_ATOM_SIZE   = 32;
-
 		static const int MAX_STRING_SIZE = 4000;
-
 
 	protected:
 
 		PktHandler *ph;
-		TypeMap map;
-		TypeTextMap tmap;
+		TypeMap     tmap;
+		TypeTextMap ttmap;
+		TextSigMap  tsmap;
 
 
 	public:
@@ -152,6 +150,12 @@
 		 * Used during message reception/decoding.
 		 */
 		const char *getSignatureFromTypeText(msg_type_text ttype);
+
+		/**
+		 * Returns the ATOM text from a msg_type
+		 */
+		const char *getTextFromType(msg_type type);
+
 		/**
 		 * Generic send message
 		 *

@@ -2,8 +2,13 @@
  * @file epapi.h
  *
  * @date   2009-06-06
- * @author Jean-Lou Dupont
+ * \author Jean-Lou Dupont
  *
+ * \mainpage Documentation for EPAPI - Erlang Port API library
+ *
+ * \section msg_struc Message Structure
+ *
+ *   {msg_type, {Msg}}
  *
  * \note Only packet header with length field=2 is supported.
  */
@@ -50,6 +55,8 @@ void doLog(int priority, const char *message, ...);
 		EEPAPI_EIENCODE,
 		EEPAPI_EIDECODE,
 		EEPAPI_TOOBIG,
+		EEPAPI_ARITY,
+		EEPAPI_BADTYPE,
 		//EEPAPI_,
 		//EEPAPI_
 	};
