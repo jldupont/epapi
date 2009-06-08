@@ -10,6 +10,13 @@
  *
  *   {msg_type, {Msg}}
  *
+ *
+ * \section usage Usage
+ *
+ * \code
+ *
+ * \endcode
+ *
  * \note Only packet header with length field=2 is supported.
  */
 

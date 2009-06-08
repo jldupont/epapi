@@ -66,7 +66,7 @@
 		 * Returns the parameter @ index
 		 *
 		 * @param index
-		 * @param **format [A|L|S]
+		 * @param *format [A|L|S]
 		 * @param **param  value
 		 */
 		int getParam(int index, char *format, ...);
