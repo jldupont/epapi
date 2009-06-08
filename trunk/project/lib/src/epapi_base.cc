@@ -22,6 +22,8 @@ epapiBase::errors[] = {
 	"ei encode",     //EEPAPI_EIENCODE
 	"ei decode",     //EEPAPI_EIDECODE
 	"too many elements", //EEPAPI_TOOBIG
+	"bad message arity", //EEPAPI_ARITY
+	"invalid type",      //EEPAPI_BADTYPE
 
 };
 
