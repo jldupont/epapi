@@ -33,7 +33,9 @@ where <em>msg_type</em> corresponds to an Erlang ATOM and <em>Message</em> corre
 Usage</a></h2>
 To send and receive messages, message <em>types</em> must be registered. This process is accomplished through the <a class="el" href="classMsgHandler.html#53974d86bc7b1716503ccbba1639a0e0">MsgHandler::registerType()</a> method.<h3><a class="anchor" name="rx">
 Receiving</a></h3>
-<div class="fragment"><pre class="fragment">                <a class="code" href="classPktHandler.html">PktHandler</a> *ph = <span class="keyword">new</span> <a class="code" href="classPktHandler.html">PktHandler</a>();
+<div class="fragment"><pre class="fragment"><span class="preprocessor">            #include &lt;<a class="code" href="epapi_8h.html">epapi.h</a>&gt;</span>
+
+                <a class="code" href="classPktHandler.html">PktHandler</a> *ph = <span class="keyword">new</span> <a class="code" href="classPktHandler.html">PktHandler</a>();
                 <a class="code" href="classMsgHandler.html">MsgHandler</a> *mh = <span class="keyword">new</span> <a class="code" href="classMsgHandler.html">MsgHandler</a>(ph);
 
                 <span class="comment">//Register a message type</span>
@@ -50,6 +52,11 @@ Receiving</a></h3>
                         printf(<span class="stringliteral">"ERROR, message: %s"</span>, mh-&gt;<a class="code" href="classepapiBase.html#08c061372f09f989a74aff2a4e2ebbd7">strerror</a>());
                         <span class="comment">// ...</span>
                 }
+                <span class="comment">//Consume message</span>
+                ...
+
+                <span class="comment">//Destroy message</span>
+                <span class="keyword">delete</span> m;
 </pre></div><h3><a class="anchor" name="tx">
 Transmitting</a></h3>
 <div class="fragment"><pre class="fragment">     <span class="keywordtype">int</span> counter;
@@ -125,7 +132,7 @@ loop(Port) -&gt;
 </pre></div><p>
 <dl class="note" compact><dt><b>Note:</b></dt><dd>Only packet header with length field=2 is supported. </dd></dl>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Tue Jun 9 12:34:15 2009 for EPAPI by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Tue Jun 9 15:34:01 2009 for EPAPI by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>
