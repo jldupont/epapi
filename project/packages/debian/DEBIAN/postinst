@@ -52,7 +52,7 @@ if command == 'configure':
 	ddst = '/usr/lib/lib%s_debug.so' % this_lib
 	dsrc = '/usr/lib/lib%s_debug-%s.so' % (this_lib, this_version)
 	
-	hdr  = '/usr/include/%s.h' % this_lib
+	hdrs = ['%s.h', '%s_msg.h', '%s_pkt.h'] 
 	
 	code = 0
 	try:
@@ -73,7 +73,10 @@ if command == 'configure':
 		os.chmod(dst,  0644)
 		os.chmod(dsrc, 0644)
 		os.chmod(ddst, 0644)
-		os.chmod(hdr,  0644)
+		
+		for hdr in hdrs:
+			path = "/usr/include/%s" % hdr
+			os.chmod(path % this_lib,  0644)
 		
 	except Exception,e:
 		print "Exception [%s]" % e
