@@ -143,7 +143,7 @@ PktHandler::rx_exact(Pkt **p, int len) {
 	int i, got=0;
 
 	do {
-		if ((i = read(ifd, buf+got, len-got)) < 0) {
+		if ((i = read(ifd, buf+got, len-got)) <= 0) {
 			return i;
 		}
 		got += i;
@@ -161,7 +161,7 @@ PktHandler::rx(Pkt **p) {
 
 	//read length field first
 	int result=PktHandler::rx_exact(p, 2);
-	if (result<0) {
+	if (result<=0) {
 		DBGLOG(LOG_ERR,"PktHandler::rx - ERROR reading length field in header");
 		last_error = EEPAPI_ERRNO; //check errno
 		return 1;
@@ -177,7 +177,7 @@ PktHandler::rx(Pkt **p) {
 	// to extract the right count
 	// of bytes from the pipe
 	result = PktHandler::rx_exact(p, l);
-	if (result<0) {
+	if (result<=0) {
 		last_error = EEPAPI_ERRNO;
 		return 1;
 	}
