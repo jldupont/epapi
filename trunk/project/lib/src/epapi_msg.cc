@@ -377,7 +377,7 @@ MsgHandler::rx(Msg **m) {
 	int version;
 	int arity;
 
-	int index;
+	int index=0;
 	char *b = (char *) p->getBuf();
 
 	//we count on the first element of the
@@ -433,6 +433,7 @@ MsgHandler::rx(Msg **m) {
 	//so that we can decode the message
 	const char *sig = getSignatureFromTypeText((const char *) stype);
 	if (NULL==sig) {
+		DBGLOG(LOG_ERR, "signature NOT FOUND, stype[%s]", stype);
 		delete p;
 		//last_error already set
 		return 1;
