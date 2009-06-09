@@ -220,6 +220,12 @@ PktHandler::tx(Pkt *p) {
 		return 1;
 	}
 
+	result = fflush(ofd);
+	if (0==result) {
+		last_error = EEPAPI_ERRNO;
+		return 1;
+	}
+
 	return 0;
 }//
 
