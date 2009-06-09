@@ -238,6 +238,8 @@ MsgHandler::getTextFromType(msg_type type) {
 	int
 MsgHandler::send(msg_type type, ...) {
 
+	DBGLOG(LOG_INFO, "MsgHandler::send - BEGIN, type[%i]", type);
+
 	//retrieve signature
 	const char *sig = getSignature(type);
 	if (NULL==sig) {
@@ -309,7 +311,7 @@ MsgHandler::send(msg_type type, ...) {
 		case 'S':
 			char *string;
 			string=va_arg(args, char *);
-			result= ei_x_encode_string(b, (const char *)string);
+			result= ei_x_encode_string(b, string);
 			break;
 		case 'a':
 		case 'A':
@@ -356,6 +358,8 @@ MsgHandler::send(msg_type type, ...) {
 	}
 
 	delete p;
+
+	DBGLOG(LOG_INFO, "MsgHandler::send - END, result[%i]", result);
 
 	return result;
 }//
@@ -489,6 +493,10 @@ MsgHandler::rx(Msg **m) {
 		}//switch
 
 		if (result) {
+			if (NULL!=atom)
+				free(atom);
+			if (NULL!=string)
+				free(string);
 			break;
 		}
 
@@ -515,6 +523,8 @@ MsgHandler::rx(Msg **m) {
 	}//for
 
 	delete p;
+
+	DBGLOG(LOG_INFO, "MsgHandler::rx - END, result[%i]", result);
 
 	return result;
 }//

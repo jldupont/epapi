@@ -6,6 +6,7 @@
  */
 
 #include <epapi.h>
+#include <sys/time.h>
 #include "logger.h"
 
 int main() {
@@ -16,14 +17,16 @@ int main() {
 	MsgHandler *mh = new MsgHandler(ph);
 
 	int result;
-	mh->registerType(1, "echo", "l");
+	mh->registerType(1, "echo", "l" );
+	mh->registerType(2, "pong", "l" );
 
 	Msg *m;
-	int myc = 0;
+	long int myc = 0;
 	while(1) {
 		result = mh->rx(&m);
 		if (result) {
 			doLog(LOG_ERR, "RECEIVE ERROR, [%s]", mh->strerror());
+			delete m;
 			break;
 		}
 		long int counter;
@@ -31,20 +34,24 @@ int main() {
 		result = m->getParam(0, &format, &counter);
 		if (result) {
 			doLog(LOG_ERR, "getParam, [%s]", m->strerror());
+			delete m;
 			break;
 		}
 		if (format!='l') {
 			doLog(LOG_ERR, "bad format");
+			delete m;
 			break;
 		}
 		doLog(LOG_INFO, "rx, counter[%li]", counter);
 		delete m;
 
-		result = mh->send(1, myc);
+
+		result = mh->send(2, myc);
 		if (result) {
 			doLog(LOG_ERR, "tx: error[%s]", mh->strerror());
 			break;
 		}
+		//usleep(250*1000);
 
 	}//while
 

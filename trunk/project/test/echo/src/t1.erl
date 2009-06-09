@@ -51,10 +51,12 @@ loop(Port) ->
 			exit(normal);
 		
 		{Port, {data, Data}} ->
-			io:format("Message raw[~p]", [Data]),
+			io:format("Message raw[~p]~n", [Data]),
 			Decoded = binary_to_term(Data),
-			io:format("Message! Decoded[~p]~n", [Decoded])
+			io:format("Message! Decoded[~p]~n", [Decoded]);
 					
+		Result ->
+			Result
     end,
 	loop(Port).
 
