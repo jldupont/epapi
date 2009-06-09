@@ -37,6 +37,8 @@
  *   \subsection rx Receiving
  *
 	  \code
+	    #include <epapi.h>
+
 	  	PktHandler *ph = new PktHandler();
 	 	MsgHandler *mh = new MsgHandler(ph);
 
@@ -54,6 +56,11 @@
 			printf("ERROR, message: %s", mh->strerror());
 			// ...
 		}
+		//Consume message
+		...
+
+		//Destroy message
+		delete m;
 	  \endcode
 
  *

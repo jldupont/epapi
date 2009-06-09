@@ -31,6 +31,9 @@ list_modules = [	'#lib',
 					'#test/echo',
 				]
 
+# HEADER files
+# ============
+headers = ['%s.h', '%s_msg.h', '%s_pkt.h']
 
 modules = []
 for module in list_modules:
@@ -98,10 +101,13 @@ if 'deb' in COMMAND_LINE_TARGETS:
 		print """scons: cloning debug library"""
 		shutil.copy('./lib/debug/lib%s_debug.so' % this_lib, './packages/debian/usr/lib/lib%s_debug-%s.so' % (this_lib,version) )
 		
-		print """scons: cloning header file & adjusting version"""
-		shutil.copy('./lib/include/%s.h' % this_lib, './packages/debian/usr/include/%s.h' % this_lib)
-		h_path = './packages/debian/usr/include/%s.h' % this_lib
-		replace_params(h_path, h_path, {'version':version} )
+		print """scons: cloning header file(s) & adjusting version"""
+		for hdr in headers:
+			frag =  hdr % this_lib
+			spath = "./lib/include/%s" % frag
+			dpath = "./packages/debian/usr/include/%s" % frag
+			shutil.copy(spath, dpath)
+			replace_params(dpath, dpath, {'version':version} )
 		
 		print """scons: removing directory"""
 		shutil.rmtree('/tmp/%s' % this_lib, ignore_errors=True)
