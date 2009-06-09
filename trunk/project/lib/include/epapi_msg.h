@@ -1,5 +1,5 @@
 /**
- * @file msg.h
+ * @file epapi_msg.h
  *
  * @date 2009-06-04
  * @author Jean-Lou Dupont
@@ -49,16 +49,27 @@
 		char  *strings[MAX_PARAMS];
 
 	public:
+		/**
+		 * Constructor
+		 */
 		Msg(void);
+
+		/**
+		 * Destructor
+		 */
 		~Msg();
 
 		/**
 		 * Returns the type of the message
+		 *
+		 * @return msg_type message type
 		 */
 		msg_type getType(void);
 
 		/**
 		 * Return the size of the parameter list
+		 *
+		 * @return size integer
 		 */
 		int getSize(void);
 
@@ -66,9 +77,11 @@
 		 * Returns the parameter @ index and
 		 * its "format" (single char)
 		 *
-		 * @param index
-		 * @param *format [A|L|S]
-		 * @param **param  value
+		 * @param index index of parameter, 0 based
+		 * @param *format [a|s|l|d]
+		 *
+		 * @return 0 SUCCESS
+		 * @return 1 FAILURE
 		 */
 		int getParam(int index, char *format, ...);
 
@@ -81,6 +94,12 @@
 		 * method is used on a parameter more
 		 * than once, the 'size' count will
 		 * be incorrect.
+		 *
+		 * @param index parameter index
+		 * @param format parameter format [a|s|l|d]
+		 *
+		 * @return 0 SUCCESS
+		 * @return 1 FAILURE
 		 */
 		int setParam(int index, char format, ...);
 
@@ -97,7 +116,9 @@
 
 
 	/**
-	 * Handler for messages to/from Erlang
+	 * Message Handler
+	 *
+	 * This class serves as the main API for clients.
 	 */
 	class MsgHandler: public epapiBase {
 
@@ -107,7 +128,15 @@
 		 * field can be.
 		 */
 		static const int MAX_TYPE_LENGTH = 32;
+
+		/**
+		 * Maximum size for an ATOM element
+		 */
 		static const int MAX_ATOM_SIZE   = 32;
+
+		/**
+		 * Maximum size for a STRING element
+		 */
 		static const int MAX_STRING_SIZE = 4000;
 
 	protected:
@@ -118,46 +147,37 @@
 
 
 	public:
+		/**
+		 * Constructor
+		 *
+		 * @param ph PktHandler instance
+		 */
 		MsgHandler(PktHandler *ph);
+
+		/**
+		 * Destructor
+		 */
 		~MsgHandler();
 
 		/**
 		 * Registers a message type
 		 *
-		 * @param type
-		 * @param signature (combination of [A|L|S])
+		 * The parameter <i>ttype</i> corresponds to the ATOM
+		 * element in string format.
+		 *
+		 * @param type msg_type (an integer identifier)
+		 * @param ttype text string corresponding to msg_type
+		 * @param signature (combination of [A|L|S|D])
+		 *
 		 */
 		void registerType(	msg_type type,
 							msg_type_text ttype,
 							const char *signature);
 
 		/**
-		 * Returns the signature corresponding
-		 * to a type.
-		 *
-		 * Used during message transmission/encoding.
-		 *
-		 * @return NULL not found
-		 */
-		const char *getSignature(msg_type type);
-
-		/**
-		 * Returns the signature corresponding
-		 * to a type text.
-		 *
-		 * Used during message reception/decoding.
-		 */
-		const char *getSignatureFromTypeText(msg_type_text ttype);
-
-		/**
-		 * Returns the ATOM text from a msg_type
-		 */
-		const char *getTextFromType(msg_type type);
-
-		/**
 		 * Generic send message
 		 *
-		 * @param msg_type
+		 * @param msg_type message type (integer)
 		 *
 		 * @return 0 SUCCESS
 		 * @return 1 FAILURE
@@ -167,12 +187,44 @@
 		/**
 		 * Generic receive message
 		 *
-		 * @param **m  Msg
+		 * @param **m  Pointer to receive a Msg instance
 		 *
 		 * @return 0 SUCCESS
 		 * @return 1 FAILURE
 		 */
 		int rx(Msg **m);
+
+	protected:
+		/**
+		 * Returns the signature corresponding
+		 * to a type.
+		 *
+		 * Used during message transmission/encoding.
+		 *
+		 * @param type msg_type (integer)
+		 * @return signature signature or NULL for not found
+		 */
+		const char *getSignature(msg_type type);
+
+		/**
+		 * Returns the signature corresponding
+		 * to a type text.
+		 *
+		 * Used during message reception/decoding.
+		 *
+		 * @param ttype msg_type_text
+		 * @return signature NULL on FAILURE
+		 */
+		const char *getSignatureFromTypeText(msg_type_text ttype);
+
+		/**
+		 * Returns the ATOM text from a msg_type
+		 *
+		 * @param type msg_type (integer)
+		 * @return string representing the ATOM corresponding to message type
+		 */
+		const char *getTextFromType(msg_type type);
+
 	};
 
 

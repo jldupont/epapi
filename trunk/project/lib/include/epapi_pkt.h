@@ -1,5 +1,5 @@
 /**
- * @file pkt.h
+ * @file epapi_pkt.h
  *
  * @date   2009-06-06
  * @author Jean-Lou Dupont
@@ -16,6 +16,7 @@
 
 	/**
 	 * Packet class
+	 *
 	 */
 	class Pkt: public epapiBase {
 
@@ -56,12 +57,17 @@
 		 * Gets the pointer to the internal
 		 * buffer and reallocs, if necessary,
 		 * to 'size'
+		 *
+		 * @param size size of required buffer
+		 * @return buffer
 		 */
 		unsigned char *getBuf(int size);
 
 		/**
 		 * Returns the Erlang specific
 		 * TX buffer
+		 *
+		 * @return ei_x_buff buffer
 		 */
 		ei_x_buff *getTxBuf(void);
 
@@ -74,6 +80,7 @@
 		 * applies to RX packet type and usually
 		 * manipulated by the PktHandler.
 		 *
+		 * @param len packet length
 		 */
 		void setLength(int len);
 
@@ -83,12 +90,19 @@
 		 *
 		 * This method really only
 		 * applies to RX packet type
+		 *
+		 * @return packet length
 		 */
 		int getLength(void);
 	};
 
 	/**
 	 * Packet Handler
+	 *
+	 * This class enables customization of the packet handling layer
+	 * by providing the capability to configure the input file
+	 * descriptor and output file descriptor.  The defaults are
+	 * "stdin" and "stdout".
 	 */
 	class PktHandler: public epapiBase {
 
@@ -98,9 +112,17 @@
 
 
 	public:
+		/**
+		 * Constructor
+		 *
+		 * Standard input and output descriptors
+		 * ie. stdin and stdout
+		 */
 		PktHandler();
 
 		/**
+		 * Constructor
+		 *
 		 * @param ifd input file descriptor
 		 * @param ofd output file descriptor
 		 */
@@ -109,12 +131,20 @@
 		~PktHandler();
 
 		/**
+		 * Receive packet
+		 *
+		 * @param p pointer to packet pointer
+		 *
 		 * @return 0 SUCCESS
 		 * @return 1 FAILURE
 		 */
 		int rx(Pkt **p);
 
 		/**
+		 * Transmit packet
+		 *
+		 * @param p pointer to packet
+		 *
 		 * @return 0 SUCCESS
 		 * @return 1 FAILURE
 		 */
@@ -122,12 +152,22 @@
 
 	protected:
 		/**
+		 * Receive (blocking) a packet
+		 *
+		 * @param p packet pointer
+		 * @param len packet length
+		 *
 		 * @return >0  LEN read
 		 * @return <=0 ERROR, check errno
 		 */
 		int rx_exact(Pkt **p, int len);
 
 		/**
+		 * Transmits (blocking) a packet
+		 *
+		 * @param buf packet buffer
+		 * @param len packet length
+		 *
 		 * @return >0   LEN written
 		 * @return <=0  ERROR, check errno
 		 */
