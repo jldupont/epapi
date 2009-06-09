@@ -22,7 +22,7 @@ start() ->
     start("").
 
 start(Param) ->
-    spawn_link(?MODULE, init, ["..debug/decho", Param]).
+    spawn_link(?MODULE, init, ["/tmp/decho", Param]).
 
 stop() ->
     ?MODULE ! stop.

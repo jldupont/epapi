@@ -384,17 +384,20 @@ MsgHandler::rx(Msg **m) {
 	//received tuple to contain an ATOM
 	//which corresponds to the message type
 	if (ei_decode_version((const char *) b, &index, &version)) {
+		DBGLOG(LOG_ERR, "ERROR decode VERSION");
 		delete p;
 		last_error=EEPAPI_EIDECODE;
 		return 1;
 	}
 	// arity should be 2 - {msg_type,{Msg}}
 	if (ei_decode_tuple_header((const char *)b, &index, &arity)) {
+		DBGLOG(LOG_ERR, "ERROR decode {msg_type...}");
 		delete p;
 		last_error=EEPAPI_EIDECODE;
 		return 1;
 	}
 	if (arity!=2) {
+		DBGLOG(LOG_ERR, "ERROR decode {msg_type,{Msg}}: ARITY");
 		last_error=EEPAPI_ARITY;
 		delete p;
 		return 1;
@@ -402,6 +405,7 @@ MsgHandler::rx(Msg **m) {
 
 	//msg_type
 	if (ei_decode_atom((const char *)b, &index, stype)) {
+		DBGLOG(LOG_ERR, "ERROR decode {msg_type...}: ATOM");
 		delete p;
 		last_error=EEPAPI_EIDECODE;
 		return 1;
@@ -410,12 +414,14 @@ MsgHandler::rx(Msg **m) {
 	// {msg_type, {Msg}}
 	//            ^
 	if (ei_decode_tuple_header((const char *)b, &index, &arity)) {
+		DBGLOG(LOG_ERR, "ERROR decode {msg_type,{Msg}}");
 		delete p;
 		last_error=EEPAPI_EIDECODE;
 		return 1;
 	}
 
 	if (arity>Msg::MAX_PARAMS) {
+		DBGLOG(LOG_ERR, "ERROR decode {msg_type...}:TOO BIG");
 		last_error = EEPAPI_TOOBIG;
 		delete p;
 		return 1;
@@ -443,6 +449,7 @@ MsgHandler::rx(Msg **m) {
 		switch(sig[i]) {
 		case 's':
 		case 'S':
+			DBGLOG(LOG_ERR, "ERROR decode, expecting[STRING]");
 			string = (char *)malloc(MAX_STRING_SIZE);
 			if (NULL==string) {
 				last_error = EEPAPI_MALLOC;
@@ -453,6 +460,7 @@ MsgHandler::rx(Msg **m) {
 			break;
 		case 'a':
 		case 'A':
+			DBGLOG(LOG_ERR, "ERROR decode, expecting[ATOM]");
 			atom = (char *)malloc(MAX_ATOM_SIZE);
 			if (NULL==atom) {
 				last_error = EEPAPI_MALLOC;
@@ -463,10 +471,12 @@ MsgHandler::rx(Msg **m) {
 			break;
 		case 'd':
 		case 'D':
+			DBGLOG(LOG_ERR, "ERROR decode, expecting[DOUBLE]");
 			result = ei_decode_double(b, &index, &d);
 			break;
 		case 'l':
 		case 'L':
+			DBGLOG(LOG_ERR, "ERROR decode, expecting[LONG]");
 			result = ei_decode_long(b, &index, &lint);
 			break;
 		default:
