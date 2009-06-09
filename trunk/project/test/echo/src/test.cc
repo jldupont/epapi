@@ -16,7 +16,7 @@ int main() {
 	MsgHandler *mh = new MsgHandler(ph);
 
 	int result;
-	mh->registerType(1, "echo", "L");
+	mh->registerType(1, "echo", "l");
 
 	Msg *m;
 	while(1) {
