@@ -2,7 +2,6 @@ Package: epapi
 Version: $version
 Priority: optional
 Architecture: i386
-Depends: 
 Section: Other
 Maintainer: Jean-Lou Dupont <epapi@jldupont.com>
 Description: Erlang Port driver API shared library
