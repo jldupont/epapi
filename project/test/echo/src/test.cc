@@ -38,6 +38,13 @@ int main() {
 		}
 		doLog(LOG_INFO, "rx, counter[%li]", counter);
 		delete m;
+
+		result = mh->send(1, counter+1);
+		if (result) {
+			doLog(LOG_ERR, "tx: error[%s]", mh->strerror());
+			break;
+		}
+
 	}//while
 
 	DEBUG_LOG(LOG_INFO, "echo: END");

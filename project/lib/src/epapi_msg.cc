@@ -260,14 +260,12 @@ MsgHandler::send(msg_type type, ...) {
 	if (len<=0) {
 		last_error = EEPAPI_BADFORMAT;
 		delete p;
-		ei_x_free(b);
 		return 1;
 	}
 
 	 if (ei_x_new_with_version(b)) {
 		 last_error = EEPAPI_NEWEIBUF;
 		 delete p;
-		 ei_x_free(b);
 		 return 1;
 	 }
 
@@ -275,7 +273,6 @@ MsgHandler::send(msg_type type, ...) {
 	 if (ei_x_encode_tuple_header(b, 2)) {
 		 last_error = EEPAPI_EIENCODE;
 		 delete p;
-		 ei_x_free(b);
 		 return 1; //<===================
 	 }
 
@@ -296,7 +293,6 @@ MsgHandler::send(msg_type type, ...) {
 	 if (ei_x_encode_tuple_header(b, len)) {
 		 last_error = EEPAPI_EIENCODE;
 		 delete p;
-		 ei_x_free(b);
 		 return 1; //<===================
 	 }
 
@@ -360,7 +356,6 @@ MsgHandler::send(msg_type type, ...) {
 	}
 
 	delete p;
-	ei_x_free( b );
 
 	return result;
 }//
