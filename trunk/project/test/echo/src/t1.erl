@@ -9,7 +9,7 @@
 %%
 %% API
 %%
--export([start/0, start/1, stop/0, echo/0]).
+-export([start/0, start/1, stop/0, echo/1]).
 
 %% internal
 -export([init/2, loop/1]).
@@ -33,8 +33,8 @@ init(ExtPrg, Param) ->
     Port = open_port({spawn, ExtPrg++" "++Param}, [{packet, 2}, binary, exit_status]),
     loop(Port).
 
-echo() ->
-	?MODULE ! {echo, {6666}}.
+echo(X) ->
+	?MODULE ! {echo, {X}}.
 
 loop(Port) ->
     receive
@@ -51,6 +51,7 @@ loop(Port) ->
 			exit(normal);
 		
 		{Port, {data, Data}} ->
+			io:format("Message raw[~p]", [Data]),
 			Decoded = binary_to_term(Data),
 			io:format("Message! Decoded[~p]~n", [Decoded])
 					

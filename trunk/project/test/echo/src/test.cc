@@ -19,6 +19,7 @@ int main() {
 	mh->registerType(1, "echo", "l");
 
 	Msg *m;
+	int myc = 0;
 	while(1) {
 		result = mh->rx(&m);
 		if (result) {
@@ -39,7 +40,7 @@ int main() {
 		doLog(LOG_INFO, "rx, counter[%li]", counter);
 		delete m;
 
-		result = mh->send(1, counter+1);
+		result = mh->send(1, myc);
 		if (result) {
 			doLog(LOG_ERR, "tx: error[%s]", mh->strerror());
 			break;
