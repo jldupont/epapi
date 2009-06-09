@@ -154,7 +154,7 @@ if 'rel' in COMMAND_LINE_TARGETS:
 	
 	debian_path = "../../dists/stable/main/binary-i386/%s" % name
 	print "scons: running dpkg-scanpackages  [%s]" % debian_path
-	os.system("./do_release")
+	os.system("cd ../.. && dpkg-scanpackages -m dists/stable/main/binary-i386 /dev/null | gzip -9c > dists/stable/main/binary-i386/Packages.gz")
 	
 	
 # DOCS
