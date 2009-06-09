@@ -47,10 +47,10 @@ if command == 'configure':
 	cvd = '/usr/lib/lib%s_debug-%s.so' % (this_lib, version)
 
 	dst = '/usr/lib/lib%s.so' % this_lib
-	src = '/usr/lib/lib%s-%s.so' % (this_lib, version)
+	src = '/usr/lib/lib%s-%s.so' % (this_lib, this_version)
 	
 	ddst = '/usr/lib/lib%s_debug.so' % this_lib
-	dsrc = '/usr/lib/lib%s_debug-%s.so' % (this_lib, version)
+	dsrc = '/usr/lib/lib%s_debug-%s.so' % (this_lib, this_version)
 	
 	code = 0
 	try:
