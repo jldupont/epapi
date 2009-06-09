@@ -28,7 +28,6 @@ Msg::Msg(void) {
 		longs[i]   = 0;
 		doubles[i] = 0.0;
 	}
-
 }//
 
 Msg::~Msg() {
@@ -105,6 +104,8 @@ Msg::getParam(int index, char *format, ...) {
 	int
 Msg::setParam(int index, char format, ...) {
 
+	//DBGLOG(LOG_INFO, "Msg::setParam, index[%i] format[%c]", index, format);
+
 	if ((index>Msg::MAX_PARAMS)|| (index>size)) {
 		last_error = EEPAPI_BADINDEX;
 		return 1;
@@ -127,7 +128,7 @@ Msg::setParam(int index, char format, ...) {
 		break;
 	case 'l':
 	case 'L':
-		longs[index] = va_arg(args, long);
+		longs[index] = va_arg(args, long int);
 		break;
 	case 'd':
 	case 'D':
@@ -145,6 +146,7 @@ Msg::setParam(int index, char format, ...) {
 
 	va_end(args);
 
+	//DBGLOG(LOG_INFO, "Msg::setParam, result[%i]", result);
 	return result;
 }//
 
@@ -230,7 +232,7 @@ MsgHandler::getTextFromType(msg_type type) {
  * specified type. The type must have
  * been previously registered.
  *
- * @param msg_type
+ * @param type message type
  *
  * @return 0 SUCCESS
  * @return 1 FAILURE
@@ -364,6 +366,14 @@ MsgHandler::send(msg_type type, ...) {
 	return result;
 }//
 
+/**
+ * Message Receive (blocking)
+ *
+ * @param m pointer to message
+ *
+ * @return 0 SUCCESS
+ * @return 1 FAILURE
+ */
 int
 MsgHandler::rx(Msg **m) {
 
@@ -448,15 +458,15 @@ MsgHandler::rx(Msg **m) {
 
 	char *string, *atom;
 	double d;
-	long lint;
+	long int lint;
 
-	DBGLOG(LOG_INFO,"MsgHandler::rx - expecting sig[%s]", sig);
+	DBGLOG(LOG_INFO,"MsgHandler::rx - expecting sig[%s] len[%i]", sig, len);
 
 	for (int i=0;i<len;i++) {
 		switch(sig[i]) {
 		case 's':
 		case 'S':
-			//DBGLOG(LOG_ERR, "ERROR decode, expecting[STRING]");
+			//DBGLOG(LOG_ERR, "decode [STRING]");
 			string = (char *)malloc(MAX_STRING_SIZE);
 			if (NULL==string) {
 				last_error = EEPAPI_MALLOC;
@@ -467,7 +477,7 @@ MsgHandler::rx(Msg **m) {
 			break;
 		case 'a':
 		case 'A':
-			//DBGLOG(LOG_ERR, "ERROR decode, expecting[ATOM]");
+			//DBGLOG(LOG_ERR, "decode, [ATOM]");
 			atom = (char *)malloc(MAX_ATOM_SIZE);
 			if (NULL==atom) {
 				last_error = EEPAPI_MALLOC;
@@ -478,13 +488,13 @@ MsgHandler::rx(Msg **m) {
 			break;
 		case 'd':
 		case 'D':
-			//DBGLOG(LOG_ERR, "ERROR decode, expecting[DOUBLE]");
 			result = ei_decode_double(b, &index, &d);
+			//DBGLOG(LOG_ERR, "decode, [DOUBLE][%e]",d);
 			break;
 		case 'l':
 		case 'L':
-			//DBGLOG(LOG_ERR, "ERROR decode, expecting[LONG]");
 			result = ei_decode_long(b, &index, &lint);
+			//DBGLOG(LOG_ERR, "decode, [LONG][%li]", lint);
 			break;
 		default:
 			last_error = EEPAPI_BADFORMAT;
@@ -504,18 +514,22 @@ MsgHandler::rx(Msg **m) {
 		switch(sig[i]) {
 		case 's':
 		case 'S':
+			//DBGLOG(LOG_ERR, "setting, [STRING]");
 			(*m)->setParam(i, 's', string);
 			break;
 		case 'a':
 		case 'A':
+			//DBGLOG(LOG_ERR, "setting, [ATOM]");
 			(*m)->setParam(i,'a', atom);
 			break;
 		case 'd':
 		case 'D':
+			//DBGLOG(LOG_ERR, "setting, [DOUBLE]");
 			(*m)->setParam(i,'d', d);
 			break;
 		case 'l':
 		case 'L':
+			//DBGLOG(LOG_ERR, "setting, [LONG]");
 			(*m)->setParam(i,'l', lint);
 			break;
 		}//switch

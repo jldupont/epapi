@@ -2,20 +2,146 @@
  * @file epapi.h
  *
  * @date   2009-06-06
- * \author Jean-Lou Dupont
+ * @author Jean-Lou Dupont
  *
- * \mainpage Documentation for EPAPI - Erlang Port API library
+ * @mainpage Documentation for EPAPI - Erlang Port API library -- version $version
+ *
+ * This library helps build Erlang Port Drivers - bridging simple
+ * messages between C/C++ and Erlang. Communication is
+ * served by a file based pipe (i.e. one "in" and one "out") which
+ * defaults to "stdin" and "stdout".
  *
  * \section msg_struc Message Structure
  *
- *   {msg_type, {Msg}}
+ * The message format supported follows:
+ *
+ *   \code
+ *   {msg_type, {Message}}
+ *   \endcode
+ *
+ * where <i>msg_type</i> corresponds to an Erlang ATOM and
+ * <i>Message</i> corresponds to an Erlang TUPLE. The <i>Message</i> tuple
+ * can be formed of the following primitives:
+ *
+ *  \li ATOM
+ *  \li STRING
+ *  \li LONG
+ *  \li DOUBLE
  *
  *
  * \section usage Usage
  *
- * \code
+ * To send and receive messages, message <i>types</i> must be registered.
+ * This process is accomplished through the MsgHandler::registerType() method.
  *
- * \endcode
+ *   \subsection rx Receiving
+ *
+	  \code
+	  	PktHandler *ph = new PktHandler();
+	 	MsgHandler *mh = new MsgHandler(ph);
+
+	 	//Register a message type
+	 	// {echo, {Counter}}
+	 	mh->registerType(1, "echo", "l" );
+
+	 	//Wait for a message
+	 	Msg *m;
+		result = mh->rx(&m);
+
+		//Verify return code
+		if (result) {
+			//handle error
+			printf("ERROR, message: %s", mh->strerror());
+			// ...
+		}
+	  \endcode
+
+ *
+ *   \subsection tx Transmitting
+ *
+ *    \code
+ *     int counter;
+ *     result =  mh->send(1, counter);
+ *     // check result
+ *    \endcode
+ *
+ *    \subsection error Error Handling
+ *
+ *    All methods return 0 on success and 1 on failure.
+ *    The error code is available through the get_errno() method,
+ *    eg.:
+ *
+ *    \code
+ *      MsgHandler *mh;
+ *      int errnum=mh->get_errno();
+ *      // ...
+ *      PktHandler *ph;
+ *      int errnum=ph->get_errno();
+ *    \endcode
+ *
+ *
+ *    \subsection erlang Erlang side
+ *
+ *    \code
+%% Author: Jean-Lou Dupont
+%% Created: 2009-06-03
+-module(t1).
+
+%%
+%% API
+%%
+-export([start/0, start/1, stop/0, echo/1]).
+
+%% internal
+-export([init/2, loop/1]).
+
+%%
+%% Local Functions
+%%
+
+echo(X) ->
+	?MODULE ! {echo, {X}}.
+
+start() ->
+    start("").
+
+start(Param) ->
+    spawn_link(?MODULE, init, ["/tmp/decho", Param]).
+
+stop() ->
+    ?MODULE ! stop.
+
+init(ExtPrg, Param) ->
+    register(?MODULE, self()),
+    process_flag(trap_exit, true),
+    Port = open_port({spawn, ExtPrg++" "++Param}, [{packet, 2}, binary, exit_status]),
+    loop(Port).
+
+loop(Port) ->
+    receive
+
+		{echo,Msg} ->
+			{Counter} = Msg,
+			BinMsg = {echo, {Counter}},
+			io:format("request to send 'echo' message [~p]~n", [BinMsg]),
+			erlang:port_command(Port, term_to_binary(BinMsg));
+
+		stop ->
+			io:format("called [stop]"),
+			erlang:port_close(Port),
+			exit(normal);
+
+		{Port, {data, Data}} ->
+			io:format("Message raw[~p]~n", [Data]),
+			Decoded = binary_to_term(Data),
+			io:format("Message! Decoded[~p]~n", [Decoded]);
+
+		Result ->
+			Result
+    end,
+	loop(Port).
+ *
+ *    \endcode
  *
  * \note Only packet header with length field=2 is supported.
  */
@@ -46,12 +172,14 @@ void doLog(int priority, const char *message, ...);
 #define DBGLOG_NULL_PTR(ptr, ...)
 #endif
 
-
+	/**
+	 * Error codes
+	 */
 	enum _epapi_error_codes {
 
 		EEPAPI_OK   = 0,
 		EEPAPI_ERR,
-		EEPAPI_ERRNO,
+		EEPAPI_ERRNO,   //client should look-up "errno"
 		EEPAPI_NULL,
 		EEPAPI_BADINDEX,
 		EEPAPI_BADFORMAT,
@@ -79,9 +207,16 @@ void doLog(int priority, const char *message, ...);
 		/**
 		 * Returns a human readable string
 		 * corresponding to the last error
-		 * set in the supplied object
+		 * set in the object instance.
 		 */
 		const char *strerror(void);
+
+		/**
+		 * Returns last error
+		 *
+		 * @return last_error integer
+		 */
+		int get_errno(void);
 
 	};
 

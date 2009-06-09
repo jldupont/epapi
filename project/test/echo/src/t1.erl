@@ -3,10 +3,6 @@
 -module(t1).
 
 %%
-%% Include files
-%%
-
-%%
 %% API
 %%
 -export([start/0, start/1, stop/0, echo/1]).
@@ -17,6 +13,9 @@
 %%
 %% Local Functions
 %%
+
+echo(X) ->
+	?MODULE ! {echo, {X}}.
 
 start() ->
     start("").
@@ -32,9 +31,6 @@ init(ExtPrg, Param) ->
     process_flag(trap_exit, true),
     Port = open_port({spawn, ExtPrg++" "++Param}, [{packet, 2}, binary, exit_status]),
     loop(Port).
-
-echo(X) ->
-	?MODULE ! {echo, {X}}.
 
 loop(Port) ->
     receive
@@ -59,4 +55,3 @@ loop(Port) ->
 			Result
     end,
 	loop(Port).
-

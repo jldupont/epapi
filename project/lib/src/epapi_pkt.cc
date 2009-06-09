@@ -18,6 +18,7 @@ Pkt::Pkt() {
 	last_error=0;
 	sz=0;
 	buf=NULL;
+	tbuf=NULL;
 }//
 
 Pkt::~Pkt() {
@@ -123,7 +124,7 @@ PktHandler::~PktHandler() {
  *
  * @return >=0 len retrieved
  * @return <0  ERROR eg. EPIPE
- * @retunr 0   ERROR / EOF
+ * @return 0   ERROR / EOF
  */
 int
 PktHandler::rx_exact(Pkt **p, int len) {

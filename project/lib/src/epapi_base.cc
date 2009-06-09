@@ -42,6 +42,11 @@ epapiBase::strerror(void) {
 	return errors[last_error];
 }//
 
+int
+epapiBase::get_errno(void) {
+
+	return last_error;
+}//
 
 #ifdef _DEBUG
 /**
