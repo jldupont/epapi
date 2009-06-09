@@ -89,11 +89,11 @@
 
 
 	typedef std::pair<msg_type, const char *> PairTypeMap;
-	typedef std::pair<msg_type_text, const char *> PairTextSigMap;
+	//typedef std::pair<msg_type_text, const char *> PairTextSigMap;
 	typedef std::pair<msg_type, const char *> PairTypeTextMap;
 
 	typedef std::map<msg_type, const char*> TypeMap;
-	typedef std::map<msg_type_text, const char*> TextSigMap;
+	//typedef std::map<msg_type_text, const char*> TextSigMap;
 	typedef std::map<msg_type, const char*> TypeTextMap;
 
 
@@ -116,7 +116,7 @@
 		PktHandler *ph;
 		TypeMap     tmap;
 		TypeTextMap ttmap;
-		TextSigMap  tsmap;
+		//TextSigMap  tsmap;
 
 
 	public:

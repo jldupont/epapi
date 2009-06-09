@@ -171,7 +171,6 @@ MsgHandler::registerType(	msg_type type,
 
 	 tmap.insert( PairTypeMap(     type,  signature) );
 	ttmap.insert( PairTypeTextMap( type,  ttype) );
-	tsmap.insert( PairTextSigMap(  ttype, signature));
 
 }//
 
@@ -193,16 +192,22 @@ MsgHandler::getSignature(msg_type type) {
 	const char *
 MsgHandler::getSignatureFromTypeText(msg_type_text ttype) {
 
-	TextSigMap::iterator it;
+	TypeTextMap::iterator it;
+	msg_type type=-1;
 
-	it = tsmap.find(ttype);
-	if (it!=tsmap.end()) {
-
-		return it->second;
+	for (it=ttmap.begin();it!=ttmap.end();++it) {
+		int result = strcmp(it->second, ttype);
+		if (0==result) {
+			type = it->first;
+			break;
+		}
+	}
+	if (-1==type) {
+		last_error = EEPAPI_NOTFOUND;
+		return NULL;
 	}
 
-	last_error = EEPAPI_NOTFOUND;
-	return NULL;
+	return getSignature(type);
 }//
 
 	const char *
@@ -446,11 +451,13 @@ MsgHandler::rx(Msg **m) {
 	double d;
 	long lint;
 
+	DBGLOG(LOG_INFO,"MsgHandler::rx - expecting sig[%s]", sig);
+
 	for (int i=0;i<len;i++) {
 		switch(sig[i]) {
 		case 's':
 		case 'S':
-			DBGLOG(LOG_ERR, "ERROR decode, expecting[STRING]");
+			//DBGLOG(LOG_ERR, "ERROR decode, expecting[STRING]");
 			string = (char *)malloc(MAX_STRING_SIZE);
 			if (NULL==string) {
 				last_error = EEPAPI_MALLOC;
@@ -461,7 +468,7 @@ MsgHandler::rx(Msg **m) {
 			break;
 		case 'a':
 		case 'A':
-			DBGLOG(LOG_ERR, "ERROR decode, expecting[ATOM]");
+			//DBGLOG(LOG_ERR, "ERROR decode, expecting[ATOM]");
 			atom = (char *)malloc(MAX_ATOM_SIZE);
 			if (NULL==atom) {
 				last_error = EEPAPI_MALLOC;
@@ -472,12 +479,12 @@ MsgHandler::rx(Msg **m) {
 			break;
 		case 'd':
 		case 'D':
-			DBGLOG(LOG_ERR, "ERROR decode, expecting[DOUBLE]");
+			//DBGLOG(LOG_ERR, "ERROR decode, expecting[DOUBLE]");
 			result = ei_decode_double(b, &index, &d);
 			break;
 		case 'l':
 		case 'L':
-			DBGLOG(LOG_ERR, "ERROR decode, expecting[LONG]");
+			//DBGLOG(LOG_ERR, "ERROR decode, expecting[LONG]");
 			result = ei_decode_long(b, &index, &lint);
 			break;
 		default:
