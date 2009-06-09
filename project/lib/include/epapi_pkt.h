@@ -72,7 +72,7 @@
 		 *
 		 * This method really only
 		 * applies to RX packet type and usually
-		 * used by the PktHandler.
+		 * manipulated by the PktHandler.
 		 *
 		 */
 		void setLength(int len);

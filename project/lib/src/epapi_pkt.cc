@@ -43,24 +43,12 @@ Pkt::getTxBuf(void) {
 	}
 
 	return tbuf;
-}
+}//
 
 unsigned char *
 Pkt::getBuf(void) {
 
-	if (NULL!=buf)
-		return (unsigned char *)buf;
-
-	if (0==sz) {
-		buf = (char *) malloc(Pkt::DSZ);
-	}
-	if (NULL!=buf) {
-		sz = Pkt::DSZ;
-	} else {
-		last_error = EEPAPI_MALLOC;
-	}
-
-	return (unsigned char *)buf;
+	return getBuf(Pkt::DSZ);
 }//
 
 unsigned char *
@@ -126,13 +114,16 @@ PktHandler::PktHandler(int _ifd, int _ofd) {
 }
 
 PktHandler::~PktHandler() {
-
 }//
 
 
 /**
+ * Waits for 'len' bytes from
+ * the input pipe
+ *
  * @return >=0 len retrieved
  * @return <0  ERROR eg. EPIPE
+ * @retunr 0   ERROR / EOF
  */
 int
 PktHandler::rx_exact(Pkt **p, int len) {
@@ -153,6 +144,8 @@ PktHandler::rx_exact(Pkt **p, int len) {
 }//
 
 /**
+ * Waits for a complete packet
+ *
  * @return 0 SUCCESS
  * @return 1 FAILURE
  */
@@ -167,6 +160,7 @@ PktHandler::rx(Pkt **p) {
 		return 1;
 	}
 
+	// length field on 2bytes format
 	unsigned char (*buf)[] = (unsigned char (*)[])(*p)->getBuf();
 	int l = ((*buf)[0] << 8) | (*buf)[1];
 
@@ -189,6 +183,12 @@ PktHandler::rx(Pkt **p) {
 }//
 
 
+/**
+ * Transmits a packet
+ *
+ * @return 0 SUCCESS
+ * @return 1 FAILURE
+ */
 int
 PktHandler::tx(Pkt *p) {
 
@@ -197,8 +197,8 @@ PktHandler::tx(Pkt *p) {
 
 	int result;
 
-	//write packet length
-	//===================
+	//write packet length on 2bytes
+	//=============================
 	li = (buf->index >> 8) & 0xff;
 	result = PktHandler::tx_exact((char *)&li, 1);
 	if (result<=0) {
@@ -206,7 +206,7 @@ PktHandler::tx(Pkt *p) {
 		return 1;
 	}
 
-	li = buf->index & 0xff;
+	li = (buf->index) & 0xff;
 	result = PktHandler::tx_exact((char *)&li, 1);
 	if (result<=0) {
 		last_error = EEPAPI_ERRNO;
@@ -220,11 +220,11 @@ PktHandler::tx(Pkt *p) {
 		return 1;
 	}
 
-	result = fflush(ofd);
-	if (0==result) {
-		last_error = EEPAPI_ERRNO;
-		return 1;
-	}
+	//result = fsync(ofd);
+	//if (0==result) {
+	//	last_error = EEPAPI_ERRNO;
+	//	return 1;
+	//}
 
 	return 0;
 }//
