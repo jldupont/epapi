@@ -34,7 +34,7 @@ init(ExtPrg, Param) ->
     loop(Port).
 
 echo() ->
-	?MODULE ! {echo, {666}}.
+	?MODULE ! {echo, {6666}}.
 
 loop(Port) ->
     receive

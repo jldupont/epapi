@@ -66,14 +66,22 @@ Pkt::getBuf(void) {
 unsigned char *
 Pkt::getBuf(int size) {
 
-	if (0==sz) {
-		buf = (char *) malloc(size);
-		if (NULL!=buf)
-			sz=size;
-		else {
-			last_error = EEPAPI_MALLOC;
-			return NULL;
+	//allocate minimum size
+	//for efficiency's sake
+	if (NULL==buf) {
+		if (size<Pkt::DSZ) {
+			buf = (char *) malloc(Pkt::DSZ);
+			sz = Pkt::DSZ;
+		} else {
+			buf = (char *) malloc(size);
+			sz = size;
 		}
+	}
+
+	if (NULL==buf) {
+		sz = 0;
+		last_error = EEPAPI_MALLOC;
+		return NULL;
 	}
 
 	//requested size fits the
@@ -151,17 +159,18 @@ PktHandler::rx_exact(Pkt **p, int len) {
 int
 PktHandler::rx(Pkt **p) {
 
-	*p = new Pkt();
-
 	//read length field first
 	int result=PktHandler::rx_exact(p, 2);
 	if (result<0) {
+		DBGLOG(LOG_ERR,"PktHandler::rx - ERROR reading length field in header");
 		last_error = EEPAPI_ERRNO; //check errno
 		return 1;
 	}
 
 	unsigned char (*buf)[] = (unsigned char (*)[])(*p)->getBuf();
 	int l = ((*buf)[0] << 8) | (*buf)[1];
+
+	DBGLOG(LOG_INFO, "PktHandler::rx - header len[%i]", l);
 
 	// the packet length gave us
 	// the information we needed
@@ -174,6 +183,7 @@ PktHandler::rx(Pkt **p) {
 	}
 
 	(*p)->setLength( result );
+	DBGLOG(LOG_INFO,"PktHandler::rx - got [%i] bytes", result);
 
 	return 0;
 }//
