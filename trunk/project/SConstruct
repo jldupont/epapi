@@ -86,6 +86,20 @@ def adjust_control_files(params, c_path):
 		print "scons: adjusting [%s]" % path
 		replace_params(path,path,params)
 
+def get_gcpwd():
+	path = os.path.expanduser("~")
+	file = open("%s/.gcpwd" % path)
+	pwd = file.read().strip()
+	file.close()
+	return pwd
+
+def get_gcuser():
+	path = os.path.expanduser("~")
+	file = open("%s/.gcuser" % path)
+	user = file.read().strip()
+	file.close()
+	return user
+
 
 # BUILDING .deb PACKAGE
 # =====================
@@ -141,7 +155,7 @@ env.Command("deb", "/tmp/%s" % this_lib, "dpkg-deb --build $SOURCE")
 # RELEASING
 #
 #  The 'deb' command is assumed to have been performed.
-#  The 'deb' package is assumed to be sitting in /tmp as litm.deb 
+#  The 'deb' package is assumed to be sitting in /tmp
 #
 # =========
 if 'rel' in COMMAND_LINE_TARGETS:
@@ -162,6 +176,25 @@ if 'rel' in COMMAND_LINE_TARGETS:
 	print "scons: running dpkg-scanpackages  [%s]" % debian_path
 	os.system("cd ../.. && dpkg-scanpackages -m dists/stable/main/binary-i386 /dev/null | gzip -9c > dists/stable/main/binary-i386/Packages.gz")
 	
+	print "scons: creating sources archive"
+	os.system("zip -r /tmp/%s-sources-%s.zip ./lib/src ./lib/include -x *.svn*" % (this_lib, version))
+	
+if 'up' in COMMAND_LINE_TARGETS:
+	import gcupload as gc
+	
+	version = read_version()
+
+	print "scons: uploading to Google Code"
+	user= get_gcuser()
+	pwd =  get_gcpwd()
+	
+	#upload(file, project_name, user_name, password, summary, labels=None)
+	src = "/tmp/%s-sources-%s.zip" % (this_lib, version)
+	gc.upload(src, this_lib, user, pwd, "sources archive", ["sources", "featured"])
+	
+	deb = "/tmp/%s_%s-1_i386.deb" % (this_lib, version)
+	gc.upload(deb, this_lib, user, pwd, "debian binary-i386", ["Type-Package", "OpSys-Linux", "featured"])
+		
 	
 # DOCS
 # ====
