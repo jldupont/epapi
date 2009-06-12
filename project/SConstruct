@@ -177,7 +177,7 @@ if 'rel' in COMMAND_LINE_TARGETS:
 	os.system("cd ../.. && dpkg-scanpackages -m dists/stable/main/binary-i386 /dev/null | gzip -9c > dists/stable/main/binary-i386/Packages.gz")
 	
 	print "scons: creating sources archive"
-	os.system("zip -r /tmp/%s-sources-%s.zip ./lib/src ./lib/include -x *.svn*" % (this_lib, version))
+	os.system("zip -r /tmp/%s-sources-%s.zip ./lib/src ./lib/include ./lib/SConstruct ./lib/README -x *.svn*" % (this_lib, version))
 	
 if 'up' in COMMAND_LINE_TARGETS:
 	import gcupload as gc
