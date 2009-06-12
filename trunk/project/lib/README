@@ -6,6 +6,7 @@ BUILDING
 The python builder 'scons' is required, see http://www.scons.org/ .
 
 - unzip sources 
+- cd epapi
 - execute 'scons' in the base directory where files where unzipped
 
 INSTALLING
