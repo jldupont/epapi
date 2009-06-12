@@ -160,23 +160,25 @@ loop(Port) ->
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <iostream>
+#include <cstring>
 
 #include <ei.h>
 
 #ifdef _DEBUG
-#include <syslog.h>
-void doLog(int priority, const char *message, ...);
-#define DBGBEGIN
-#define DBGEND
-#define DBGMSG(...) printf(__VA_ARGS__)
-#define DBGLOG(...) doLog(__VA_ARGS__)
-#define DBGLOG_NULL_PTR(ptr, ...) if (NULL==ptr) doLog(__VA_ARGS__)
+	#include <syslog.h>
+	void doLog(int priority, const char *message, ...);
+	#define DBGBEGIN
+	#define DBGEND
+	#define DBGMSG(...) printf(__VA_ARGS__)
+	#define DBGLOG(...) doLog(__VA_ARGS__)
+	#define DBGLOG_NULL_PTR(ptr, ...) if (NULL==ptr) doLog(__VA_ARGS__)
 #else
-#define DBGBEGIN if(0){
-#define DBGEND   }
-#define DBGMSG(...)
-#define DBGLOG(...)
-#define DBGLOG_NULL_PTR(ptr, ...)
+	#define DBGBEGIN if(0){
+	#define DBGEND   }
+	#define DBGMSG(...)
+	#define DBGLOG(...)
+	#define DBGLOG_NULL_PTR(ptr, ...)
 #endif
 
 	/**

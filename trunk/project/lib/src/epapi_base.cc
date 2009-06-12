@@ -7,6 +7,8 @@
 
 #include "epapi.h"
 
+using namespace std;
+
 const char *
 epapiBase::errors[] = {
 	"OK",            //EEPAPI_OK
