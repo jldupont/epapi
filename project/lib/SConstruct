@@ -19,3 +19,7 @@ if 'install' in COMMAND_LINE_TARGETS:
 	
 	print "scons: installing 'epapi.h' in /usr/include"
 	shutil.copy("./include/epapi.h", "/usr/include")
+	
+	import os
+	os.chmod("/usr/lib/libepapi.so", mode=0644)
+	os.chmod("/usr/include/epapi.h", mode=0644)
