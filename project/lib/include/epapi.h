@@ -150,6 +150,12 @@ loop(Port) ->
  *
  *    \endcode
  *
+ * \section releases Releases
+ *
+ *  \li 0.1 - Initial Release
+ *  \li 0.2 - Set the msg_type correctly
+ *
+ *
  * \note Only packet header with length field=2 is supported.
  */
 

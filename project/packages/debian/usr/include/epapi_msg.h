@@ -60,6 +60,13 @@
 		~Msg();
 
 		/**
+		 * Sets the msg_type
+		 *
+		 * @param type msg_type
+		 */
+		void setType(msg_type type);
+
+		/**
 		 * Returns the type of the message
 		 *
 		 * @return msg_type message type
@@ -215,7 +222,7 @@
 		 * @param ttype msg_type_text
 		 * @return signature NULL on FAILURE
 		 */
-		const char *getSignatureFromTypeText(msg_type_text ttype);
+		const char *getSignatureFromTypeText(msg_type_text ttype, msg_type *type);
 
 		/**
 		 * Returns the ATOM text from a msg_type
@@ -224,6 +231,16 @@
 		 * @return string representing the ATOM corresponding to message type
 		 */
 		const char *getTextFromType(msg_type type);
+
+
+		/**
+		 * Retrieves the msg_type from msg_type_text
+		 *
+		 * @param ttype msg_type_text
+		 * @return type msg_type
+		 * @return -1 ERROR
+		 */
+		msg_type getTypeFromTypeText(msg_type_text ttype);
 
 	};
 

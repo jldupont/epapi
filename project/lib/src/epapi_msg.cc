@@ -45,6 +45,12 @@ Msg::getSize(void) {
 	return size;
 }//
 
+	void
+Msg::setType(msg_type _type) {
+
+	type = _type;
+}//
+
 	msg_type
 Msg::getType(void) {
 	return type;
@@ -192,7 +198,29 @@ MsgHandler::getSignature(msg_type type) {
 }//
 
 	const char *
-MsgHandler::getSignatureFromTypeText(msg_type_text ttype) {
+MsgHandler::getSignatureFromTypeText(msg_type_text ttype, msg_type *type) {
+
+	TypeTextMap::iterator it;
+	*type=-1;
+
+	for (it=ttmap.begin();it!=ttmap.end();++it) {
+		int result = strcmp(it->second, ttype);
+		if (0==result) {
+			*type = it->first;
+			break;
+		}
+	}
+	if (-1==*type) {
+		last_error = EEPAPI_NOTFOUND;
+		return NULL;
+	}
+
+	return getSignature(*type);
+}//
+
+
+	msg_type
+MsgHandler::getTypeFromTypeText(msg_type_text ttype) {
 
 	TypeTextMap::iterator it;
 	msg_type type=-1;
@@ -206,11 +234,12 @@ MsgHandler::getSignatureFromTypeText(msg_type_text ttype) {
 	}
 	if (-1==type) {
 		last_error = EEPAPI_NOTFOUND;
-		return NULL;
+		return -1;
 	}
 
-	return getSignature(type);
+	return type;
 }//
+
 
 	const char *
 MsgHandler::getTextFromType(msg_type type) {
@@ -445,13 +474,15 @@ MsgHandler::rx(Msg **m) {
 
 	//find a corresponding msg_type
 	//so that we can decode the message
-	const char *sig = getSignatureFromTypeText((const char *) stype);
+	const char *sig = getSignatureFromTypeText((const char *) stype, &type);
 	if (NULL==sig) {
 		DBGLOG(LOG_ERR, "signature NOT FOUND, stype[%s]", stype);
 		delete p;
 		//last_error already set
 		return 1;
 	}
+
+	(*m)->setType(type);
 
 	int len = strlen( sig );
 	int result;
