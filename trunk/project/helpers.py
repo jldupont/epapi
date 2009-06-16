@@ -5,9 +5,10 @@
     @author:  Jean-Lou Dupont
 """
 import os
+import shutil
 import sys
 from string import Template
-
+from types import *
 
 def read_version():
     file = open('./VERSION')
@@ -66,6 +67,14 @@ def get_contents(path):
     contents = file.read().strip()
     file.close()
     return contents
+
+
+class pyjld_os_Error(EnvironmentError):
+    """ Basic error class
+    """
+    pass
+
+
 
 def safe_copytree(src, dst, symlinks=False, dir_mode=0777, skip_dirs=[], make_dirs=False):
     """
