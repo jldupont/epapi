@@ -9,12 +9,7 @@ import os
 import shutil
 from string import Template
 
-try:
-	from pyjld.os import recursive_chmod, safe_copytree
-except:
-	print "*** Missing package: use easy_install pyjld.os"
-	exit(1)
-
+from helpers import *
 
 Help("""\
    'scons' to build the libraries (release and debug),
