@@ -33,6 +33,7 @@
 <option id="gnu.cpp.compiler.mingw.so.debug.option.debugging.level.1268761079" name="Debug Level" superClass="gnu.cpp.compiler.mingw.so.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 <option id="gnu.cpp.compiler.option.include.paths.368949101" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/epapi/lib/include}&quot;"/>
+<listOptionValue builtIn="false" value="h:/"/>
 </option>
 <inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.93739250" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 </tool>
