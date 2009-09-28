@@ -193,6 +193,11 @@ PktHandler::rx(Pkt **p) {
 int
 PktHandler::tx(Pkt *p) {
 
+	if (NULL==p) {
+		last_error=EEPAPI_NULL;
+		return 1;
+	}
+
 	ei_x_buff *buf = p->getTxBuf();
 	unsigned char li;
 
