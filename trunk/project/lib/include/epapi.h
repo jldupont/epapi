@@ -237,6 +237,6 @@ loop(Port) ->
 
 	#include "epapi_pkt.h"
 	#include "epapi_msg.h"
-
+	#include "epapi_term.h"
 
 #endif /* EPAPI_H_ */
