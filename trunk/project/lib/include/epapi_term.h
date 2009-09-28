@@ -66,20 +66,21 @@
 	protected:
 
 		PktHandler *ph;
+		Pkt *p;
 		int index;
 
 	public:
 		/**
 		 * Constructor used when sending
 		 */
-		TermHandler(void);
+		TermHandler(PktHandler *ph);
 
 		/**
 		 * Constructor used when receiving
 		 *
 		 * @param ph PktHandler instance
 		 */
-		TermHandler(PktHandler *ph);
+		TermHandler(PktHandler *ph, Pkt *p);
 
 		/**
 		 * Destructor

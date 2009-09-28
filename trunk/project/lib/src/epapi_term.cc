@@ -50,29 +50,41 @@ Term::setDataPtr(TermPointer *ptr) {
 	data=ptr;
 }
 
+
+
+
+
 // When sending
-TermHandler::TermHandler(void) {
-	ph=NULL;
+TermHandler::TermHandler(PktHandler *_ph) {
+	ph=_ph;
 }
 
 // When receiving
-TermHandler::TermHandler(PktHandler *packet) {
-	ph=packet;
+TermHandler::TermHandler(PktHandler *_ph, Pkt *_p) {
+	ph=_ph;
+	p=_p;
 }
 
 TermHandler::~TermHandler() {
+	if (NULL!=ph) {
+		delete ph;
+	}
+
+	if (NULL!=p) {
+		delete p;
+	}
 }
 
 
 int
 TermHandler::send(void) {
 
-	int result = ph->tx( ph );
+	int result = ph->tx( p );
 	if (result) {
 
 		// the PktHandler layer
 		// will tell us what we need...
-		last_error = p->last_error;
+		last_error = ph->last_error;
 	}
 
 	return result;
@@ -96,26 +108,28 @@ TermHandler::append(TermType type, ...) {
 	ei_x_buff *b;
 
 	// First time, let's prepare ourselves a packet
-	if (NULL==ph) {
-		ph=new Pkt();
+	if (NULL==p) {
+		p=new Pkt();
 
-		b= ph->getTxBuf();
+		b= p->getTxBuf();
 		if (NULL==b) {
-			delete ph;
+			delete p;
+			p=NULL;
 			last_error = EEPAPI_MALLOC;
 			return 1;
 		}
 
 		 if (ei_x_new_with_version(b)) {
 			 last_error = EEPAPI_NEWEIBUF;
-			 delete ph;
+			 delete p;
+			 p=NULL;
 			 return 1;
 		 }
 
 	}//if
 
 
-	b = ph->getTxBuf();
+	b = p->getTxBuf();
 	if (NULL==b) {
 		delete p;
 		last_error = EEPAPI_MALLOC;
@@ -161,13 +175,23 @@ TermHandler::append(TermType type, ...) {
 		break;
 
 	case TERMTYPE_LONG:
-		integer=var_arg(args, long);
+		integer=va_arg(args, long);
 		result=ei_x_encode_long(b, integer);
 		break;
 
 	case TERMTYPE_ULONG:
-		uinteger=var_arg(args, unsigned long);
+		uinteger=va_arg(args, unsigned long);
 		result=ei_x_encode_ulong(b, uinteger);
+		break;
+
+	case TERMTYPE_LONGLONG:
+		linteger=va_arg(args, long long);
+		result=ei_x_encode_longlong(b, linteger);
+		break;
+
+	case TERMTYPE_ULONGLONG:
+		ulinteger=va_arg(args, unsigned long long);
+		result=ei_x_encode_ulonglong(b, ulinteger);
 		break;
 
 	case TERMTYPE_STRING:
