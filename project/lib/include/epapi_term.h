@@ -20,6 +20,13 @@
 		,TERMTYPE_END_LIST
 		,TERMTYPE_ATOM
 		,TERMTYPE_TUPLE
+		,TERMTYPE_FLOAT
+		,TERMTYPE_LONG
+		,TERMTYPE_ULONG
+		,TERMTYPE_LONGLONG
+		,TERMTYPE_ULONGLONG
+		,TERMTYPE_STRING
+		,TERMTYPE_BINARY
 	} TermType;
 
 	typedef void *TermPointer;
@@ -33,6 +40,9 @@
 		void *data;
 
 	public:
+		Term(void);
+		~Term();
+
 		TermType getType(void);
 		void     setType(TermType type);
 
@@ -60,7 +70,12 @@
 
 	public:
 		/**
-		 * Constructor
+		 * Constructor used when sending
+		 */
+		TermHandler(void);
+
+		/**
+		 * Constructor used when receiving
 		 *
 		 * @param ph PktHandler instance
 		 */
