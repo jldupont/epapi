@@ -30,7 +30,7 @@
 <option id="gnu.cpp.compiler.so.debug.option.optimization.level.1501616437" name="Optimization Level" superClass="gnu.cpp.compiler.so.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 <option id="gnu.cpp.compiler.so.debug.option.debugging.level.1338798281" name="Debug Level" superClass="gnu.cpp.compiler.so.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 <option id="gnu.cpp.compiler.option.include.paths.36909634" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-<listOptionValue builtIn="false" value="include"/>
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/epapi-lib/include}&quot;"/>
 </option>
 <inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.37671901" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 </tool>

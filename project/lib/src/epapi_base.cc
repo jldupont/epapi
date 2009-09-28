@@ -32,7 +32,7 @@ epapiBase::errors[] = {
 const char *
 epapiBase::strerror(void) {
 
-	if (last_error>(sizeof(errors)/sizeof(unsigned int)))
+	if (last_error>((int)(sizeof(errors)/sizeof(int))))
 		return errors[1];
 
 	//if we need to look-up system errno
