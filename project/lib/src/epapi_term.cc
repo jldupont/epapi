@@ -57,12 +57,14 @@ Term::setDataPtr(TermPointer *ptr) {
 // When sending
 TermHandler::TermHandler(PktHandler *_ph) {
 	ph=_ph;
+	index=0;
 }
 
 // When receiving
 TermHandler::TermHandler(PktHandler *_ph, Pkt *_p) {
 	ph=_ph;
 	p=_p;
+	index=0;
 }
 
 TermHandler::~TermHandler() {
@@ -79,6 +81,11 @@ TermHandler::~TermHandler() {
 int
 TermHandler::send(void) {
 
+	if (NULL==ph) {
+		last_error = EEPAPI_NULL;
+		return 1;
+	}
+
 	int result = ph->tx( p );
 	if (result) {
 
@@ -92,6 +99,11 @@ TermHandler::send(void) {
 
 /**
  * Appends a term to the packet being currently assembled
+ *
+ * String: must be NUL terminated
+ *
+ * Binary:
+ * 		append(TERMTYPE_BINARY, long length, void *bin);
  *
  * Atom:
  * 		append(TERMTYPE_ATOM, char *string)
@@ -136,6 +148,7 @@ TermHandler::append(TermType type, ...) {
 		return 1;
 	}
 
+	void *bin;  long len;
 	const char *string;
 	int result, arity;
 
@@ -145,7 +158,6 @@ TermHandler::append(TermType type, ...) {
 	unsigned long long ulinteger;
 	double d;
 
-	int index=0;
 	va_list args;
 
 	va_start(args, type);
@@ -195,14 +207,77 @@ TermHandler::append(TermType type, ...) {
 		break;
 
 	case TERMTYPE_STRING:
+		string=va_arg(args, char *);
+		result=ei_x_encode_string(b, string);
+		break;
 
 	case TERMTYPE_BINARY:
+		len=va_arg(args, long);
+		bin=va_arg(args, void*);
+		result=ei_x_encode_binary(b, bin, len);
+		break;
 
 	default:
+		result=1;
 		break;
 	}//switch
 
+	va_end(args);
 
-}
+	if (result) {
+		last_error = EEPAPI_EIENCODE;
+	}
 
+
+	return result;
+}//
+
+
+/**
+ * Iterates through the received packet and
+ * extracts the elements of the term() 1by1
+ *
+ * The function returns the Term of type 'TERMTYPE_END'
+ * when the end of the received term() is reached.
+ *
+ * It is the responsibility of the caller to dispose of
+ * the returned Term through the TermPointer variable.
+ */
+int
+TermHandler::iter(TermPointer **tptr) {
+
+	if (NULL==p) {
+		last_error=EEPAPI_NULL;
+		return 1;
+	}
+
+	unsigned char *buf;
+
+	buf=p->getBuf();
+
+	int result;
+	int version;
+
+	// we are just starting... read the version header first
+	if (0==index) {
+		result=ei_decode_version((const char *)buf, &index, &version);
+		if (result) {
+			last_error=EEPAPI_EIDECODE;
+			return 1;
+		}
+	}//if
+
+	//we are at least past the 'version' field of the packet from hereon
+	//we need to figure out which 'type' follows
+	int type;
+	int size;
+	result=ei_get_type((const char *)buf, &index, &type, &size);
+	if (result) {
+		last_error=EEPAPI_EIDECODE;
+		return 1;
+	}
+
+
+
+}//
 

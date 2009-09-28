@@ -16,6 +16,7 @@
 
 	typedef enum {
 		TERMTYPE_INVALID = 0
+		,TERMTYPE_END
 		,TERMTYPE_START_LIST
 		,TERMTYPE_END_LIST
 		,TERMTYPE_ATOM
@@ -67,7 +68,7 @@
 
 		PktHandler *ph;
 		Pkt *p;
-		int index;
+		int index; // for the rx side
 
 	public:
 		/**
