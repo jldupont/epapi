@@ -277,7 +277,33 @@ TermHandler::iter(TermPointer **tptr) {
 		return 1;
 	}
 
+	switch(type) {
+	case ERL_SMALL_INTEGER_EXT:
+	case ERL_INTEGER_EXT:
+	case ERL_FLOAT_EXT:
+	case ERL_ATOM_EXT:
+	case ERL_SMALL_TUPLE_EXT:
+	case ERL_LARGE_TUPLE_EXT:
+	case ERL_NIL_EXT:
+	case ERL_STRING_EXT:
+	case ERL_LIST_EXT:
+	case ERL_BINARY_EXT:
 
+	case ERL_SMALL_BIG_EXT:
+	case ERL_LARGE_BIG_EXT:
 
+	// Unsupported types
+	// ^^^^^^^^^^^^^^^^^
+	case ERL_REFERENCE_EXT:
+	case ERL_NEW_REFERENCE_EXT:
+	case ERL_PORT_EXT:
+	case ERL_PID_EXT:
+	case ERL_NEW_FUN_EXT:
+	case ERL_FUN_EXT:
+	default:
+		break;
+	}//switch
+
+	return result;
 }//
 
