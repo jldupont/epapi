@@ -277,23 +277,41 @@ TermHandler::iter(TermPointer **tptr) {
 		return 1;
 	}
 
+	char atom[MAXATOMLEN];
+	long integer;
+	long long linteger;
+
 	switch(type) {
 	case ERL_SMALL_INTEGER_EXT:
 	case ERL_INTEGER_EXT:
-	case ERL_FLOAT_EXT:
+	case ERL_SMALL_BIG_EXT:
+		result=ei_decode_long((const char *)buf, &index, &integer);
+		if (result)
+			result=ei_decode_longlong((const char *)buf, &index, &linteger);
+
 	case ERL_ATOM_EXT:
+		result=ei_decode_atom((const char *)buf, &index, atom);
+		break;
+
+	case ERL_FLOAT_EXT:
+
 	case ERL_SMALL_TUPLE_EXT:
 	case ERL_LARGE_TUPLE_EXT:
+
+
 	case ERL_NIL_EXT:
+
 	case ERL_STRING_EXT:
+
 	case ERL_LIST_EXT:
+
 	case ERL_BINARY_EXT:
 
-	case ERL_SMALL_BIG_EXT:
-	case ERL_LARGE_BIG_EXT:
+
 
 	// Unsupported types
 	// ^^^^^^^^^^^^^^^^^
+	case ERL_LARGE_BIG_EXT:
 	case ERL_REFERENCE_EXT:
 	case ERL_NEW_REFERENCE_EXT:
 	case ERL_PORT_EXT:
