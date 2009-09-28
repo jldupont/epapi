@@ -41,6 +41,13 @@
 		void *data;
 
 	public:
+
+		// for numbers e.g. long, float etc.
+		Term(TermType type);
+
+		// for string
+		Term(TermType type, int size);
+
 		Term(void);
 		~Term();
 
