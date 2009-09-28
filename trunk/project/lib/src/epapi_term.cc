@@ -6,11 +6,22 @@
  */
 #include "epapi.h"
 
+Term::Term(TermType _type) {
+	type=_type;
+	size=0;
+	Value.data=NULL;
+}
+
+// For string() and atom()
+Term::Term(TermType _type, int _size) {
+	type=_type;
+	size=_size;
+}
 
 Term::Term(void) {
 	type=TERMTYPE_INVALID;
 	size=0;
-	data=NULL;
+	Value.data=NULL;
 }
 
 Term::~Term() {
@@ -42,12 +53,12 @@ Term::setSize(int sz) {
 
 TermPointer
 Term::getDataPtr(void) {
-	return data;
+	return Value.data;
 }
 
 void
 Term::setDataPtr(TermPointer *ptr) {
-	data=ptr;
+	Value.data=ptr;
 }
 
 
@@ -232,6 +243,97 @@ TermHandler::append(TermType type, ...) {
 	return result;
 }//
 
+
+int
+TermHandler::peek(TermType *term_type, int *size) {
+
+	if ((NULL==p) || (NULL==term_type)){
+		last_error=EEPAPI_NULL;
+		return 1;
+	}
+
+	unsigned char *buf;
+
+	buf=p->getBuf();
+	if (NULL==buf) {
+		last_error=EEPAPI_NULL;
+		return 1;
+	}
+
+	int result;
+	int version;
+
+	// we are just starting... read the version header first
+	if (0==index) {
+		result=ei_decode_version((const char *)buf, &index, &version);
+		if (result) {
+			last_error=EEPAPI_EIDECODE;
+			return 1;
+		}
+	}//if
+
+	//we are at least past the 'version' field of the packet from hereon
+	//we need to figure out which 'type' follows
+	int type;
+	result=ei_get_type((const char *)buf, &index, &type, &size);
+	if (result) {
+		last_error=EEPAPI_EIDECODE;
+		return 1;
+	}
+
+	switch(type) {
+	case ERL_SMALL_INTEGER_EXT:
+	case ERL_INTEGER_EXT:
+	case ERL_SMALL_BIG_EXT:
+		*term_type=TERMTYPE=
+		result=ei_decode_long((const char *)buf, &index, &integer);
+		if (result)
+			result=ei_decode_longlong((const char *)buf, &index, &linteger);
+
+	case ERL_ATOM_EXT:
+		*term_type=TERMTYPE_ATOM;
+		//result=ei_decode_atom((const char *)buf, &index, atom);
+		break;
+
+	case ERL_FLOAT_EXT:
+		*term_type=TERMTYPE_FLOAT;
+		break;
+
+	case ERL_SMALL_TUPLE_EXT:
+	case ERL_LARGE_TUPLE_EXT:
+		*term_type=TERMTYPE_TUPLE;
+		break;
+
+	case ERL_STRING_EXT:
+		*term_type=TERMTYPE_STRING;
+		break;
+
+	case ERL_LIST_EXT:
+		*term_type=TERMTYPE_START_LIST;
+		break;
+
+	case ERL_BINARY_EXT:
+		*term_type=TERMTYPE_BINARY;
+		break;
+
+	// Unsupported types
+	// ^^^^^^^^^^^^^^^^^
+	case ERL_NIL_EXT:
+	case ERL_LARGE_BIG_EXT:
+	case ERL_REFERENCE_EXT:
+	case ERL_NEW_REFERENCE_EXT:
+	case ERL_PORT_EXT:
+	case ERL_PID_EXT:
+	case ERL_NEW_FUN_EXT:
+	case ERL_FUN_EXT:
+	default:
+		*term_type=EEPAPI_BADTYPE;
+		break;
+
+	}//switch
+
+	return 0;
+}
 
 /**
  * Iterates through the received packet and

@@ -38,7 +38,13 @@
 	protected:
 		TermType type;
 		int size;
-		void *data;
+
+		union _Value {
+			long integer;
+			long long linteger;
+			double afloat;
+			void *data;
+		} Value;
 
 	public:
 
@@ -50,6 +56,9 @@
 
 		Term(void);
 		~Term();
+
+		void setValue(void *Value);
+		void getValue(void **value);
 
 		TermType getType(void);
 		void     setType(TermType type);
