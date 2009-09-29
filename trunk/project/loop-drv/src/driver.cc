@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
 
 		int result;
 		TermStruct ts;
-		oth->clean(&ts);
+		ith->clean(&ts);
 
 		DBGLOG(LOG_INFO, "epapi_loop_drv: starting decode & adapt loop");
 		// Loop through the received Term
@@ -61,17 +61,18 @@ int main(int argc, char **argv) {
 					break;
 			}
 
-			if (EEPAPI_BADTYPE!=last_error) {
+			if (!result) {
 				DBGLOG(LOG_INFO, "epapi_loop_drv: appending");
 				// got one term, stuff it in output side
 				result=oth->append(&ts);
 				if (result) {
 					last_error=oth->last_error;
+					DBGLOG(LOG_ERR, "epapi_loop_drv: append error, msg: %s", oth->strerror());
 					break;
 				}
 			}
 			// reached the end... proceed to sending
-			if (EEPAPI_BADTYPE==last_error) {
+			if (result &&(EEPAPI_BADTYPE==last_error)) {
 				result = 0;
 				break;
 			}
