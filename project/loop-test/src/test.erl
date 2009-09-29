@@ -5,6 +5,7 @@
 
 -define(TIMEOUT, 2000).
 -define(DRV, "epapi_loop_drv").
+-define(TESTDATA, {test}).
 
 
 %%
@@ -24,9 +25,11 @@ go() ->
 loop() ->
 	receive
 		{port, Port} ->
+			io:format("Port: ~p~n", [Port]),
 			put(port, Port);
 		
 		{_Port, {exit_status, Reason}} ->
+			io:format("EXIT REASON: ~p~n", [Reason]),
 			exit(Reason);
 		
 		{_Port, {data, Data}} ->
@@ -36,8 +39,9 @@ loop() ->
 			io:format("Other: ~p~n", [Other])
 	after ?TIMEOUT ->
 		
+		TestData=erlang:term_to_binary(?TESTDATA),
 		Port=get(port),
-		Port ! {command, {test}}
+		Port ! {self(), {command, TestData}}
 		  
 	end,
 	loop().
