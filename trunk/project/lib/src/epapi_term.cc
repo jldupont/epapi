@@ -52,8 +52,8 @@ TermHandler::TermHandler(PktHandler *_ph) {
 }
 
 // When receiving
-TermHandler::TermHandler(PktHandler *_ph, Pkt *_p) {
-	ph=_ph;
+TermHandler::TermHandler(Pkt *_p) {
+	ph=NULL;
 	p=_p;
 	index=0;
 }

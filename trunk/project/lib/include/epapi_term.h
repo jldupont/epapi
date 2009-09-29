@@ -73,9 +73,9 @@
 		/**
 		 * Constructor used when receiving
 		 *
-		 * @param ph PktHandler instance
+		 * @param p Pkt instance
 		 */
-		TermHandler(PktHandler *ph, Pkt *p);
+		TermHandler(Pkt *p);
 
 		/**
 		 * Destructor
