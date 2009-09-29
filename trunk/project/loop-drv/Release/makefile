@@ -38,19 +38,19 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: epapi_loop_drv_debug
+all: epapi_loop_drv
 
 # Tool invocations
-epapi_loop_drv_debug: $(OBJS) $(USER_OBJS)
+epapi_loop_drv: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++ -L"/home/jldupont/workspace/epapi/trunk/project/lib/Release" -o"epapi_loop_drv_debug" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -L"/home/jldupont/workspace/epapi/trunk/project/lib/Release" -o"epapi_loop_drv" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(OBJS)$(C++_DEPS)$(C_DEPS)$(CC_DEPS)$(CPP_DEPS)$(EXECUTABLES)$(CXX_DEPS)$(C_UPPER_DEPS) epapi_loop_drv_debug
+	-$(RM) $(OBJS)$(C++_DEPS)$(C_DEPS)$(CC_DEPS)$(CPP_DEPS)$(EXECUTABLES)$(CXX_DEPS)$(C_UPPER_DEPS) epapi_loop_drv
 	-@echo ' '
 
 .PHONY: all clean dependents
