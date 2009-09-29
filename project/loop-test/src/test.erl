@@ -33,7 +33,8 @@ loop() ->
 			exit(Reason);
 		
 		{_Port, {data, Data}} ->
-			io:format("data: ~p~n", [Data]);
+			Term=binary_to_term(Data),
+			io:format("data: ~p~n", [Term]);
 			
 		Other ->
 			io:format("Other: ~p~n", [Other])

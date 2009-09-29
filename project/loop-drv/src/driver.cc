@@ -27,8 +27,8 @@ int main(int argc, char **argv) {
 		r = ph->rx(&p);
 		if (r) {
 			last_error = ph->last_error;
+			DBGLOG(LOG_ERR, "Error, msg: %s", ph->strerror());
 			delete p;
-			DBGLOG(LOG_ERR, "Error, msg: %s", last_error);
 			break;
 		}
 
@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
 		// Start the RX side
 		ith=new TermHandler(p);
 		if (NULL==ith) {
-			DBGLOG(LOG_ERR, "Error, msg: %s", last_error);
+			DBGLOG(LOG_ERR, "Error, msg: %s", ith->strerror());
 			last_error=EEPAPI_MALLOC;
 			break;
 		}
