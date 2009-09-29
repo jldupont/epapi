@@ -68,6 +68,22 @@ TermHandler::~TermHandler() {
 	}
 }
 
+void
+TermHandler::destroy(TermStruct *ts) {
+	if (NULL==ts) return;
+
+	switch(ts->type) {
+	case TERMTYPE_ATOM:
+	case TERMTYPE_STRING:
+	case TERMTYPE_BINARY:
+		if (NULL!=ts->Value.string)
+			free(ts->Value.string);
+		break;
+	default:
+		break;
+	}
+
+}
 
 int
 TermHandler::send(void) {
@@ -155,7 +171,7 @@ TermHandler::append(TermType type, ...) {
 
 	switch(type) {
 	case TERMTYPE_START_LIST:
-		 result=ei_x_encode_list_header(b, 1);
+		result=ei_x_encode_list_header(b, 1);
 		break;
 
 	case TERMTYPE_END_LIST:
