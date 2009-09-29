@@ -485,9 +485,9 @@ MsgHandler::rx(Msg **m) {
 	(*m)->setType(type);
 
 	int len = strlen( sig );
-	int result;
+	int result=1;
 
-	char *string, *atom;
+	char *string=NULL, *atom=NULL;
 	double d;
 	long int lint;
 
