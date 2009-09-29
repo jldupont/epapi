@@ -25,7 +25,6 @@ TermHandler::term_strings[] = {
 	,"TERMTYPE_START_TUPLE"
 	,"TERMTYPE_ATOM"
 	,"TERMTYPE_STRING"
-	,"TERMTYPE_TUPLE"
 	,"TERMTYPE_DOUBLE"
 	,"TERMTYPE_LONG"
 	,"TERMTYPE_ULONG"
@@ -59,14 +58,10 @@ TermHandler::TermHandler(Pkt *_p) {
 	index=0;
 }
 
+// Cleaning up 'ph' and 'p' is
+// not our responsibility... we were just
+// loaned those!
 TermHandler::~TermHandler() {
-	if (NULL!=ph) {
-		delete ph;
-	}
-
-	if (NULL!=p) {
-		delete p;
-	}
 }
 
 void
@@ -187,7 +182,7 @@ TermHandler::append(TermType type, ...) {
 		result=ei_x_encode_atom(b, string);
 		break;
 
-	case TERMTYPE_TUPLE:
+	case TERMTYPE_START_TUPLE:
 		arity=va_arg(args, int);
 		result=ei_x_encode_tuple_header(b, arity);
 		break;
@@ -253,10 +248,14 @@ TermHandler::append(TermStruct *ts) {
 	}
 
 	int result;
-	ei_x_buff *b;
+	ei_x_buff *b; //local shortcut
+
+	DBGLOG(LOG_INFO, "TermHandler::append - start");
 
 	// First time, let's prepare ourselves a packet
 	if (NULL==p) {
+		DBGLOG(LOG_INFO, "TermHandler::append - new packet");
+
 		p=new Pkt();
 
 		b= p->getTxBuf();
@@ -267,13 +266,6 @@ TermHandler::append(TermStruct *ts) {
 			return 1;
 		}
 
-		 if (ei_x_new_with_version(b)) {
-			 last_error = EEPAPI_NEWEIBUF;
-			 delete p;
-			 p=NULL;
-			 return 1;
-		 }
-
 	}//if
 
 	b = p->getTxBuf();
@@ -282,6 +274,8 @@ TermHandler::append(TermStruct *ts) {
 		last_error = EEPAPI_MALLOC;
 		return 1;
 	}
+
+	DBGLOG(LOG_INFO, "TermHandler::append: type: %i", ts->type);
 
 	switch(ts->type) {
 
@@ -294,10 +288,12 @@ TermHandler::append(TermStruct *ts) {
 		break;
 
 	case TERMTYPE_ATOM:
+		DBGLOG(LOG_INFO, "TermHandler::append: ATOM: %s", ts->Value.string);
 		result=ei_x_encode_atom(b, (const char *)ts->Value.string);
 		break;
 
-	case TERMTYPE_TUPLE:
+	case TERMTYPE_START_TUPLE:
+		DBGLOG(LOG_INFO, "TermHandler::append: TUPLE, size: %i", ts->size);
 		result=ei_x_encode_tuple_header(b, (int) ts->size);
 		break;
 
@@ -361,6 +357,10 @@ TermHandler::iter(TermStruct *ptr) {
 	unsigned char *buf;
 
 	buf=p->getBuf();
+	if (NULL==buf) {
+		last_error=EEPAPI_NULL;
+		return 1;
+	}
 
 	int result;
 	int version;
@@ -372,7 +372,11 @@ TermHandler::iter(TermStruct *ptr) {
 			last_error=EEPAPI_EIDECODE;
 			return 1;
 		}
+
+		DBGLOG(LOG_INFO, "TermHandler::iter: Version: %i", version);
 	}//if
+
+
 
 	//we are at least past the 'version' field of the packet from hereon
 	//we need to figure out which 'type' follows
@@ -384,11 +388,14 @@ TermHandler::iter(TermStruct *ptr) {
 		return 1;
 	}
 
+	DBGLOG(LOG_INFO, "TermHandler::iter: type: %i", type);
+
 	char *sptr;
 
 	switch(type) {
 	case ERL_SMALL_INTEGER_EXT:
 	case ERL_INTEGER_EXT:
+		DBGLOG(LOG_INFO, "TermHandler::iter: SMALL_INTEGER/INTEGER");
 		result=ei_decode_long((const char *)buf, &index, &(ptr->Value.integer));
 		ptr->type=TERMTYPE_LONG;
 
@@ -399,6 +406,7 @@ TermHandler::iter(TermStruct *ptr) {
 		break;
 	case ERL_LARGE_BIG_EXT:
 	case ERL_SMALL_BIG_EXT:
+		DBGLOG(LOG_INFO, "TermHandler::iter: BIG_EXT");
 		result=ei_decode_longlong((const char *)buf, &index, &(ptr->Value.linteger));
 		ptr->type=TERMTYPE_LONGLONG;
 
@@ -409,6 +417,7 @@ TermHandler::iter(TermStruct *ptr) {
 		break;
 
 	case ERL_ATOM_EXT:
+		DBGLOG(LOG_INFO, "TermHandler::iter: ATOM");
 		sptr=(char*) malloc(sizeof(char)*size+sizeof(char));
 		if (NULL==sptr) {
 			last_error=EEPAPI_MALLOC;
@@ -421,22 +430,26 @@ TermHandler::iter(TermStruct *ptr) {
 		break;
 
 	case ERL_FLOAT_EXT:
+		DBGLOG(LOG_INFO, "TermHandler::iter: FLOAT");
 		result=ei_decode_double((const char *)buf, &index, &(ptr->Value.afloat));
 		ptr->type=TERMTYPE_DOUBLE;
 		break;
 
 	case ERL_SMALL_TUPLE_EXT:
 	case ERL_LARGE_TUPLE_EXT:
+		DBGLOG(LOG_INFO, "TermHandler::iter: TUPLE");
 		result=ei_decode_tuple_header((const char *)buf, &index, &size);
 		ptr->size= (long) size;
 		ptr->type=TERMTYPE_START_TUPLE;
 		break;
 
 	case ERL_NIL_EXT:
-		(*ptr).type=TERMTYPE_NIL;
+		DBGLOG(LOG_INFO, "TermHandler::iter: NIL");
+		ptr->type=TERMTYPE_NIL;
 		break;
 
 	case ERL_STRING_EXT:
+		DBGLOG(LOG_INFO, "TermHandler::iter: STRING");
 		sptr=(char*) malloc(sizeof(char)*size+sizeof(char));
 		if (NULL==sptr) {
 			last_error=EEPAPI_MALLOC;
@@ -449,12 +462,14 @@ TermHandler::iter(TermStruct *ptr) {
 		break;
 
 	case ERL_LIST_EXT:
+		DBGLOG(LOG_INFO, "TermHandler::iter: LIST");
 		result=ei_decode_list_header((const char *)buf, &index, &size);
 		ptr->size=(long) size;
 		ptr->type=TERMTYPE_START_LIST;
 		break;
 
 	case ERL_BINARY_EXT:
+		DBGLOG(LOG_INFO, "TermHandler::iter: BINARY");
 		sptr=(char*) malloc(sizeof(char)*size+sizeof(char));
 		if (NULL==sptr) {
 			last_error=EEPAPI_MALLOC;
@@ -476,10 +491,14 @@ TermHandler::iter(TermStruct *ptr) {
 	case ERL_NEW_FUN_EXT:
 	case ERL_FUN_EXT:
 	default:
+		ptr->type=TERMTYPE_UNSUPPORTED;
+		DBGLOG(LOG_ERR, "TermHandler::iter: UNSUPPORTED");
 		result=1;
 		last_error=EEPAPI_BADTYPE;
 		break;
 	}//switch
+
+	DBGLOG(LOG_INFO, "TermHandler::iter: Result: %i", result);
 
 	return result;
 }//

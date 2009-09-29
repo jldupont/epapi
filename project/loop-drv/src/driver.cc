@@ -28,14 +28,16 @@ int main(int argc, char **argv) {
 		if (r) {
 			last_error = ph->last_error;
 			delete p;
-			DBGLOG("Error, msg: %s", last_error);
+			DBGLOG(LOG_ERR, "Error, msg: %s", last_error);
 			break;
 		}
+
+		DBGLOG(LOG_INFO, "epapi_loop_drv: got packet");
 
 		// Start the RX side
 		ith=new TermHandler(p);
 		if (NULL==ith) {
-			DBGLOG("Error, msg: %s", last_error);
+			DBGLOG(LOG_ERR, "Error, msg: %s", last_error);
 			last_error=EEPAPI_MALLOC;
 			break;
 		}
@@ -43,6 +45,8 @@ int main(int argc, char **argv) {
 		int result;
 		TermStruct ts;
 		oth->clean(&ts);
+
+		DBGLOG(LOG_INFO, "epapi_loop_drv: starting decode & adapt loop");
 		// Loop through the received Term
 		do {
 			result=ith->iter( &ts );
@@ -57,23 +61,29 @@ int main(int argc, char **argv) {
 					break;
 			}
 
-			// got one term, stuff it in output side
-			result=oth->append(&ts);
-			if (result) {
-				last_error=oth->last_error;
-				break;
+			if (EEPAPI_BADTYPE!=last_error) {
+				DBGLOG(LOG_INFO, "epapi_loop_drv: appending");
+				// got one term, stuff it in output side
+				result=oth->append(&ts);
+				if (result) {
+					last_error=oth->last_error;
+					break;
+				}
 			}
-
 			// reached the end... proceed to sending
 			if (EEPAPI_BADTYPE==last_error) {
 				result = 0;
+				break;
 			}
 
 		} while(1);
 
+		delete ith;
+
 		if (result) // error occured
 			break;
 		else {
+			DBGLOG(LOG_INFO, "epapi_loop_drv: about to send back");
 			// send
 			result=oth->send();
 			if (result) {
@@ -82,6 +92,7 @@ int main(int argc, char **argv) {
 			}
 		}
 
+		DBGLOG(LOG_INFO, "epapi_loop_drv: end of loop");
 
 	} while (1) ;
 

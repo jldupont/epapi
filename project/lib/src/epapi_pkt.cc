@@ -35,8 +35,9 @@ ei_x_buff *
 Pkt::getTxBuf(void) {
 
 	if (NULL==tbuf) {
-		//tbuf = (ei_x_buff *) malloc(sizeof(ei_x_buff));
-		ei_x_new(tbuf);
+		tbuf = (ei_x_buff *) malloc(sizeof(ei_x_buff));
+		if (NULL!=tbuf)
+			ei_x_new(tbuf);
 	}
 
 	if (NULL==tbuf) {
@@ -54,18 +55,19 @@ Pkt::getBuf(void) {
 }//
 
 unsigned char *
-Pkt::getBuf(int size) {
+Pkt::getBuf(int _size) {
 
 	//allocate minimum size
 	//for efficiency's sake
 	if (NULL==buf) {
-		if (size<Pkt::DSZ) {
+		if (_size<Pkt::DSZ) {
 			buf = (char *) malloc(Pkt::DSZ);
 			sz = Pkt::DSZ;
 		} else {
-			buf = (char *) malloc(size);
-			sz = size;
+			buf = (char *) malloc(_size);
+			sz = _size;
 		}
+		DBGLOG(LOG_INFO,"Pkt::getBuf: creating to size: %i", sz);
 	}
 
 	if (NULL==buf) {
@@ -77,10 +79,11 @@ Pkt::getBuf(int size) {
 	//requested size fits the
 	//current size? else realloc
 	unsigned char *tmp;
-	if (size>sz) {
-		tmp = (unsigned char *) realloc(buf, size);
+	if (_size>sz) {
+		DBGLOG(LOG_INFO,"Pkt::getBuf: reallocating to size: %i, current: %i", _size, sz);
+		tmp = (unsigned char *) realloc(buf, _size);
 		if (NULL!=tmp) {
-			sz = size;
+			sz = _size;
 			buf=(char *)tmp;
 		} else {
 			last_error = EEPAPI_REALLOC;
@@ -153,6 +156,8 @@ PktHandler::rx_exact(Pkt **p, int len) {
  */
 int
 PktHandler::rx(Pkt **p) {
+
+	DBGLOG(LOG_INFO,"PktHandler::rx - start");
 
 	//read length field first
 	int result=PktHandler::rx_exact(p, 2);
