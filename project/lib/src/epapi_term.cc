@@ -266,6 +266,8 @@ TermHandler::append(TermStruct *ts) {
 			return 1;
 		}
 
+		ei_x_new_with_version(b);
+
 	}//if
 
 	b = p->getTxBuf();
