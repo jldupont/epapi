@@ -4,4 +4,4 @@
 
 USER_OBJS :=
 
-LIBS := -lepapi
+LIBS := -lepapi_debug -lei
