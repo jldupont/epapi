@@ -83,6 +83,13 @@
 		~TermHandler();
 
 		/**
+		 * Frees a TermStruct
+		 *
+		 * @param ts TermStruct
+		 */
+		void destroy(TermStruct *ts);
+
+		/**
 		 * Returns a human readable string
 		 * corresponding to a specific term type
 		 *

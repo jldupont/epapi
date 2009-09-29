@@ -10,7 +10,7 @@
 
 int main(int argc, char **argv) {
 
-	TermHandler *th = NULL;
+	TermHandler *ith = NULL;
   	PktHandler *ph  = new PktHandler();
 	Pkt *p = NULL;
 	int r;
@@ -29,12 +29,14 @@ int main(int argc, char **argv) {
 			break;
 		}
 
-		th=new TermHandler(p);
+		// Start the RX side
+		ith=new TermHandler(p);
 		if (NULL==th) {
 			DBGLOG("Error, msg: %s", last_error);
 			last_error=EEPAPI_MALLOC;
 			break;
 		}
+
 
 
 
