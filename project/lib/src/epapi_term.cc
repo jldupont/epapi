@@ -14,6 +14,36 @@
  */
 #include "epapi.h"
 
+using namespace std;
+
+const char *
+TermHandler::term_strings[] = {
+	"TERMTYPE_INVALID"
+	,"TERMTYPE_END"
+	,"TERMTYPE_START_LIST"
+	,"TERMTYPE_END_LIST"
+	,"TERMTYPE_START_TUPLE"
+	,"TERMTYPE_ATOM"
+	,"TERMTYPE_STRING"
+	,"TERMTYPE_TUPLE"
+	,"TERMTYPE_DOUBLE"
+	,"TERMTYPE_LONG"
+	,"TERMTYPE_ULONG"
+	,"TERMTYPE_LONGLONG"
+	,"TERMTYPE_ULONGLONG"
+	,"TERMTYPE_BINARY"
+	,"TERMTYPE_NIL"
+};
+
+const char *
+TermHandler::termtype_tostring(TermType type) {
+
+	if (type>((int)(sizeof(term_strings)/sizeof(int))))
+		return NULL;
+
+	return term_strings[type];
+}
+
 
 // When sending
 TermHandler::TermHandler(PktHandler *_ph) {
