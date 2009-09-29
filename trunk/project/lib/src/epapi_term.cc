@@ -3,66 +3,16 @@
  *
  * @date   2009-09-28
  * @author jldupont
+ *
+ *
+ * ERL_SMALL_INTEGER_EXT : 8  bits integer
+ * ERL_INTEGER_EXT:        32 bits integer
+ *
+ * ERL_SMALL_BIG_EXT:      8  bits arity, bignum  -- might fit in 32/64 bits
+ * ERL_LARGE_BIG_EXT:      32 bits arity, bignum  -- might fit in 32/64 bits
+ *
  */
 #include "epapi.h"
-
-Term::Term(TermType _type) {
-	type=_type;
-	size=0;
-	Value.data=NULL;
-}
-
-// For string() and atom()
-Term::Term(TermType _type, int _size) {
-	type=_type;
-	size=_size;
-}
-
-Term::Term(void) {
-	type=TERMTYPE_INVALID;
-	size=0;
-	Value.data=NULL;
-}
-
-Term::~Term() {
-
-	if (NULL!=data) {
-		free(data);
-	}
-}
-
-TermType
-Term::getType(void) {
-	return type;
-}
-
-void
-Term::setType(TermType t) {
-	type=t;
-}
-
-int
-Term::getSize(void) {
-	return size;
-}
-
-void
-Term::setSize(int sz) {
-	size=sz;
-}
-
-TermPointer
-Term::getDataPtr(void) {
-	return Value.data;
-}
-
-void
-Term::setDataPtr(TermPointer *ptr) {
-	Value.data=ptr;
-}
-
-
-
 
 
 // When sending
@@ -192,7 +142,7 @@ TermHandler::append(TermType type, ...) {
 		result=ei_x_encode_tuple_header(b, arity);
 		break;
 
-	case TERMTYPE_FLOAT:
+	case TERMTYPE_DOUBLE:
 		d=va_arg(args, double);
 		result=ei_x_encode_double(b, d);
 		break;
@@ -244,97 +194,6 @@ TermHandler::append(TermType type, ...) {
 }//
 
 
-int
-TermHandler::peek(TermType *term_type, int *size) {
-
-	if ((NULL==p) || (NULL==term_type)){
-		last_error=EEPAPI_NULL;
-		return 1;
-	}
-
-	unsigned char *buf;
-
-	buf=p->getBuf();
-	if (NULL==buf) {
-		last_error=EEPAPI_NULL;
-		return 1;
-	}
-
-	int result;
-	int version;
-
-	// we are just starting... read the version header first
-	if (0==index) {
-		result=ei_decode_version((const char *)buf, &index, &version);
-		if (result) {
-			last_error=EEPAPI_EIDECODE;
-			return 1;
-		}
-	}//if
-
-	//we are at least past the 'version' field of the packet from hereon
-	//we need to figure out which 'type' follows
-	int type;
-	result=ei_get_type((const char *)buf, &index, &type, &size);
-	if (result) {
-		last_error=EEPAPI_EIDECODE;
-		return 1;
-	}
-
-	switch(type) {
-	case ERL_SMALL_INTEGER_EXT:
-	case ERL_INTEGER_EXT:
-	case ERL_SMALL_BIG_EXT:
-		*term_type=TERMTYPE=
-		result=ei_decode_long((const char *)buf, &index, &integer);
-		if (result)
-			result=ei_decode_longlong((const char *)buf, &index, &linteger);
-
-	case ERL_ATOM_EXT:
-		*term_type=TERMTYPE_ATOM;
-		//result=ei_decode_atom((const char *)buf, &index, atom);
-		break;
-
-	case ERL_FLOAT_EXT:
-		*term_type=TERMTYPE_FLOAT;
-		break;
-
-	case ERL_SMALL_TUPLE_EXT:
-	case ERL_LARGE_TUPLE_EXT:
-		*term_type=TERMTYPE_TUPLE;
-		break;
-
-	case ERL_STRING_EXT:
-		*term_type=TERMTYPE_STRING;
-		break;
-
-	case ERL_LIST_EXT:
-		*term_type=TERMTYPE_START_LIST;
-		break;
-
-	case ERL_BINARY_EXT:
-		*term_type=TERMTYPE_BINARY;
-		break;
-
-	// Unsupported types
-	// ^^^^^^^^^^^^^^^^^
-	case ERL_NIL_EXT:
-	case ERL_LARGE_BIG_EXT:
-	case ERL_REFERENCE_EXT:
-	case ERL_NEW_REFERENCE_EXT:
-	case ERL_PORT_EXT:
-	case ERL_PID_EXT:
-	case ERL_NEW_FUN_EXT:
-	case ERL_FUN_EXT:
-	default:
-		*term_type=EEPAPI_BADTYPE;
-		break;
-
-	}//switch
-
-	return 0;
-}
-
 /**
  * Iterates through the received packet and
  * extracts the elements of the term() 1by1
@@ -346,9 +205,9 @@ TermHandler::peek(TermType *term_type, int *size) {
  * the returned Term through the TermPointer variable.
  */
 int
-TermHandler::iter(TermPointer **tptr) {
+TermHandler::iter(TermStruct *ptr) {
 
-	if (NULL==p) {
+	if ((NULL==p) || (NULL==ptr)){
 		last_error=EEPAPI_NULL;
 		return 1;
 	}
@@ -379,41 +238,91 @@ TermHandler::iter(TermPointer **tptr) {
 		return 1;
 	}
 
-	char atom[MAXATOMLEN];
-	long integer;
-	long long linteger;
+	char *sptr;
 
 	switch(type) {
 	case ERL_SMALL_INTEGER_EXT:
 	case ERL_INTEGER_EXT:
+		result=ei_decode_long((const char *)buf, &index, &(ptr->Value.integer));
+		ptr->type=TERMTYPE_LONG;
+
+		if (result) {
+			result=ei_decode_ulong((const char *)buf, &index, &(ptr->Value.uinteger));
+			ptr->type=TERMTYPE_ULONG;
+		}
+		break;
+	case ERL_LARGE_BIG_EXT:
 	case ERL_SMALL_BIG_EXT:
-		result=ei_decode_long((const char *)buf, &index, &integer);
-		if (result)
-			result=ei_decode_longlong((const char *)buf, &index, &linteger);
+		result=ei_decode_longlong((const char *)buf, &index, &(ptr->Value.linteger));
+		ptr->type=TERMTYPE_LONGLONG;
+
+		if (result) {
+			result=ei_decode_ulonglong((const char *)buf, &index, &(ptr->Value.luinteger));
+			ptr->type=TERMTYPE_ULONGLONG;
+		}
+		break;
 
 	case ERL_ATOM_EXT:
-		result=ei_decode_atom((const char *)buf, &index, atom);
+		sptr=(char*) malloc(sizeof(char)*size+sizeof(char));
+		if (NULL==sptr) {
+			last_error=EEPAPI_MALLOC;
+			return 1;
+		}
+		result=ei_decode_atom((const char *)buf, &index, sptr);
+		ptr->Value.string=sptr;
+		ptr->size=size;
+		ptr->type=TERMTYPE_ATOM;
 		break;
 
 	case ERL_FLOAT_EXT:
+		result=ei_decode_double((const char *)buf, &index, &(ptr->Value.afloat));
+		ptr->type=TERMTYPE_DOUBLE;
+		break;
 
 	case ERL_SMALL_TUPLE_EXT:
 	case ERL_LARGE_TUPLE_EXT:
-
+		result=ei_decode_tuple_header((const char *)buf, &index, &size);
+		ptr->size= (long) size;
+		ptr->type=TERMTYPE_START_TUPLE;
+		break;
 
 	case ERL_NIL_EXT:
+		(*ptr).type=TERMTYPE_NIL;
+		break;
 
 	case ERL_STRING_EXT:
+		sptr=(char*) malloc(sizeof(char)*size+sizeof(char));
+		if (NULL==sptr) {
+			last_error=EEPAPI_MALLOC;
+			return 1;
+		}
+		result=ei_decode_string((const char *)buf, &index, sptr);
+		ptr->Value.string=sptr;
+		ptr->size=size;
+		ptr->type=TERMTYPE_STRING;
+		break;
 
 	case ERL_LIST_EXT:
+		result=ei_decode_list_header((const char *)buf, &index, &size);
+		ptr->size=(long) size;
+		ptr->type=TERMTYPE_START_LIST;
+		break;
 
 	case ERL_BINARY_EXT:
+		sptr=(char*) malloc(sizeof(char)*size+sizeof(char));
+		if (NULL==sptr) {
+			last_error=EEPAPI_MALLOC;
+			return 1;
+		}
+		result=ei_decode_binary((const char *)buf, &index, sptr, &(ptr->size));
+		ptr->Value.string=sptr;
+		ptr->type=TERMTYPE_BINARY;
+		break;
 
 
 
 	// Unsupported types
 	// ^^^^^^^^^^^^^^^^^
-	case ERL_LARGE_BIG_EXT:
 	case ERL_REFERENCE_EXT:
 	case ERL_NEW_REFERENCE_EXT:
 	case ERL_PORT_EXT:
@@ -421,6 +330,8 @@ TermHandler::iter(TermPointer **tptr) {
 	case ERL_NEW_FUN_EXT:
 	case ERL_FUN_EXT:
 	default:
+		result=1;
+		last_error=EEPAPI_BADTYPE;
 		break;
 	}//switch
 
