@@ -83,11 +83,12 @@
 		~TermHandler();
 
 		/**
-		 * Frees a TermStruct
+		 * Cleans a TermStruct
+		 * i.e. frees the 'string' component
 		 *
 		 * @param ts TermStruct
 		 */
-		void destroy(TermStruct *ts);
+		void clean(TermStruct *ts);
 
 		/**
 		 * Returns a human readable string
@@ -100,6 +101,9 @@
 
 		/**
 		 * Send the packet
+		 *
+		 * This method cleans up so that it the
+		 * object instance can be reused for sending more terms.
 		 *
 		 * @return 0 SUCCESS
 		 * @return 1 FAILURE
@@ -115,6 +119,15 @@
 		 * @return 1 FAILURE
 		 */
 		int append(TermType type, ...);
+
+		/**
+		 * Appends an element from a TermStruct
+		 *
+		 * @param ts TermStruct
+		 * @return 0 SUCCESS
+		 * @return 1 FAILURE
+		 */
+		int append(TermStruct *ts);
 
 		/**
 		 * Iteration interface - iterates over a packet
