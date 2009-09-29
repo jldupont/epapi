@@ -19,56 +19,33 @@
 		,TERMTYPE_END
 		,TERMTYPE_START_LIST
 		,TERMTYPE_END_LIST
+		,TERMTYPE_START_TUPLE
 		,TERMTYPE_ATOM
+		,TERMTYPE_STRING
 		,TERMTYPE_TUPLE
-		,TERMTYPE_FLOAT
+		,TERMTYPE_DOUBLE
 		,TERMTYPE_LONG
 		,TERMTYPE_ULONG
 		,TERMTYPE_LONGLONG
 		,TERMTYPE_ULONGLONG
-		,TERMTYPE_STRING
 		,TERMTYPE_BINARY
+		,TERMTYPE_NIL
 	} TermType;
 
-	typedef void *TermPointer;
 
-
-	class Term {
-
-	protected:
+	typedef struct _TermStruct {
 		TermType type;
-		int size;
-
-		union _Value {
+		long size; // only applicable to string
+		union {
+			unsigned long uinteger;
 			long integer;
 			long long linteger;
+			unsigned long long luinteger;
 			double afloat;
-			void *data;
+			void *string;
 		} Value;
+	} TermStruct;
 
-	public:
-
-		// for numbers e.g. long, float etc.
-		Term(TermType type);
-
-		// for string
-		Term(TermType type, int size);
-
-		Term(void);
-		~Term();
-
-		void setValue(void *Value);
-		void getValue(void **value);
-
-		TermType getType(void);
-		void     setType(TermType type);
-
-		int  getSize(void);
-		void setSize(int sz);
-
-		TermPointer getDataPtr(void);
-		void        setDataPtr(TermPointer *term_pointer);
-	};
 
 
 	/**
@@ -126,12 +103,12 @@
 		 * Iteration interface - iterates over a packet
 		 * and extracts all elements of the container term()
 		 *
-		 * @param term_pointer Pointer to Term
+		 * @param ptr Pointer to TermStruct for receiving the term
 		 *
 		 * @return 0 SUCCESS
 		 * @return 1 FAILURE
 		 */
-		int iter(TermPointer **term_pointer);
+		int iter(TermStruct *ptr);
 
 	};
 
