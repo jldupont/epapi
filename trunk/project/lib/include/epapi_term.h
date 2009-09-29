@@ -56,6 +56,7 @@
 	class TermHandler: public epapiBase {
 
 	public:
+		static const char *term_strings[];
 
 	protected:
 
@@ -80,6 +81,15 @@
 		 * Destructor
 		 */
 		~TermHandler();
+
+		/**
+		 * Returns a human readable string
+		 * corresponding to a specific term type
+		 *
+		 * @param type TermType
+		 * @return const char *
+		 */
+		const char *termtype_tostring(TermType type);
 
 		/**
 		 * Send the packet
