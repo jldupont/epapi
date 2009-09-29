@@ -216,6 +216,7 @@ PktHandler::tx(Pkt *p) {
 	//write packet length on 2bytes
 	//=============================
 	li = (buf->index >> 8) & 0xff;
+	DBGLOG(LOG_INFO, "PktHandler::tx: size byte 1: %i", (int)li);
 	result = PktHandler::tx_exact((char *)&li, 1);
 	if (result<=0) {
 		last_error = EEPAPI_ERRNO;
@@ -223,6 +224,7 @@ PktHandler::tx(Pkt *p) {
 	}
 
 	li = (buf->index) & 0xff;
+	DBGLOG(LOG_INFO, "PktHandler::tx: size byte 2: %i", (int)li);
 	result = PktHandler::tx_exact((char *)&li, 1);
 	if (result<=0) {
 		last_error = EEPAPI_ERRNO;
