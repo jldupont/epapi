@@ -10,32 +10,37 @@
 
 int main(int argc, char **argv) {
 
-  	PktHandler *ph = new PktHandler();
+	TermHandler *th = NULL;
+  	PktHandler *ph  = new PktHandler();
 	Pkt *p = NULL;
 	int r;
+	int last_error;
 
 
 	do {
-		if (NULL==pkt)
+		if (NULL==p)
 			p=new Pkt();
 
 		r = ph->rx(&p);
+		if (r) {
+			last_error = ph->last_error;
+			delete p;
+			DBGLOG("Error, msg: %s", last_error);
+			break;
+		}
+
+		th=new TermHandler(p);
+		if (NULL==th) {
+			DBGLOG("Error, msg: %s", last_error);
+			last_error=EEPAPI_MALLOC;
+			break;
+		}
+
+
 
 	} while (1) ;
 
-	if (r) {
-		last_error = ph->last_error;
-		delete p;
-		return 1;
-	}
 
 
-	//Verify return code
-	if (result) {
-		//handle error
-		printf("ERROR, message: %s", mh->strerror());
-		// ...
-	}
-
-
+	exit(last_error);
 }//
