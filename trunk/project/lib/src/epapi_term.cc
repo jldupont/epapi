@@ -48,6 +48,7 @@ TermHandler::termtype_tostring(TermType type) {
 // When sending
 TermHandler::TermHandler(PktHandler *_ph) {
 	ph=_ph;
+	p=NULL;
 	index=0;
 }
 
@@ -69,7 +70,7 @@ TermHandler::~TermHandler() {
 }
 
 void
-TermHandler::destroy(TermStruct *ts) {
+TermHandler::clean(TermStruct *ts) {
 	if (NULL==ts) return;
 
 	switch(ts->type) {
@@ -88,7 +89,7 @@ TermHandler::destroy(TermStruct *ts) {
 int
 TermHandler::send(void) {
 
-	if (NULL==ph) {
+	if ((NULL==ph) || (NULL==p)){
 		last_error = EEPAPI_NULL;
 		return 1;
 	}
@@ -100,6 +101,9 @@ TermHandler::send(void) {
 		// will tell us what we need...
 		last_error = ph->last_error;
 	}
+
+	delete p;
+	p=NULL;
 
 	return result;
 }
@@ -238,6 +242,102 @@ TermHandler::append(TermType type, ...) {
 
 	return result;
 }//
+
+
+int
+TermHandler::append(TermStruct *ts) {
+
+	if (NULL==ts) {
+		last_error=EEPAPI_NULL;
+		return 1;
+	}
+
+	int result;
+	ei_x_buff *b;
+
+	// First time, let's prepare ourselves a packet
+	if (NULL==p) {
+		p=new Pkt();
+
+		b= p->getTxBuf();
+		if (NULL==b) {
+			delete p;
+			p=NULL;
+			last_error = EEPAPI_MALLOC;
+			return 1;
+		}
+
+		 if (ei_x_new_with_version(b)) {
+			 last_error = EEPAPI_NEWEIBUF;
+			 delete p;
+			 p=NULL;
+			 return 1;
+		 }
+
+	}//if
+
+	b = p->getTxBuf();
+	if (NULL==b) {
+		delete p;
+		last_error = EEPAPI_MALLOC;
+		return 1;
+	}
+
+	switch(ts->type) {
+
+	case TERMTYPE_START_LIST:
+		result=ei_x_encode_list_header(b, 1);
+		break;
+
+	case TERMTYPE_END_LIST:
+		result=ei_x_encode_empty_list(b);
+		break;
+
+	case TERMTYPE_ATOM:
+		result=ei_x_encode_atom(b, (const char *)ts->Value.string);
+		break;
+
+	case TERMTYPE_TUPLE:
+		result=ei_x_encode_tuple_header(b, (int) ts->size);
+		break;
+
+	case TERMTYPE_DOUBLE:
+		result=ei_x_encode_double(b, ts->Value.afloat);
+		break;
+
+	case TERMTYPE_LONG:
+		result=ei_x_encode_long(b, ts->Value.integer);
+		break;
+
+	case TERMTYPE_ULONG:
+		result=ei_x_encode_ulong(b, ts->Value.uinteger);
+		break;
+
+	case TERMTYPE_LONGLONG:
+		result=ei_x_encode_longlong(b, ts->Value.linteger);
+		break;
+
+	case TERMTYPE_ULONGLONG:
+		result=ei_x_encode_ulonglong(b, ts->Value.luinteger);
+		break;
+
+	case TERMTYPE_STRING:
+		result=ei_x_encode_string(b, (const char *) ts->Value.string);
+		break;
+
+	case TERMTYPE_BINARY:
+		result=ei_x_encode_binary(b, ts->Value.string, ts->size);
+		break;
+
+	default:
+		result=1;
+		break;
+
+
+	}//switch
+
+	return result;
+}
 
 
 /**

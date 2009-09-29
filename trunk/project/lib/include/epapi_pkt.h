@@ -103,6 +103,10 @@
 	 * by providing the capability to configure the input file
 	 * descriptor and output file descriptor.  The defaults are
 	 * "stdin" and "stdout".
+	 *
+	 * The only state maintained in this class is the 'last_error'
+	 * variable thus an instance of this class can be reused easily.
+	 *
 	 */
 	class PktHandler: public epapiBase {
 

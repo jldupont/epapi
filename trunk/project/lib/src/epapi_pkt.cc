@@ -35,7 +35,8 @@ ei_x_buff *
 Pkt::getTxBuf(void) {
 
 	if (NULL==tbuf) {
-		tbuf = (ei_x_buff *) malloc(sizeof(ei_x_buff));
+		//tbuf = (ei_x_buff *) malloc(sizeof(ei_x_buff));
+		ei_x_new(tbuf);
 	}
 
 	if (NULL==tbuf) {
@@ -199,6 +200,10 @@ PktHandler::tx(Pkt *p) {
 	}
 
 	ei_x_buff *buf = p->getTxBuf();
+	if (NULL==buf) {
+		last_error=EEPAPI_MALLOC;
+		return 1;
+	}
 	unsigned char li;
 
 	int result;
