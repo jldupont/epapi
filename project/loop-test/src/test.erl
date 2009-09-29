@@ -5,7 +5,11 @@
 
 -define(TIMEOUT, 2000).
 -define(DRV, "epapi_loop_drv").
--define(TESTDATA, {test}).
+%-define(TESTDATA, {test, "test", [test, "test"]}).
+%-define(TESTDATA, {test, "test"}).
+%-define(TESTDATA, {test, [1,2,3,4,5]}).
+-define(TESTDATA, {test, [test]}).
+
 
 
 %%

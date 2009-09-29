@@ -89,6 +89,8 @@ TermHandler::send(void) {
 		return 1;
 	}
 
+	DBGLOG(LOG_INFO,"TermHandler::send - start");
+
 	int result = ph->tx( p );
 	if (result) {
 
