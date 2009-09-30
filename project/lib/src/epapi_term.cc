@@ -98,7 +98,6 @@ TermHandler::append(TermStruct *ts) {
 
 	b = p->getTxBuf();
 	if (NULL==b) {
-		delete p;
 		last_error = EEPAPI_MALLOC;
 		return 1;
 	}

@@ -3,7 +3,7 @@
 
 -module(test).
 
--define(TIMEOUT, 2000).
+-define(TIMEOUT, 100).
 -define(DRV, "epapi_loop_drv").
 
 -define(TESTDATA, {test, "test", [test, "test777", 1.0]}).

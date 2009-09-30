@@ -18,7 +18,8 @@ Pkt::Pkt() {
 	last_error=0;
 	sz=0;
 	buf=NULL;
-	tbuf=NULL;
+	//tbuf=NULL;
+	ei_x_new_with_version(&tbuf);
 }//
 
 Pkt::~Pkt() {
@@ -26,8 +27,8 @@ Pkt::~Pkt() {
 	if (NULL!=buf)
 		free(buf);
 
-	if (NULL!=tbuf)
-		ei_x_free(tbuf);
+	//if (NULL!=tbuf)
+	//	ei_x_free(tbuf);
 
 }//
 
@@ -37,23 +38,26 @@ Pkt::clean(void) {
 	if (NULL!=buf) {
 		bzero((void *)buf, sz);
 	}
+
+	ei_x_free(&tbuf);
+	ei_x_new_with_version(&tbuf);
 }
 
 ei_x_buff *
 Pkt::getTxBuf(void) {
 
-	if (NULL==tbuf) {
-		tbuf = (ei_x_buff *) malloc(sizeof(ei_x_buff));
-		if (NULL!=tbuf)
-			ei_x_new_with_version(tbuf);
-	}
+	//if (NULL==tbuf) {
+	//	tbuf = (ei_x_buff *) malloc(sizeof(ei_x_buff));
+	//	if (NULL!=tbuf)
+	//		ei_x_new_with_version(tbuf);
+	//}
 
-	if (NULL==tbuf) {
-		last_error = EEPAPI_MALLOC;
-		return NULL;
-	}
+	//if (NULL==tbuf) {
+	//	last_error = EEPAPI_MALLOC;
+	//	return NULL;
+	//}
 
-	return tbuf;
+	return &tbuf;
 }//
 
 unsigned char *
@@ -112,6 +116,10 @@ int
 Pkt::getLength(void) {
 	return len;
 }
+
+
+
+
 
 // =========================================
 // PktHandler Class
