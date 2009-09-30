@@ -2,11 +2,15 @@
 # @author Jean-Lou Dupont
 #
 
-all: debug release
+MAKE=make
+BUILDS=Release Debug
+TARGETS=all clean
 
-debug:
-	make -C Debug
-	
-release:
-	make -C Release
-	
+$(TARGETS):
+	@for b in $(BUILDS) ; do $(MAKE) -C $$b $@ ; done
+
+$(BUILDS):
+	@for t in $(TARGETS) ; do $(MAKE) -C $@ $$t ; done
+
+%:
+	@for b in $(BUILDS) ; do $(MAKE) -C $$b $@ ; done
