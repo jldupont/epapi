@@ -22,14 +22,14 @@
 		,TERMTYPE_END_LIST    //4
 		,TERMTYPE_START_TUPLE //5
 		,TERMTYPE_ATOM        //6
-		,TERMTYPE_STRING
-		,TERMTYPE_DOUBLE
-		,TERMTYPE_LONG
-		,TERMTYPE_ULONG
-		,TERMTYPE_LONGLONG
-		,TERMTYPE_ULONGLONG
-		,TERMTYPE_BINARY
-		,TERMTYPE_NIL
+		,TERMTYPE_STRING      //7
+		,TERMTYPE_DOUBLE      //8
+		,TERMTYPE_LONG        //9
+		,TERMTYPE_ULONG       //10
+		,TERMTYPE_LONGLONG    //11
+		,TERMTYPE_ULONGLONG   //12
+		,TERMTYPE_BINARY      //13
+		,TERMTYPE_NIL         //14
 	} TermType;
 
 
@@ -100,15 +100,11 @@
 		const char *termtype_tostring(TermType type);
 
 		/**
-		 * Send the packet
+		 * Initialize the TX process
 		 *
-		 * This method cleans up so that it the
-		 * object instance can be reused for sending more terms.
-		 *
-		 * @return 0 SUCCESS
-		 * @return 1 FAILURE
+		 * @param p Pkt pointer
 		 */
-		int send(void);
+		void initTx(Pkt *p);
 
 		/**
 		 * Appends an element to the packet

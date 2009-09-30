@@ -168,6 +168,7 @@ loop(Port) ->
 #include <stdarg.h>
 #include <iostream>
 #include <cstring>
+#include <strings.h>
 
 #include <ei.h>
 

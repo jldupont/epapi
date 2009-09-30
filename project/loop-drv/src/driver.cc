@@ -23,6 +23,8 @@ int main(int argc, char **argv) {
 	do {
 		if (NULL==p)
 			p=new Pkt();
+		else
+			p->clean();
 
 		r = ph->rx(&p);
 		if (r) {
@@ -45,6 +47,10 @@ int main(int argc, char **argv) {
 		int result;
 		TermStruct ts;
 		ith->clean(&ts);
+
+		Pkt *opkt = new Pkt();
+		oth->initTx(opkt);
+
 
 		DBGLOG(LOG_INFO, "epapi_loop_drv: starting decode & adapt loop");
 		// Loop through the received Term
@@ -70,6 +76,9 @@ int main(int argc, char **argv) {
 					DBGLOG(LOG_ERR, "epapi_loop_drv: append error, msg: %s", oth->strerror());
 					break;
 				}
+
+				if (TERMTYPE_NIL==ts.type)
+					break;
 			}
 			// reached the end... proceed to sending
 			if (result &&(EEPAPI_BADTYPE==last_error)) {
@@ -86,7 +95,8 @@ int main(int argc, char **argv) {
 		else {
 			DBGLOG(LOG_INFO, "epapi_loop_drv: about to send back");
 			// send
-			result=oth->send();
+			result=ph->tx(opkt);
+			delete opkt; // we won't be needed this regardless
 			if (result) {
 				last_error=oth->last_error;
 				break;

@@ -31,13 +31,21 @@ Pkt::~Pkt() {
 
 }//
 
+void
+Pkt::clean(void) {
+
+	if (NULL!=buf) {
+		bzero((void *)buf, sz);
+	}
+}
+
 ei_x_buff *
 Pkt::getTxBuf(void) {
 
 	if (NULL==tbuf) {
 		tbuf = (ei_x_buff *) malloc(sizeof(ei_x_buff));
 		if (NULL!=tbuf)
-			ei_x_new(tbuf);
+			ei_x_new_with_version(tbuf);
 	}
 
 	if (NULL==tbuf) {

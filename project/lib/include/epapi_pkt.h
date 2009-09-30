@@ -17,6 +17,10 @@
 	/**
 	 * Packet class
 	 *
+	 * Instance used for Tx cannot be recycled
+	 * as I do not understand enough of the inner
+	 * workings of Erlang libei.
+	 *
 	 */
 	class Pkt: public epapiBase {
 
@@ -65,7 +69,7 @@
 
 		/**
 		 * Returns the Erlang specific
-		 * TX buffer
+		 * TX buffer initialized with with version.
 		 *
 		 * @return ei_x_buff buffer
 		 */
@@ -94,6 +98,16 @@
 		 * @return packet length
 		 */
 		int getLength(void);
+
+		/**
+		 * Clean the internal buffer
+		 * (if one is allocated)
+		 *
+		 * This method helps prepare
+		 * for reception of new data.
+		 */
+		void clean(void);
+
 	};
 
 	/**

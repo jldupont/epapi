@@ -296,11 +296,14 @@ MsgHandler::send(msg_type type, ...) {
 		return 1;
 	}
 
+	/* ALREADY DONE THROUGH getTxBuf()
+
 	 if (ei_x_new_with_version(b)) {
 		 last_error = EEPAPI_NEWEIBUF;
 		 delete p;
 		 return 1;
 	 }
+	*/
 
 	 // {msg_type, {Msg}} , arity = 2
 	 if (ei_x_encode_tuple_header(b, 2)) {

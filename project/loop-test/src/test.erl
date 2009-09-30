@@ -5,10 +5,15 @@
 
 -define(TIMEOUT, 2000).
 -define(DRV, "epapi_loop_drv").
+
 %-define(TESTDATA, {test, "test", [test, "test"]}).
 %-define(TESTDATA, {test, "test"}).
 %-define(TESTDATA, {test, [1,2,3,4,5]}).
--define(TESTDATA, {test, [test]}).
+%-define(TESTDATA, {test, [test]}).           %% generates NIL at the end
+%-define(TESTDATA, {test, [test, 123456]}).
+%-define(TESTDATA, {}).                        %% generates TUPLE size 0, type=183 (UNSUPPORTED)
+-define(TESTDATA, {{}}).                       %% TUPLE size 1, TUPLE size 0, type=114 (UNSUPPORTED)
+%-define(TESTDATA, []).                        %% just generates NIL
 
 
 

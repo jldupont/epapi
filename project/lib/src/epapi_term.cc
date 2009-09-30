@@ -65,6 +65,12 @@ TermHandler::~TermHandler() {
 }
 
 void
+TermHandler::initTx(Pkt *_p) {
+
+	p=_p;
+}
+
+void
 TermHandler::clean(TermStruct *ts) {
 	if (NULL==ts) return;
 
@@ -82,166 +88,6 @@ TermHandler::clean(TermStruct *ts) {
 }
 
 int
-TermHandler::send(void) {
-
-	if ((NULL==ph) || (NULL==p)){
-		last_error = EEPAPI_NULL;
-		return 1;
-	}
-
-	DBGLOG(LOG_INFO,"TermHandler::send - start");
-
-	int result = ph->tx( p );
-	if (result) {
-
-		// the PktHandler layer
-		// will tell us what we need...
-		last_error = ph->last_error;
-	}
-
-	delete p;
-	p=NULL;
-
-	return result;
-}
-
-/**
- * Appends a term to the packet being currently assembled
- *
- * String: must be NUL terminated
- *
- * Binary:
- * 		append(TERMTYPE_BINARY, long length, void *bin);
- *
- * Atom:
- * 		append(TERMTYPE_ATOM, char *string)
- *
- * Tuple:
- *		append(TERMTYPE_TUPLE, int arity)
- *		append(TERMTYPE_xyz, ...)
- *		...
- *
- */
-int
-TermHandler::append(TermType type, ...) {
-
-	ei_x_buff *b;
-
-	// First time, let's prepare ourselves a packet
-	if (NULL==p) {
-		p=new Pkt();
-
-		b= p->getTxBuf();
-		if (NULL==b) {
-			delete p;
-			p=NULL;
-			last_error = EEPAPI_MALLOC;
-			return 1;
-		}
-
-		 if (ei_x_new_with_version(b)) {
-			 last_error = EEPAPI_NEWEIBUF;
-			 delete p;
-			 p=NULL;
-			 return 1;
-		 }
-
-	}//if
-
-
-	b = p->getTxBuf();
-	if (NULL==b) {
-		delete p;
-		last_error = EEPAPI_MALLOC;
-		return 1;
-	}
-
-	void *bin;  long len;
-	const char *string;
-	int result, arity;
-
-	long integer;
-	unsigned long uinteger;
-	long long linteger;
-	unsigned long long ulinteger;
-	double d;
-
-	va_list args;
-
-	va_start(args, type);
-
-	switch(type) {
-	case TERMTYPE_START_LIST:
-		result=ei_x_encode_list_header(b, 1);
-		break;
-
-	case TERMTYPE_END_LIST:
-		result=ei_x_encode_empty_list(b);
-		break;
-
-	case TERMTYPE_ATOM:
-		string=va_arg(args, char *);
-		result=ei_x_encode_atom(b, string);
-		break;
-
-	case TERMTYPE_START_TUPLE:
-		arity=va_arg(args, int);
-		result=ei_x_encode_tuple_header(b, arity);
-		break;
-
-	case TERMTYPE_DOUBLE:
-		d=va_arg(args, double);
-		result=ei_x_encode_double(b, d);
-		break;
-
-	case TERMTYPE_LONG:
-		integer=va_arg(args, long);
-		result=ei_x_encode_long(b, integer);
-		break;
-
-	case TERMTYPE_ULONG:
-		uinteger=va_arg(args, unsigned long);
-		result=ei_x_encode_ulong(b, uinteger);
-		break;
-
-	case TERMTYPE_LONGLONG:
-		linteger=va_arg(args, long long);
-		result=ei_x_encode_longlong(b, linteger);
-		break;
-
-	case TERMTYPE_ULONGLONG:
-		ulinteger=va_arg(args, unsigned long long);
-		result=ei_x_encode_ulonglong(b, ulinteger);
-		break;
-
-	case TERMTYPE_STRING:
-		string=va_arg(args, char *);
-		result=ei_x_encode_string(b, string);
-		break;
-
-	case TERMTYPE_BINARY:
-		len=va_arg(args, long);
-		bin=va_arg(args, void*);
-		result=ei_x_encode_binary(b, bin, len);
-		break;
-
-	default:
-		result=1;
-		break;
-	}//switch
-
-	va_end(args);
-
-	if (result) {
-		last_error = EEPAPI_EIENCODE;
-	}
-
-
-	return result;
-}//
-
-
-int
 TermHandler::append(TermStruct *ts) {
 
 	if (NULL==ts) {
@@ -252,25 +98,11 @@ TermHandler::append(TermStruct *ts) {
 	int result;
 	ei_x_buff *b; //local shortcut
 
-	DBGLOG(LOG_INFO, "TermHandler::append - start");
-
-	// First time, let's prepare ourselves a packet
 	if (NULL==p) {
-		DBGLOG(LOG_INFO, "TermHandler::append - new packet");
-
-		p=new Pkt();
-
-		b= p->getTxBuf();
-		if (NULL==b) {
-			delete p;
-			p=NULL;
-			last_error = EEPAPI_MALLOC;
-			return 1;
-		}
-
-		ei_x_new_with_version(b);
-
-	}//if
+		DBGLOG(LOG_INFO, "TermHandler::append - need a packet!");
+		last_error=EEPAPI_NULL;
+		return 1;
+	}
 
 	b = p->getTxBuf();
 	if (NULL==b) {
@@ -287,6 +119,7 @@ TermHandler::append(TermStruct *ts) {
 		result=ei_x_encode_list_header(b, 1);
 		break;
 
+	case TERMTYPE_NIL:
 	case TERMTYPE_END_LIST:
 		result=ei_x_encode_empty_list(b);
 		break;
@@ -450,6 +283,7 @@ TermHandler::iter(TermStruct *ptr) {
 	case ERL_NIL_EXT:
 		DBGLOG(LOG_INFO, "TermHandler::iter: NIL");
 		ptr->type=TERMTYPE_NIL;
+		result=0;
 		break;
 
 	case ERL_STRING_EXT:
