@@ -4,7 +4,7 @@
 #
 VERSION=`cat VERSION`
 PRJ=epapi
-DEBIAN_PKG_VER=2
+DEBIAN_PKG_VER=1
 
 DPREFIX=/tmp/$(PRJ)/debian/DEBIAN
 CTLFILES=$(DPREFIX)/control $(DPREFIX)/postinst $(DPREFIX)/postrm $(DPREFIX)/preinst $(DPREFIX)/prerm
