@@ -1,1 +1,9 @@
+
+Setup
+-----
 Install a symbolic link to epapi_loop_drv from here to ../loop-drv/Debug
+
+
+Testing:
+--------
+erl -pa ebin -run test go
