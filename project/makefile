@@ -6,6 +6,7 @@ VERSION=`cat VERSION`
 PRJ=epapi
 
 UPREFIX=/tmp/$(PRJ)/debian/usr
+DOCMAIN=./docs/html/main.html
 
 all: 
 	@echo "Version: ${VERSION}"
@@ -16,6 +17,7 @@ all:
 doc:
 	@echo "Version: ${VERSION}"
 	@doxygen
+	@./.tools/adjust_version.py $(VERSION) $(DOCMAIN) $(DOCMAIN)	
 
 
 #  /usr/include/epapi.h
