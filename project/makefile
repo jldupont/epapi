@@ -11,7 +11,7 @@ CTLFILES=$(DPREFIX)/control $(DPREFIX)/postinst $(DPREFIX)/postrm $(DPREFIX)/pre
 UPREFIX=/tmp/$(PRJ)/debian/usr
 DOCMAIN=./docs/html/main.html
 
-IDIST=../../dists/stable/main/binary-i386
+IDIST=dists/stable/main/binary-i386
 
 
 all:
@@ -33,6 +33,24 @@ doc:
 
 
 rel: doc deb up
+
+
+src:
+	@echo "* Making sources archive - version ${VERSION}"
+	@echo "> copying tree to /tmp"
+	@rm -rf /tmp/$(PRJ)_sources
+	@mkdir /tmp/$(PRJ)_sources
+	@mkdir /tmp/$(PRJ)_sources/$(PRJ)
+	@cp -R ../project/* /tmp/$(PRJ)_sources/$(PRJ)
+
+	@echo "> zipping"
+	cd /tmp/$(PRJ)_sources && zip -r $(PRJ).zip $(PRJ) -x *.svn* *.so *.o *.os *html* *.old*
+	mv /tmp/$(PRJ)_sources/$(PRJ).zip /tmp/$(PRJ)_sources/$(PRJ)-$(VERSION).zip
+
+up:
+	@echo "* Uploading sources archive to GoogleCode"
+	@./.tools/upload.py /tmp/$(PRJ)_sources/$(PRJ)-$(VERSION).zip $(PRJ)
+
 
 
 deb:
@@ -66,26 +84,9 @@ deb:
 	@dpkg-deb --build /tmp/$(PRJ)/debian /tmp/$(PRJ)/$(PRJ).deb
 	
 	@echo "> copying .deb to repository"
-	@cp /tmp/$(PRJ)/$(PRJ).deb $(IDIST)/$(PRJ)_$(VERSION)-$(DEBIAN_PKG_VER)_i386.deb
+	@cp /tmp/$(PRJ)/$(PRJ).deb ../../$(IDIST)/$(PRJ)_$(VERSION)-$(DEBIAN_PKG_VER)_i386.deb
 	
 	@echo "> running dpkg-scanpackages"
-	@dpkg-scanpackages -m $(IDIST) /dev/null | gzip -9c > $(IDIST)/Packages.gz
-
-
-src:
-	@echo "* Making sources archive - version ${VERSION}"
-	@echo "> copying tree to /tmp"
-	@rm -rf /tmp/$(PRJ)_sources
-	@mkdir /tmp/$(PRJ)_sources
-	@mkdir /tmp/$(PRJ)_sources/$(PRJ)
-	@cp -R ../project/* /tmp/$(PRJ)_sources/$(PRJ)
-
-	@echo "> zipping"
-	cd /tmp/$(PRJ)_sources && zip -r $(PRJ).zip $(PRJ) -x *.svn* *.so *.o *.os *html* *.old*
-	mv /tmp/$(PRJ)_sources/$(PRJ).zip /tmp/$(PRJ)_sources/$(PRJ)-$(VERSION).zip
-
-up:
-	@echo "* Uploading sources archive to GoogleCode"
-	@./.tools/upload.py /tmp/$(PRJ)_sources/$(PRJ)-$(VERSION).zip $(PRJ)
+	@cd ../.. && dpkg-scanpackages -m $(IDIST) /dev/null | gzip -9c > $(IDIST)/Packages.gz
 
 	
