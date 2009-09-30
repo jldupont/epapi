@@ -4,9 +4,15 @@
 #
 VERSION=`cat VERSION`
 PRJ=epapi
+DEBIAN_PKG_VER=1
 
+DPREFIX=/tmp/$(PRJ)/debian/DEBIAN
+CTLFILES=$(DPREFIX)/control $(DPREFIX)/postinst $(DPREFIX)/postrm $(DPREFIX)/preinst $(DPREFIX)/prerm
 UPREFIX=/tmp/$(PRJ)/debian/usr
 DOCMAIN=./docs/html/main.html
+
+IDIST=../../dists/stable/main/binary-i386
+
 
 all: 
 	@echo "Version: ${VERSION}"
@@ -16,16 +22,9 @@ all:
 	
 doc:
 	@echo "Version: ${VERSION}"
-	@doxygen
+	@cd docs && doxygen
 	@./.tools/adjust_version.py $(VERSION) $(DOCMAIN) $(DOCMAIN)	
 
-
-#  /usr/include/epapi.h
-#  /usr/lib/libepapi.so-VERSION
-#  /usr/lib/libepapi_debug.so-VERSION
-#  /usr/lib/erlang/lib/epapi/ebin/test.beam
-#  /usr/lib/erlang/lib/epapi/src/test.erl
-#  /usr/lib/pkgconfig/epapi.pc
 
 deb:
 	@echo "* Building .deb -- Version: ${VERSION}"
@@ -49,4 +48,35 @@ deb:
 
 	@echo "> adusting version info"
 	@./.tools/adjust_version.py $(VERSION) $(UPREFIX)/include/epapi.h $(UPREFIX)/lib/pkgconfig/epapi.pc
+	@./.tools/adjust_version.py $(VERSION) $(CTLFILES)
 
+	@echo "> adjusting DEBIAN control files permissions"
+	@chmod 0775 $(CTLFILES)
+
+	@echo "> running dpkg-deb"
+	@dpkg-deb --build /tmp/$(PRJ)/debian /tmp/$(PRJ)/$(PRJ).deb
+	
+	@echo "> copying .deb to repository"
+	@cp /tmp/$(PRJ)/$(PRJ).deb $(IDIST)/$(PRJ)_$(VERSION)-$(DEBIAN_PKG_VER)_i386.deb
+	
+	@echo "> running dpkg-scanpackages"
+	@dpkg-scanpackages -m $(IDIST) /dev/null | gzip -9c > $(IDIST)/Packages.gz
+
+
+src:
+	@echo "* Making sources archive - version ${VERSION}"
+	@echo "> copying tree to /tmp"
+	@rm -rf /tmp/$(PRJ)_sources
+	@mkdir /tmp/$(PRJ)_sources
+	@mkdir /tmp/$(PRJ)_sources/$(PRJ)
+	@cp -R ../project/* /tmp/$(PRJ)_sources/$(PRJ)
+
+	@echo "> zipping"
+	cd /tmp/$(PRJ)_sources && zip -r $(PRJ).zip $(PRJ) -x *.svn* *.so *.o *.os *html* *.old*
+	mv /tmp/$(PRJ)_sources/$(PRJ).zip /tmp/$(PRJ)_sources/$(PRJ)-$(VERSION).zip
+
+up:
+	@echo "* Uploading sources archive to GoogleCode"
+	@./.tools/upload.py /tmp/$(PRJ)_sources/$(PRJ)-$(VERSION).zip $(PRJ)
+
+	
