@@ -103,17 +103,19 @@ TermHandler::append(TermStruct *ts) {
 		return 1;
 	}
 
-	DBGLOG(LOG_INFO, "TermHandler::append: type: %i", ts->type);
+	//DBGLOG(LOG_INFO, "TermHandler::append: type: %i", ts->type);
 
 	switch(ts->type) {
 
 	case TERMTYPE_START_LIST:
-		result=ei_x_encode_list_header(b, 1);
+		DBGLOG(LOG_INFO, "TermHandler::append: LIST_HEADER, size: %i", ts->size);
+		result=ei_x_encode_list_header(b, ts->size);
 		break;
 
 
 	case TERMTYPE_NIL:
 	case TERMTYPE_END_LIST:
+		DBGLOG(LOG_INFO, "TermHandler::append: NIL");
 		result=ei_x_encode_empty_list(b);
 		break;
 
@@ -128,35 +130,42 @@ TermHandler::append(TermStruct *ts) {
 		break;
 
 	case TERMTYPE_DOUBLE:
-		DBGLOG(LOG_INFO, "TermHandler::append: DOUBLE");
+		DBGLOG(LOG_INFO, "TermHandler::append: DOUBLE, value: %f", ts->Value.afloat);
 		result=ei_x_encode_double(b, ts->Value.afloat);
 		break;
 
 	case TERMTYPE_LONG:
+		DBGLOG(LOG_INFO, "TermHandler::append: LONG, value: %l", ts->Value.integer);
 		result=ei_x_encode_long(b, ts->Value.integer);
 		break;
 
 	case TERMTYPE_ULONG:
+		DBGLOG(LOG_INFO, "TermHandler::append: ULONG, value: %ul", ts->Value.uinteger);
 		result=ei_x_encode_ulong(b, ts->Value.uinteger);
 		break;
 
 	case TERMTYPE_LONGLONG:
+		DBGLOG(LOG_INFO, "TermHandler::append: LONGLONG");
 		result=ei_x_encode_longlong(b, ts->Value.linteger);
 		break;
 
 	case TERMTYPE_ULONGLONG:
+		DBGLOG(LOG_INFO, "TermHandler::append: ULONGLONG");
 		result=ei_x_encode_ulonglong(b, ts->Value.luinteger);
 		break;
 
 	case TERMTYPE_STRING:
+		DBGLOG(LOG_INFO, "TermHandler::append: STRING: %s", ts->Value.string);
 		result=ei_x_encode_string(b, (const char *) ts->Value.string);
 		break;
 
 	case TERMTYPE_BINARY:
+		DBGLOG(LOG_INFO, "TermHandler::append: BINARY");
 		result=ei_x_encode_binary(b, ts->Value.string, ts->size);
 		break;
 
 	default:
+		DBGLOG(LOG_INFO, "TermHandler::append: ERROR");
 		result=1;
 		break;
 
@@ -219,7 +228,7 @@ TermHandler::iter(TermStruct *ptr) {
 		return 1;
 	}
 
-	DBGLOG(LOG_INFO, "TermHandler::iter: type: %i", type);
+	//DBGLOG(LOG_INFO, "TermHandler::iter: type: %i", type);
 
 	char *sptr;
 
@@ -248,7 +257,6 @@ TermHandler::iter(TermStruct *ptr) {
 		break;
 
 	case ERL_ATOM_EXT:
-		DBGLOG(LOG_INFO, "TermHandler::iter: ATOM");
 		sptr=(char*) malloc(sizeof(char)*size+sizeof(char));
 		if (NULL==sptr) {
 			last_error=EEPAPI_MALLOC;
@@ -258,24 +266,24 @@ TermHandler::iter(TermStruct *ptr) {
 		ptr->Value.string=sptr;
 		ptr->size=size;
 		ptr->type=TERMTYPE_ATOM;
+		DBGLOG(LOG_INFO, "TermHandler::iter: ATOM, size: %i", size);
 		break;
 
 	case ERL_FLOAT_EXT:
-		DBGLOG(LOG_INFO, "TermHandler::iter: FLOAT");
 		result=ei_decode_double((const char *)buf, &index, &(ptr->Value.afloat));
 		ptr->type=TERMTYPE_DOUBLE;
+		DBGLOG(LOG_INFO, "TermHandler::iter: FLOAT, value: %f", ptr->Value.afloat);
 		break;
 
 	case ERL_SMALL_TUPLE_EXT:
 	case ERL_LARGE_TUPLE_EXT:
-		DBGLOG(LOG_INFO, "TermHandler::iter: TUPLE");
 		result=ei_decode_tuple_header((const char *)buf, &index, &size);
 		ptr->size= (long) size;
 		ptr->type=TERMTYPE_START_TUPLE;
+		DBGLOG(LOG_INFO, "TermHandler::iter: TUPLE, size: %i", size);
 		break;
 
 	case ERL_STRING_EXT:
-		DBGLOG(LOG_INFO, "TermHandler::iter: STRING");
 		sptr=(char*) malloc(sizeof(char)*size+sizeof(char));
 		if (NULL==sptr) {
 			last_error=EEPAPI_MALLOC;
@@ -285,17 +293,17 @@ TermHandler::iter(TermStruct *ptr) {
 		ptr->Value.string=sptr;
 		ptr->size=size;
 		ptr->type=TERMTYPE_STRING;
+		DBGLOG(LOG_INFO, "TermHandler::iter: STRING, size: %i", size);
 		break;
 
 	case ERL_LIST_EXT:
-		DBGLOG(LOG_INFO, "TermHandler::iter: LIST");
 		result=ei_decode_list_header((const char *)buf, &index, &size);
 		ptr->size=(long) size;
 		ptr->type=TERMTYPE_START_LIST;
+		DBGLOG(LOG_INFO, "TermHandler::iter: LIST, size: %i", size);
 		break;
 
 	case ERL_BINARY_EXT:
-		DBGLOG(LOG_INFO, "TermHandler::iter: BINARY");
 		sptr=(char*) malloc(sizeof(char)*size+sizeof(char));
 		if (NULL==sptr) {
 			last_error=EEPAPI_MALLOC;
@@ -304,6 +312,7 @@ TermHandler::iter(TermStruct *ptr) {
 		result=ei_decode_binary((const char *)buf, &index, sptr, &(ptr->size));
 		ptr->Value.string=sptr;
 		ptr->type=TERMTYPE_BINARY;
+		DBGLOG(LOG_INFO, "TermHandler::iter: BINARY, size: %l", size);
 		break;
 
 		// Received often as termination

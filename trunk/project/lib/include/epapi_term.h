@@ -29,6 +29,8 @@
 		,TERMTYPE_LONGLONG    //11
 		,TERMTYPE_ULONGLONG   //12
 		,TERMTYPE_BINARY      //13
+		//,TERMTYPE_CHAR        // NOT DEFINED in ei.h
+		//,TERMTYPE_BOOLEAN     // NOT DEFINED in ei.h
 		,TERMTYPE_NIL         //14
 	} TermType;
 
