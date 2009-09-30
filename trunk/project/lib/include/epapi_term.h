@@ -16,7 +16,7 @@
 
 	typedef enum {
 		TERMTYPE_INVALID = 0
-		,TERMTYPE_UNSUPPORTED
+		,TERMTYPE_UNSUPPORTED //1
 		,TERMTYPE_END         //2
 		,TERMTYPE_START_LIST  //3
 		,TERMTYPE_END_LIST    //4
@@ -60,22 +60,14 @@
 
 	protected:
 
-		PktHandler *ph;
 		Pkt *p;
 		int index; // for the rx side
 
 	public:
 		/**
-		 * Constructor used when sending
+		 * Constructor
 		 */
-		TermHandler(PktHandler *ph);
-
-		/**
-		 * Constructor used when receiving
-		 *
-		 * @param p Pkt instance
-		 */
-		TermHandler(Pkt *p);
+		TermHandler(void);
 
 		/**
 		 * Destructor
@@ -100,11 +92,11 @@
 		const char *termtype_tostring(TermType type);
 
 		/**
-		 * Initialize the TX process
+		 * Initialize
 		 *
 		 * @param p Pkt pointer
 		 */
-		void initTx(Pkt *p);
+		void init(Pkt *p);
 
 		/**
 		 * Appends an element to the packet

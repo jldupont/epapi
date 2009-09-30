@@ -75,6 +75,7 @@ Pkt::getBuf(int _size) {
 			buf = (char *) malloc(_size);
 			sz = _size;
 		}
+		bzero((void*) buf, sz);
 		DBGLOG(LOG_INFO,"Pkt::getBuf: creating to size: %i", sz);
 	}
 
@@ -90,6 +91,7 @@ Pkt::getBuf(int _size) {
 	if (_size>sz) {
 		DBGLOG(LOG_INFO,"Pkt::getBuf: reallocating to size: %i, current: %i", _size, sz);
 		tmp = (unsigned char *) realloc(buf, _size);
+		bzero((void *)(buf+sz), (_size-sz));
 		if (NULL!=tmp) {
 			sz = _size;
 			buf=(char *)tmp;
@@ -97,6 +99,7 @@ Pkt::getBuf(int _size) {
 			last_error = EEPAPI_REALLOC;
 		}
 	}
+
 	return (unsigned char *)buf;
 }//
 
