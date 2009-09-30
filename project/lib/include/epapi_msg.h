@@ -184,7 +184,7 @@
 		/**
 		 * Generic send message
 		 *
-		 * @param msg_type message type (integer)
+		 * @param type msg_type message type (integer)
 		 *
 		 * @return 0 SUCCESS
 		 * @return 1 FAILURE
@@ -219,6 +219,7 @@
 		 *
 		 * Used during message reception/decoding.
 		 *
+		 * @param type msg_type
 		 * @param ttype msg_type_text
 		 * @return signature NULL on FAILURE
 		 */

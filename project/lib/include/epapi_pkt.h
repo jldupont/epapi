@@ -3,6 +3,17 @@
  *
  * @date   2009-06-06
  * @author Jean-Lou Dupont
+ *
+ * \section Overview
+ *
+ *   \subsection Pkt Class
+ *
+ *   This class serves to hold either a 'receive' side packet
+ *   or a 'transmit' side packet.  For reason of efficiency & speed,
+ *   each process direction is handled differently.
+ *
+ *   Pkt instances can be recycled by using the 'clean'
+ *
  */
 
 #ifndef PKT_H_
@@ -15,11 +26,8 @@
 
 
 	/**
-	 * Packet class
-	 *
-	 * Instance used for Tx cannot be recycled
-	 * as I do not understand enough of the inner
-	 * workings of Erlang libei.
+	 * \class Pkt
+	 * \brief Pkt class declaration
 	 *
 	 */
 	class Pkt: public epapiBase {
@@ -46,14 +54,13 @@
 		Pkt();
 
 		/**
-		 * Destroys either RX or TX
-		 * packet types
+		 * Destructor
 		 */
 		~Pkt();
 
 		/**
 		 * Gets the pointer to
-		 * the internal buffer
+		 * the internal buffer for the RX process
 		 */
 		unsigned char *getBuf(void);
 
@@ -110,8 +117,17 @@
 
 	};
 
+
+
+// =====================================================================
+// =====================================================================
+
+
+
+
 	/**
-	 * Packet Handler
+	 * \class PktHandler
+	 * \brief Packet Handler class declaration
 	 *
 	 * This class enables customization of the packet handling layer
 	 * by providing the capability to configure the input file

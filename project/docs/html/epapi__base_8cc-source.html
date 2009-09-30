@@ -53,7 +53,7 @@
 <a name="l00032"></a>00032 <span class="keyword">const</span> <span class="keywordtype">char</span> *
 <a name="l00033"></a><a class="code" href="classepapiBase.html#08c061372f09f989a74aff2a4e2ebbd7">00033</a> <a class="code" href="classepapiBase.html#08c061372f09f989a74aff2a4e2ebbd7">epapiBase::strerror</a>(<span class="keywordtype">void</span>) {
 <a name="l00034"></a>00034 
-<a name="l00035"></a>00035         <span class="keywordflow">if</span> (<a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a>&gt;(<span class="keyword">sizeof</span>(<a class="code" href="classepapiBase.html#b89b91afa9072d363984aa45a1dd5d2c">errors</a>)/<span class="keyword">sizeof</span>(<span class="keywordtype">int</span>)))
+<a name="l00035"></a>00035         <span class="keywordflow">if</span> (<a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a>&gt;((<span class="keywordtype">int</span>)(<span class="keyword">sizeof</span>(<a class="code" href="classepapiBase.html#b89b91afa9072d363984aa45a1dd5d2c">errors</a>)/<span class="keyword">sizeof</span>(<span class="keywordtype">int</span>))))
 <a name="l00036"></a>00036                 <span class="keywordflow">return</span> <a class="code" href="classepapiBase.html#b89b91afa9072d363984aa45a1dd5d2c">errors</a>[1];
 <a name="l00037"></a>00037 
 <a name="l00038"></a>00038         <span class="comment">//if we need to look-up system errno</span>
@@ -93,7 +93,7 @@
 <a name="l00072"></a>00072 }
 <a name="l00073"></a>00073 <span class="preprocessor">#endif</span>
 </pre></div></div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Mon Jun 15 15:28:38 2009 for EPAPI by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Wed Sep 30 09:09:35 2009 for EPAPI by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.8 </small></address>
 </body>
