@@ -17,22 +17,25 @@ int main(int argc, char **argv) {
 
 	TermStruct ts;
 
-	Pkt *p = NULL;
+	Pkt *ipkt = new Pkt();
+	Pkt *opkt = new Pkt();
+
 	int r;
 	int last_error;
 	int result;
 
 	do {
+		/*
 		if (NULL==p)
 			p=new Pkt();
 		else
 			p->clean(); // recycle!
+		*/
 
-		r = ph->rx(&p);
+		r = ph->rx(&ipkt);
 		if (r) {
 			last_error = ph->last_error;
 			DBGLOG(LOG_ERR, "Error, msg: %s", ph->strerror());
-			delete p;
 			break;
 		}
 
@@ -40,9 +43,9 @@ int main(int argc, char **argv) {
 
 		// SETUP before iteration
 		ith->clean(&ts);
-		ith->init(p);
+		ith->init(ipkt);
 
-		Pkt *opkt = new Pkt(); //can't recycle those...
+		//Pkt *opkt = new Pkt(); //can't recycle those...
 		oth->init(opkt);
 
 
@@ -81,13 +84,18 @@ int main(int argc, char **argv) {
 
 		} while(1);
 
+		// make sure we are ready for next round... if any
+		ipkt->clean();
+
 		if (result) // error occured
 			break;
 		else {
 			DBGLOG(LOG_INFO, "epapi_loop_drv: about to send back");
 			// send
 			result=ph->tx(opkt);
-			delete opkt; // we won't be needed this regardless
+			opkt->clean(); //recycle
+
+			//delete opkt; // we won't be needed this regardless
 			if (result) {
 				last_error=oth->last_error;
 				break;
@@ -99,6 +107,10 @@ int main(int argc, char **argv) {
 	} while (1) ;
 
 
-
+	delete ipkt;
+	delete opkt;
+	delete ph;
+	delete ith;
+	delete oth;
 	exit(last_error);
 }//

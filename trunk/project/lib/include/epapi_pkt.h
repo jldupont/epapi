@@ -36,7 +36,7 @@
 		int len;
 
 		//TX packet type
-		ei_x_buff *tbuf;
+		ei_x_buff tbuf;
 
 	public:
 
