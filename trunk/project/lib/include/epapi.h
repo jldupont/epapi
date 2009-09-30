@@ -154,6 +154,7 @@ loop(Port) ->
  *
  *  \li 0.1 - Initial Release
  *  \li 0.2 - Set the msg_type correctly
+ *  \li 0.3 - Add TermHandler functionality (required by erlang-dbus)
  *
  *
  * \note Only packet header with length field=2 is supported.
