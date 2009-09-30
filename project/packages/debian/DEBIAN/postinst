@@ -43,16 +43,16 @@ print "EPAPI: postinst: command[%s] configured version [%s] this version[%s]" % 
 if command == 'configure':
 
 	#configured version
-	cv  = '/usr/lib/lib%s-%s.so' % (this_lib, version)
-	cvd = '/usr/lib/lib%s_debug-%s.so' % (this_lib, version)
+	cv  = '/usr/lib/lib%s.so.%s' % (this_lib, version)
+	cvd = '/usr/lib/lib%s_debug.so.%s' % (this_lib, version)
 
 	dst = '/usr/lib/lib%s.so' % this_lib
-	src = '/usr/lib/lib%s-%s.so' % (this_lib, this_version)
+	src = '/usr/lib/lib%s.so.%s' % (this_lib, this_version)
 	
 	ddst = '/usr/lib/lib%s_debug.so' % this_lib
-	dsrc = '/usr/lib/lib%s_debug-%s.so' % (this_lib, this_version)
+	dsrc = '/usr/lib/lib%s_debug.so.%s' % (this_lib, this_version)
 	
-	hdrs = ['%s.h', '%s_msg.h', '%s_pkt.h'] 
+	hdrs = ['%s.h', '%s_msg.h', '%s_pkt.h', '%s_term.h'] 
 	
 	code = 0
 	try:
@@ -68,15 +68,15 @@ if command == 'configure':
 		print """EPAPI: creating symlink src[%s] ==> dst[%s]""" % (dsrc, ddst)
 		os.symlink(dsrc, ddst)
 			
-		print """EPAPI: chmod's"""
-		os.chmod(src,  0644)
-		os.chmod(dst,  0644)
-		os.chmod(dsrc, 0644)
-		os.chmod(ddst, 0644)
+		#print """EPAPI: chmod's"""
+		#os.chmod(src,  0644)
+		#os.chmod(dst,  0644)
+		#os.chmod(dsrc, 0644)
+		#os.chmod(ddst, 0644)
 		
-		for hdr in hdrs:
-			path = "/usr/include/%s" % hdr
-			os.chmod(path % this_lib,  0644)
+		#for hdr in hdrs:
+		#	path = "/usr/include/%s" % hdr
+		#	os.chmod(path % this_lib,  0644)
 		
 	except Exception,e:
 		print "Exception [%s]" % e
