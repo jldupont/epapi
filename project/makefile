@@ -4,7 +4,7 @@
 #
 VERSION=`cat VERSION`
 PRJ=epapi
-DEBIAN_PKG_VER=1
+DEBIAN_PKG_VER=2
 
 DPREFIX=/tmp/$(PRJ)/debian/DEBIAN
 CTLFILES=$(DPREFIX)/control $(DPREFIX)/postinst $(DPREFIX)/postrm $(DPREFIX)/preinst $(DPREFIX)/prerm
@@ -66,8 +66,8 @@ deb:
 	@cp lib/include/epapi_msg.h             /tmp/$(PRJ)/debian/usr/include/epapi_msg.h
 	@cp lib/include/epapi_pkt.h             /tmp/$(PRJ)/debian/usr/include/epapi_pkt.h
 	@cp lib/include/epapi_term.h            /tmp/$(PRJ)/debian/usr/include/epapi_term.h
-	@cp lib/Debug/libepapi_debug.so         /tmp/$(PRJ)/debian/usr/lib/libepapi_debug.so-$(VERSION)
-	@cp lib/Release/libepapi.so             /tmp/$(PRJ)/debian/usr/lib/libepapi.so-$(VERSION)
+	@cp lib/Debug/libepapi_debug.so         /tmp/$(PRJ)/debian/usr/lib/libepapi_debug.so.$(VERSION)
+	@cp lib/Release/libepapi.so             /tmp/$(PRJ)/debian/usr/lib/libepapi.so.$(VERSION)
 	@cp loop-drv/Debug/epapi_loop_drv_debug /tmp/$(PRJ)/debian/usr/lib/erlang/lib/$(PRJ)/ebin/epapi_loop_drv_debug
 	@cp loop-drv/Release/epapi_loop_drv     /tmp/$(PRJ)/debian/usr/lib/erlang/lib/$(PRJ)/ebin/epapi_loop_drv
 	@cp loop-test/ebin/test.beam            /tmp/$(PRJ)/debian/usr/lib/erlang/lib/$(PRJ)/ebin/test.beam
