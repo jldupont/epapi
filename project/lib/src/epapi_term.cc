@@ -70,8 +70,10 @@ TermHandler::clean(TermStruct *ts) {
 	case TERMTYPE_ATOM:
 	case TERMTYPE_STRING:
 	case TERMTYPE_BINARY:
+
 		if (NULL!=ts->Value.string) {
 			free(ts->Value.string);
+			// prevent double-free
 			ts->Value.string = NULL;
 		}
 		break;
