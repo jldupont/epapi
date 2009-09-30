@@ -107,6 +107,11 @@ TermHandler::append(TermStruct *ts) {
 
 	switch(ts->type) {
 
+	// for convenience
+	case TERMTYPE_END:
+		result=0; //pass-through
+		break;
+
 	case TERMTYPE_START_LIST:
 		DBGLOG(LOG_INFO, "TermHandler::append: LIST_HEADER, size: %i", ts->size);
 		result=ei_x_encode_list_header(b, ts->size);

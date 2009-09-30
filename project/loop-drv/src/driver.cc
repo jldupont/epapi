@@ -57,14 +57,8 @@ int main(int argc, char **argv) {
 			// through the Erlang erl_interface code...
 			if (result) {
 				last_error=ith->last_error;
-				if (EEPAPI_BADTYPE!=last_error)
 					break;
 			}
-			if (!result)
-				if (TERMTYPE_END==ts.type) {
-					break;
-					result=0;
-				}
 
 
 			if (!result) {
@@ -78,15 +72,12 @@ int main(int argc, char **argv) {
 				}
 
 				// NIL is sometimes used to terminate a term()
-				// so it must be passed to 'append'
-				if (TERMTYPE_NIL==ts.type)
+				// so it must be passed to 'append' *but* it nonetheless
+				// terminates a term()
+				if ((TERMTYPE_NIL==ts.type) || (TERMTYPE_END==ts.type))
 					break;
 			}
 
-			//if (result &&(EEPAPI_BADTYPE==last_error)) {
-			//	result = 0;
-			//	break;
-			//}
 
 		} while(1);
 
