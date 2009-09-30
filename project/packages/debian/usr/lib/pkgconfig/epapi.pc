@@ -6,6 +6,5 @@ Name: epapi
 Description: Erlang Port API library
 URL: http://epapi.googlecode.com/
 Version: $version
-Requires: erlang
 Libs: -lei  
 Cflags: -I${includedir}
