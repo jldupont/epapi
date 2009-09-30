@@ -12,19 +12,21 @@ int main(int argc, char **argv) {
 
   	PktHandler *ph  = new PktHandler();
 
-	TermHandler *ith = NULL;
-	TermHandler *oth = new TermHandler(ph);
+	TermHandler *ith = new TermHandler();
+	TermHandler *oth = new TermHandler();
+
+	TermStruct ts;
 
 	Pkt *p = NULL;
 	int r;
 	int last_error;
-
+	int result;
 
 	do {
 		if (NULL==p)
 			p=new Pkt();
 		else
-			p->clean();
+			p->clean(); // recycle!
 
 		r = ph->rx(&p);
 		if (r) {
@@ -36,20 +38,12 @@ int main(int argc, char **argv) {
 
 		DBGLOG(LOG_INFO, "epapi_loop_drv: got packet");
 
-		// Start the RX side
-		ith=new TermHandler(p);
-		if (NULL==ith) {
-			DBGLOG(LOG_ERR, "Error, msg: %s", ith->strerror());
-			last_error=EEPAPI_MALLOC;
-			break;
-		}
-
-		int result;
-		TermStruct ts;
+		// SETUP before iteration
 		ith->clean(&ts);
+		ith->init(p);
 
-		Pkt *opkt = new Pkt();
-		oth->initTx(opkt);
+		Pkt *opkt = new Pkt(); //can't recycle those...
+		oth->init(opkt);
 
 
 		DBGLOG(LOG_INFO, "epapi_loop_drv: starting decode & adapt loop");
@@ -66,6 +60,12 @@ int main(int argc, char **argv) {
 				if (EEPAPI_BADTYPE!=last_error)
 					break;
 			}
+			if (!result)
+				if (TERMTYPE_END==ts.type) {
+					break;
+					result=0;
+				}
+
 
 			if (!result) {
 				DBGLOG(LOG_INFO, "epapi_loop_drv: appending");
@@ -77,18 +77,18 @@ int main(int argc, char **argv) {
 					break;
 				}
 
+				// NIL is sometimes used to terminate a term()
+				// so it must be passed to 'append'
 				if (TERMTYPE_NIL==ts.type)
 					break;
 			}
-			// reached the end... proceed to sending
-			if (result &&(EEPAPI_BADTYPE==last_error)) {
-				result = 0;
-				break;
-			}
+
+			//if (result &&(EEPAPI_BADTYPE==last_error)) {
+			//	result = 0;
+			//	break;
+			//}
 
 		} while(1);
-
-		delete ith;
 
 		if (result) // error occured
 			break;

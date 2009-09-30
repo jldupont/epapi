@@ -44,30 +44,22 @@ TermHandler::termtype_tostring(TermType type) {
 }
 
 
-// When sending
-TermHandler::TermHandler(PktHandler *_ph) {
-	ph=_ph;
+TermHandler::TermHandler(void) {
 	p=NULL;
 	index=0;
 }
 
-// When receiving
-TermHandler::TermHandler(Pkt *_p) {
-	ph=NULL;
-	p=_p;
-	index=0;
-}
-
-// Cleaning up 'ph' and 'p' is
+// Cleaning up packet 'p' is
 // not our responsibility... we were just
 // loaned those!
 TermHandler::~TermHandler() {
 }
 
 void
-TermHandler::initTx(Pkt *_p) {
+TermHandler::init(Pkt *_p) {
 
 	p=_p;
+	index=0;
 }
 
 void
@@ -119,6 +111,7 @@ TermHandler::append(TermStruct *ts) {
 		result=ei_x_encode_list_header(b, 1);
 		break;
 
+
 	case TERMTYPE_NIL:
 	case TERMTYPE_END_LIST:
 		result=ei_x_encode_empty_list(b);
@@ -135,6 +128,7 @@ TermHandler::append(TermStruct *ts) {
 		break;
 
 	case TERMTYPE_DOUBLE:
+		DBGLOG(LOG_INFO, "TermHandler::append: DOUBLE");
 		result=ei_x_encode_double(b, ts->Value.afloat);
 		break;
 
@@ -280,12 +274,6 @@ TermHandler::iter(TermStruct *ptr) {
 		ptr->type=TERMTYPE_START_TUPLE;
 		break;
 
-	case ERL_NIL_EXT:
-		DBGLOG(LOG_INFO, "TermHandler::iter: NIL");
-		ptr->type=TERMTYPE_NIL;
-		result=0;
-		break;
-
 	case ERL_STRING_EXT:
 		DBGLOG(LOG_INFO, "TermHandler::iter: STRING");
 		sptr=(char*) malloc(sizeof(char)*size+sizeof(char));
@@ -318,7 +306,24 @@ TermHandler::iter(TermStruct *ptr) {
 		ptr->type=TERMTYPE_BINARY;
 		break;
 
+		// Received often as termination
+		// but I cannot be 100% sure.
+		// With proper buffer initialization,
+		// NULL will be caught instead.
+	case ERL_NIL_EXT:
+		DBGLOG(LOG_INFO, "TermHandler::iter: NIL");
+		ptr->type=TERMTYPE_NIL;
+		result=0;
+		break;
 
+
+	// If the receive memory was properly zero'ed
+	// (e.g. using the "clean" method on the Pkt instance)
+	case 0:
+		DBGLOG(LOG_INFO, "TermHandler::iter: NULL");
+		ptr->type=TERMTYPE_END;
+		result=0;
+		break;
 
 	// Unsupported types
 	// ^^^^^^^^^^^^^^^^^
@@ -330,7 +335,7 @@ TermHandler::iter(TermStruct *ptr) {
 	case ERL_FUN_EXT:
 	default:
 		ptr->type=TERMTYPE_UNSUPPORTED;
-		DBGLOG(LOG_ERR, "TermHandler::iter: UNSUPPORTED");
+		DBGLOG(LOG_ERR, "TermHandler::iter: UNSUPPORTED (type: %i)", ptr->type);
 		result=1;
 		last_error=EEPAPI_BADTYPE;
 		break;
