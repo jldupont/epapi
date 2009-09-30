@@ -28,6 +28,6 @@ except: command=''
 try:    version = sys.argv[2]
 except: version = ''
 	
-print "EPAPI: preinst: command[%s] configured version[%s] version[%s]" % (command, version, this_version)
+#print "EPAPI: preinst: command[%s] configured version[%s] version[%s]" % (command, version, this_version)
 
 sys.exit(0)

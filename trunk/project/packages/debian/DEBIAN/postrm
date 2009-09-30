@@ -49,7 +49,7 @@ print "EPAPI: cmd[%s] version[%s]" % (command, version)
 
 try:
 
-	hdrs = ['epapi.h', 'epapi_msg.h', 'epapi_pkt.h']	
+	#hdrs = ['epapi.h', 'epapi_msg.h', 'epapi_pkt.h']	
 	dst = '/usr/lib/lib%s.so' % this_lib
 	ddst = '/usr/lib/lib%s_debug.so' % this_lib
 
@@ -69,14 +69,14 @@ try:
 	
 	if (command == 'remove') or (command == 'purge'):
 			
-		print "EPAPI: removing header files"
-		for hdr in hdrs:
-			path = "/usr/include/%s" % hdr
-			try:    
-				os.remove( path )
-				print "EPAPI: removed [%s]" % path
-			except: 
-				pass
+		#print "EPAPI: removing header files"
+		#for hdr in hdrs:
+		#	path = "/usr/include/%s" % hdr
+		#	try:    
+		#		os.remove( path )
+		#		print "EPAPI: removed [%s]" % path
+		#	except: 
+		#		pass
 	
 		print "EPAPI: removing symlinks"
 		try:
