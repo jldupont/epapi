@@ -2,7 +2,6 @@
 # @author Jean-Lou Dupont
 #
 
-MAKE=make
 BUILDS=Release Debug
 TARGETS=all clean
 
