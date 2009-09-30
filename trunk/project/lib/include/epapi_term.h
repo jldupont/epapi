@@ -1,8 +1,12 @@
-/*
- * epapi_term.h
+/**
+ * @file epapi_term.h
  *
- *  Created on: 2009-09-28
- *      Author: jldupont
+ * @date   2009-09-28
+ * @author jldupont
+ *
+ * \section Overview
+ *  This file contains the declarations relative to the \ref TermHandler "TermHandler" class.
+ *
  */
 
 #ifndef EPAPI_TERM_H_

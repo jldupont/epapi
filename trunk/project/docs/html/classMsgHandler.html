@@ -37,7 +37,7 @@ Collaboration diagram for MsgHandler:</div>
 <div class="dynsection">
 <p><center><img src="classMsgHandler__coll__graph.png" border="0" usemap="#MsgHandler__coll__map" alt="Collaboration graph"></center>
 <map name="MsgHandler__coll__map">
-<area shape="rect" href="classepapiBase.html" title="epapiBase" alt="" coords="16,5,99,32"><area shape="rect" href="classPktHandler.html" title="PktHandler" alt="" coords="67,83,152,109"></map>
+<area shape="rect" href="classepapiBase.html" title="epapiBase" alt="" coords="16,5,99,32"><area shape="rect" href="classPktHandler.html" title="Packet Handler class declaration." alt="" coords="67,83,152,109"></map>
 <center><font size="2">[<a target="top" href="graph_legend.html">legend</a>]</font></center></div>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
@@ -101,13 +101,13 @@ This class serves as the main API for clients.
 Constructor<p>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>ph</em>&nbsp;</td><td><a class="el" href="classPktHandler.html">PktHandler</a> instance </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>ph</em>&nbsp;</td><td><a class="el" href="classPktHandler.html" title="Packet Handler class declaration.">PktHandler</a> instance </td></tr>
   </table>
 </dl>
 
 <p>Definition at line <a class="el" href="epapi__msg_8cc-source.html#l00164">164</a> of file <a class="el" href="epapi__msg_8cc-source.html">epapi_msg.cc</a>.</p>
 
-<p>References <a class="el" href="epapi_8h-source.html#l00217">epapiBase::last_error</a>, and <a class="el" href="epapi__msg_8h-source.html#l00151">ph</a>.</p>
+<p>References <a class="el" href="epapi_8h-source.html#l00219">epapiBase::last_error</a>, and <a class="el" href="epapi__msg_8h-source.html#l00151">ph</a>.</p>
 
 </div>
 </div><p>
@@ -163,7 +163,7 @@ Used during message transmission/encoding.<p>
 
 <p>Definition at line <a class="el" href="epapi__msg_8cc-source.html#l00186">186</a> of file <a class="el" href="epapi__msg_8cc-source.html">epapi_msg.cc</a>.</p>
 
-<p>References <a class="el" href="epapi_8h-source.html#l00203">EEPAPI_NOTFOUND</a>, <a class="el" href="epapi_8h-source.html#l00217">epapiBase::last_error</a>, and <a class="el" href="epapi__msg_8h-source.html#l00152">tmap</a>.</p>
+<p>References <a class="el" href="epapi_8h-source.html#l00205">EEPAPI_NOTFOUND</a>, <a class="el" href="epapi_8h-source.html#l00219">epapiBase::last_error</a>, and <a class="el" href="epapi__msg_8h-source.html#l00152">tmap</a>.</p>
 
 <p>Referenced by <a class="el" href="epapi__msg_8cc-source.html#l00201">getSignatureFromTypeText()</a>, and <a class="el" href="epapi__msg_8cc-source.html#l00270">send()</a>.</p>
 
@@ -208,6 +208,7 @@ Returns the signature corresponding to a type text.<p>
 Used during message reception/decoding.<p>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>type</em>&nbsp;</td><td>msg_type </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>ttype</em>&nbsp;</td><td>msg_type_text </td></tr>
   </table>
 </dl>
@@ -215,9 +216,9 @@ Used during message reception/decoding.<p>
 
 <p>Definition at line <a class="el" href="epapi__msg_8cc-source.html#l00201">201</a> of file <a class="el" href="epapi__msg_8cc-source.html">epapi_msg.cc</a>.</p>
 
-<p>References <a class="el" href="epapi_8h-source.html#l00203">EEPAPI_NOTFOUND</a>, <a class="el" href="epapi__msg_8cc-source.html#l00186">getSignature()</a>, <a class="el" href="epapi_8h-source.html#l00217">epapiBase::last_error</a>, and <a class="el" href="epapi__msg_8h-source.html#l00153">ttmap</a>.</p>
+<p>References <a class="el" href="epapi_8h-source.html#l00205">EEPAPI_NOTFOUND</a>, <a class="el" href="epapi__msg_8cc-source.html#l00186">getSignature()</a>, <a class="el" href="epapi_8h-source.html#l00219">epapiBase::last_error</a>, and <a class="el" href="epapi__msg_8h-source.html#l00153">ttmap</a>.</p>
 
-<p>Referenced by <a class="el" href="epapi__msg_8cc-source.html#l00407">rx()</a>.</p>
+<p>Referenced by <a class="el" href="epapi__msg_8cc-source.html#l00410">rx()</a>.</p>
 
 <p>
 <div class="dynheader">
@@ -266,7 +267,7 @@ Returns the ATOM text from a msg_type<p>
 
 <p>Definition at line <a class="el" href="epapi__msg_8cc-source.html#l00245">245</a> of file <a class="el" href="epapi__msg_8cc-source.html">epapi_msg.cc</a>.</p>
 
-<p>References <a class="el" href="epapi_8h-source.html#l00203">EEPAPI_NOTFOUND</a>, <a class="el" href="epapi_8h-source.html#l00217">epapiBase::last_error</a>, and <a class="el" href="epapi__msg_8h-source.html#l00153">ttmap</a>.</p>
+<p>References <a class="el" href="epapi_8h-source.html#l00205">EEPAPI_NOTFOUND</a>, <a class="el" href="epapi_8h-source.html#l00219">epapiBase::last_error</a>, and <a class="el" href="epapi__msg_8h-source.html#l00153">ttmap</a>.</p>
 
 <p>Referenced by <a class="el" href="epapi__msg_8cc-source.html#l00270">send()</a>.</p>
 
@@ -309,7 +310,7 @@ Retrieves the msg_type from msg_type_text<p>
 
 <p>Definition at line <a class="el" href="epapi__msg_8cc-source.html#l00223">223</a> of file <a class="el" href="epapi__msg_8cc-source.html">epapi_msg.cc</a>.</p>
 
-<p>References <a class="el" href="epapi_8h-source.html#l00203">EEPAPI_NOTFOUND</a>, <a class="el" href="epapi_8h-source.html#l00217">epapiBase::last_error</a>, and <a class="el" href="epapi__msg_8h-source.html#l00153">ttmap</a>.</p>
+<p>References <a class="el" href="epapi_8h-source.html#l00205">EEPAPI_NOTFOUND</a>, <a class="el" href="epapi_8h-source.html#l00219">epapiBase::last_error</a>, and <a class="el" href="epapi__msg_8h-source.html#l00153">ttmap</a>.</p>
 
 </div>
 </div><p>
@@ -395,9 +396,9 @@ Message Receive (blocking)<p>
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>0 SUCCESS <p>
 1 FAILURE </dd></dl>
 
-<p>Definition at line <a class="el" href="epapi__msg_8cc-source.html#l00407">407</a> of file <a class="el" href="epapi__msg_8cc-source.html">epapi_msg.cc</a>.</p>
+<p>Definition at line <a class="el" href="epapi__msg_8cc-source.html#l00410">410</a> of file <a class="el" href="epapi__msg_8cc-source.html">epapi_msg.cc</a>.</p>
 
-<p>References <a class="el" href="epapi_8h-source.html#l00186">DBGLOG</a>, <a class="el" href="epapi_8h-source.html#l00208">EEPAPI_ARITY</a>, <a class="el" href="epapi_8h-source.html#l00200">EEPAPI_BADFORMAT</a>, <a class="el" href="epapi_8h-source.html#l00206">EEPAPI_EIDECODE</a>, <a class="el" href="epapi_8h-source.html#l00201">EEPAPI_MALLOC</a>, <a class="el" href="epapi_8h-source.html#l00207">EEPAPI_TOOBIG</a>, <a class="el" href="epapi__pkt_8cc-source.html#l00050">Pkt::getBuf()</a>, <a class="el" href="epapi__msg_8cc-source.html#l00201">getSignatureFromTypeText()</a>, <a class="el" href="epapi_8h-source.html#l00217">epapiBase::last_error</a>, <a class="el" href="epapi__msg_8h-source.html#l00142">MAX_ATOM_SIZE</a>, <a class="el" href="epapi__msg_8h-source.html#l00037">Msg::MAX_PARAMS</a>, <a class="el" href="epapi__msg_8h-source.html#l00147">MAX_STRING_SIZE</a>, <a class="el" href="epapi__msg_8h-source.html#l00137">MAX_TYPE_LENGTH</a>, <a class="el" href="epapi__msg_8h-source.html#l00151">ph</a>, and <a class="el" href="epapi__pkt_8cc-source.html#l00154">PktHandler::rx()</a>.</p>
+<p>References <a class="el" href="epapi_8h-source.html#l00188">DBGLOG</a>, <a class="el" href="epapi_8h-source.html#l00210">EEPAPI_ARITY</a>, <a class="el" href="epapi_8h-source.html#l00202">EEPAPI_BADFORMAT</a>, <a class="el" href="epapi_8h-source.html#l00208">EEPAPI_EIDECODE</a>, <a class="el" href="epapi_8h-source.html#l00203">EEPAPI_MALLOC</a>, <a class="el" href="epapi_8h-source.html#l00209">EEPAPI_TOOBIG</a>, <a class="el" href="epapi__pkt_8cc-source.html#l00067">Pkt::getBuf()</a>, <a class="el" href="epapi__msg_8cc-source.html#l00201">getSignatureFromTypeText()</a>, <a class="el" href="epapi_8h-source.html#l00219">epapiBase::last_error</a>, <a class="el" href="epapi__msg_8h-source.html#l00142">MAX_ATOM_SIZE</a>, <a class="el" href="epapi__msg_8h-source.html#l00037">Msg::MAX_PARAMS</a>, <a class="el" href="epapi__msg_8h-source.html#l00147">MAX_STRING_SIZE</a>, <a class="el" href="epapi__msg_8h-source.html#l00137">MAX_TYPE_LENGTH</a>, <a class="el" href="epapi__msg_8h-source.html#l00151">ph</a>, and <a class="el" href="epapi__pkt_8cc-source.html#l00180">PktHandler::rx()</a>.</p>
 
 <p>
 <div class="dynheader">
@@ -439,7 +440,7 @@ Here is the call graph for this function:</div>
 Generic send message<p>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>msg_type</em>&nbsp;</td><td>message type (integer)</td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>type</em>&nbsp;</td><td>msg_type message type (integer)</td></tr>
   </table>
 </dl>
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>0 SUCCESS <p>
@@ -455,7 +456,7 @@ Builds a 'packet' according to the specified type. The type must have been previ
 
 <p>Definition at line <a class="el" href="epapi__msg_8cc-source.html#l00270">270</a> of file <a class="el" href="epapi__msg_8cc-source.html">epapi_msg.cc</a>.</p>
 
-<p>References <a class="el" href="epapi_8h-source.html#l00186">DBGLOG</a>, <a class="el" href="epapi_8h-source.html#l00200">EEPAPI_BADFORMAT</a>, <a class="el" href="epapi_8h-source.html#l00209">EEPAPI_BADTYPE</a>, <a class="el" href="epapi_8h-source.html#l00205">EEPAPI_EIENCODE</a>, <a class="el" href="epapi_8h-source.html#l00201">EEPAPI_MALLOC</a>, <a class="el" href="epapi_8h-source.html#l00204">EEPAPI_NEWEIBUF</a>, <a class="el" href="epapi__msg_8cc-source.html#l00186">getSignature()</a>, <a class="el" href="epapi__msg_8cc-source.html#l00245">getTextFromType()</a>, <a class="el" href="epapi__pkt_8cc-source.html#l00035">Pkt::getTxBuf()</a>, <a class="el" href="epapi_8h-source.html#l00217">epapiBase::last_error</a>, <a class="el" href="epapi__msg_8h-source.html#l00151">ph</a>, and <a class="el" href="epapi__pkt_8cc-source.html#l00194">PktHandler::tx()</a>.</p>
+<p>References <a class="el" href="epapi_8h-source.html#l00188">DBGLOG</a>, <a class="el" href="epapi_8h-source.html#l00202">EEPAPI_BADFORMAT</a>, <a class="el" href="epapi_8h-source.html#l00211">EEPAPI_BADTYPE</a>, <a class="el" href="epapi_8h-source.html#l00207">EEPAPI_EIENCODE</a>, <a class="el" href="epapi_8h-source.html#l00203">EEPAPI_MALLOC</a>, <a class="el" href="epapi__msg_8cc-source.html#l00186">getSignature()</a>, <a class="el" href="epapi__msg_8cc-source.html#l00245">getTextFromType()</a>, <a class="el" href="epapi__pkt_8cc-source.html#l00050">Pkt::getTxBuf()</a>, <a class="el" href="epapi_8h-source.html#l00219">epapiBase::last_error</a>, <a class="el" href="epapi__msg_8h-source.html#l00151">ph</a>, and <a class="el" href="epapi__pkt_8cc-source.html#l00222">PktHandler::tx()</a>.</p>
 
 <p>
 <div class="dynheader">
@@ -484,7 +485,7 @@ Here is the call graph for this function:</div>
 Maximum size for an ATOM element 
 <p>Definition at line <a class="el" href="epapi__msg_8h-source.html#l00142">142</a> of file <a class="el" href="epapi__msg_8h-source.html">epapi_msg.h</a>.</p>
 
-<p>Referenced by <a class="el" href="epapi__msg_8cc-source.html#l00407">rx()</a>.</p>
+<p>Referenced by <a class="el" href="epapi__msg_8cc-source.html#l00410">rx()</a>.</p>
 
 </div>
 </div><p>
@@ -503,7 +504,7 @@ Maximum size for an ATOM element
 Maximum size for a STRING element 
 <p>Definition at line <a class="el" href="epapi__msg_8h-source.html#l00147">147</a> of file <a class="el" href="epapi__msg_8h-source.html">epapi_msg.h</a>.</p>
 
-<p>Referenced by <a class="el" href="epapi__msg_8cc-source.html#l00407">rx()</a>.</p>
+<p>Referenced by <a class="el" href="epapi__msg_8cc-source.html#l00410">rx()</a>.</p>
 
 </div>
 </div><p>
@@ -522,7 +523,7 @@ Maximum size for a STRING element
 Maximum length the 'message type' field can be. 
 <p>Definition at line <a class="el" href="epapi__msg_8h-source.html#l00137">137</a> of file <a class="el" href="epapi__msg_8h-source.html">epapi_msg.h</a>.</p>
 
-<p>Referenced by <a class="el" href="epapi__msg_8cc-source.html#l00407">rx()</a>.</p>
+<p>Referenced by <a class="el" href="epapi__msg_8cc-source.html#l00410">rx()</a>.</p>
 
 </div>
 </div><p>
@@ -541,7 +542,7 @@ Maximum length the 'message type' field can be.
 
 <p>Definition at line <a class="el" href="epapi__msg_8h-source.html#l00151">151</a> of file <a class="el" href="epapi__msg_8h-source.html">epapi_msg.h</a>.</p>
 
-<p>Referenced by <a class="el" href="epapi__msg_8cc-source.html#l00164">MsgHandler()</a>, <a class="el" href="epapi__msg_8cc-source.html#l00407">rx()</a>, <a class="el" href="epapi__msg_8cc-source.html#l00270">send()</a>, and <a class="el" href="epapi__msg_8cc-source.html#l00169">~MsgHandler()</a>.</p>
+<p>Referenced by <a class="el" href="epapi__msg_8cc-source.html#l00164">MsgHandler()</a>, <a class="el" href="epapi__msg_8cc-source.html#l00410">rx()</a>, <a class="el" href="epapi__msg_8cc-source.html#l00270">send()</a>, and <a class="el" href="epapi__msg_8cc-source.html#l00169">~MsgHandler()</a>.</p>
 
 </div>
 </div><p>
@@ -586,7 +587,7 @@ Maximum length the 'message type' field can be.
 <hr>The documentation for this class was generated from the following files:<ul>
 <li>lib/include/<a class="el" href="epapi__msg_8h-source.html">epapi_msg.h</a><li>lib/src/<a class="el" href="epapi__msg_8cc-source.html">epapi_msg.cc</a></ul>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Mon Jun 15 15:28:43 2009 for EPAPI by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Wed Sep 30 09:09:35 2009 for EPAPI by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.8 </small></address>
 </body>

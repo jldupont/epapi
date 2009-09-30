@@ -182,7 +182,7 @@
 <a name="l00161"></a>00161 <span class="comment">// =========================================</span>
 <a name="l00162"></a>00162 <span class="comment">// MsgHandler class</span>
 <a name="l00163"></a>00163 <span class="comment">// =========================================</span>
-<a name="l00164"></a><a class="code" href="classMsgHandler.html#a639691ed149b303b2fbd90bb4d55d52">00164</a> <a class="code" href="classMsgHandler.html#a639691ed149b303b2fbd90bb4d55d52">MsgHandler::MsgHandler</a>(<a class="code" href="classPktHandler.html">PktHandler</a> *_ph) {
+<a name="l00164"></a><a class="code" href="classMsgHandler.html#a639691ed149b303b2fbd90bb4d55d52">00164</a> <a class="code" href="classMsgHandler.html#a639691ed149b303b2fbd90bb4d55d52">MsgHandler::MsgHandler</a>(<a class="code" href="classPktHandler.html" title="Packet Handler class declaration.">PktHandler</a> *_ph) {
 <a name="l00165"></a>00165         <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a>=0;
 <a name="l00166"></a>00166         <a class="code" href="classMsgHandler.html#fd3e38ff410b84821844bcc96dfbd717">ph</a>  = _ph;
 <a name="l00167"></a>00167 }<span class="comment">//</span>
@@ -300,7 +300,7 @@
 <a name="l00279"></a>00279         }
 <a name="l00280"></a>00280 
 <a name="l00281"></a>00281         <span class="comment">//get ourselves a Tx packet</span>
-<a name="l00282"></a>00282         <a class="code" href="classPkt.html">Pkt</a> *p = <span class="keyword">new</span> <a class="code" href="classPkt.html">Pkt</a>();
+<a name="l00282"></a>00282         <a class="code" href="classPkt.html" title="Pkt class declaration.">Pkt</a> *p = <span class="keyword">new</span> <a class="code" href="classPkt.html" title="Pkt class declaration.">Pkt</a>();
 <a name="l00283"></a>00283         ei_x_buff *b = p-&gt;<a class="code" href="classPkt.html#e4b18454e4706a91e38c219f14676ed5">getTxBuf</a>();
 <a name="l00284"></a>00284         <span class="keywordflow">if</span> (NULL==b) {
 <a name="l00285"></a>00285                 <span class="keyword">delete</span> p;
@@ -317,287 +317,290 @@
 <a name="l00296"></a>00296                 <span class="keywordflow">return</span> 1;
 <a name="l00297"></a>00297         }
 <a name="l00298"></a>00298 
-<a name="l00299"></a>00299          <span class="keywordflow">if</span> (ei_x_new_with_version(b)) {
-<a name="l00300"></a>00300                  <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a> = <a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a81583d51cacaa4f98f29d84ef03e189c81">EEPAPI_NEWEIBUF</a>;
-<a name="l00301"></a>00301                  <span class="keyword">delete</span> p;
-<a name="l00302"></a>00302                  <span class="keywordflow">return</span> 1;
-<a name="l00303"></a>00303          }
-<a name="l00304"></a>00304 
-<a name="l00305"></a>00305          <span class="comment">// {msg_type, {Msg}} , arity = 2</span>
-<a name="l00306"></a>00306          <span class="keywordflow">if</span> (ei_x_encode_tuple_header(b, 2)) {
-<a name="l00307"></a>00307                  <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a> = <a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a81c1e5f7eec16cee2a890ee827a4c4b775">EEPAPI_EIENCODE</a>;
-<a name="l00308"></a>00308                  <span class="keyword">delete</span> p;
-<a name="l00309"></a>00309                  <span class="keywordflow">return</span> 1; <span class="comment">//&lt;===================</span>
-<a name="l00310"></a>00310          }
-<a name="l00311"></a>00311 
-<a name="l00312"></a>00312          <span class="comment">// send 'msg_type'</span>
-<a name="l00313"></a>00313          <span class="keyword">const</span> <span class="keywordtype">char</span> *ttext = <a class="code" href="classMsgHandler.html#ed7e2f903be5bb29cb3c59711431732e">getTextFromType</a>(type);
-<a name="l00314"></a>00314          <span class="keywordflow">if</span> (NULL==ttext) {
-<a name="l00315"></a>00315                  <span class="keyword">delete</span> p;
-<a name="l00316"></a>00316                  <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a>=<a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a811b51763f6c9b03dfd41b41fc1c3c79c6">EEPAPI_BADTYPE</a>;
-<a name="l00317"></a>00317                  <span class="keywordflow">return</span> 1;
-<a name="l00318"></a>00318          }
-<a name="l00319"></a>00319         <span class="keywordflow">if</span>( ei_x_encode_atom(b, ttext)) {
-<a name="l00320"></a>00320                 <span class="keyword">delete</span> p;
-<a name="l00321"></a>00321                 <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a> = <a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a81c1e5f7eec16cee2a890ee827a4c4b775">EEPAPI_EIENCODE</a>;
-<a name="l00322"></a>00322                 <span class="keywordflow">return</span> 1;
-<a name="l00323"></a>00323         }
-<a name="l00324"></a>00324 
-<a name="l00325"></a>00325          <span class="comment">// open tuple for {msg}}</span>
-<a name="l00326"></a>00326          <span class="keywordflow">if</span> (ei_x_encode_tuple_header(b, len)) {
-<a name="l00327"></a>00327                  <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a> = <a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a81c1e5f7eec16cee2a890ee827a4c4b775">EEPAPI_EIENCODE</a>;
-<a name="l00328"></a>00328                  <span class="keyword">delete</span> p;
-<a name="l00329"></a>00329                  <span class="keywordflow">return</span> 1; <span class="comment">//&lt;===================</span>
-<a name="l00330"></a>00330          }
-<a name="l00331"></a>00331 
-<a name="l00332"></a>00332         <span class="keywordtype">int</span> index=0;
-<a name="l00333"></a>00333         <span class="keywordtype">int</span> result=0; <span class="comment">//optimistic</span>
-<a name="l00334"></a>00334         va_list args;
-<a name="l00335"></a>00335 
-<a name="l00336"></a>00336         va_start(args, type);
-<a name="l00337"></a>00337 
-<a name="l00338"></a>00338         <span class="keywordflow">for</span>(;index&lt;len;index++) {
-<a name="l00339"></a>00339                 <span class="keywordflow">switch</span>(sig[index]) {
+<a name="l00299"></a>00299         <span class="comment">/* ALREADY DONE THROUGH getTxBuf()</span>
+<a name="l00300"></a>00300 <span class="comment"></span>
+<a name="l00301"></a>00301 <span class="comment">         if (ei_x_new_with_version(b)) {</span>
+<a name="l00302"></a>00302 <span class="comment">                 last_error = EEPAPI_NEWEIBUF;</span>
+<a name="l00303"></a>00303 <span class="comment">                 delete p;</span>
+<a name="l00304"></a>00304 <span class="comment">                 return 1;</span>
+<a name="l00305"></a>00305 <span class="comment">         }</span>
+<a name="l00306"></a>00306 <span class="comment">        */</span>
+<a name="l00307"></a>00307 
+<a name="l00308"></a>00308          <span class="comment">// {msg_type, {Msg}} , arity = 2</span>
+<a name="l00309"></a>00309          <span class="keywordflow">if</span> (ei_x_encode_tuple_header(b, 2)) {
+<a name="l00310"></a>00310                  <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a> = <a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a81c1e5f7eec16cee2a890ee827a4c4b775">EEPAPI_EIENCODE</a>;
+<a name="l00311"></a>00311                  <span class="keyword">delete</span> p;
+<a name="l00312"></a>00312                  <span class="keywordflow">return</span> 1; <span class="comment">//&lt;===================</span>
+<a name="l00313"></a>00313          }
+<a name="l00314"></a>00314 
+<a name="l00315"></a>00315          <span class="comment">// send 'msg_type'</span>
+<a name="l00316"></a>00316          <span class="keyword">const</span> <span class="keywordtype">char</span> *ttext = <a class="code" href="classMsgHandler.html#ed7e2f903be5bb29cb3c59711431732e">getTextFromType</a>(type);
+<a name="l00317"></a>00317          <span class="keywordflow">if</span> (NULL==ttext) {
+<a name="l00318"></a>00318                  <span class="keyword">delete</span> p;
+<a name="l00319"></a>00319                  <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a>=<a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a811b51763f6c9b03dfd41b41fc1c3c79c6">EEPAPI_BADTYPE</a>;
+<a name="l00320"></a>00320                  <span class="keywordflow">return</span> 1;
+<a name="l00321"></a>00321          }
+<a name="l00322"></a>00322         <span class="keywordflow">if</span>( ei_x_encode_atom(b, ttext)) {
+<a name="l00323"></a>00323                 <span class="keyword">delete</span> p;
+<a name="l00324"></a>00324                 <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a> = <a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a81c1e5f7eec16cee2a890ee827a4c4b775">EEPAPI_EIENCODE</a>;
+<a name="l00325"></a>00325                 <span class="keywordflow">return</span> 1;
+<a name="l00326"></a>00326         }
+<a name="l00327"></a>00327 
+<a name="l00328"></a>00328          <span class="comment">// open tuple for {msg}}</span>
+<a name="l00329"></a>00329          <span class="keywordflow">if</span> (ei_x_encode_tuple_header(b, len)) {
+<a name="l00330"></a>00330                  <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a> = <a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a81c1e5f7eec16cee2a890ee827a4c4b775">EEPAPI_EIENCODE</a>;
+<a name="l00331"></a>00331                  <span class="keyword">delete</span> p;
+<a name="l00332"></a>00332                  <span class="keywordflow">return</span> 1; <span class="comment">//&lt;===================</span>
+<a name="l00333"></a>00333          }
+<a name="l00334"></a>00334 
+<a name="l00335"></a>00335         <span class="keywordtype">int</span> index=0;
+<a name="l00336"></a>00336         <span class="keywordtype">int</span> result=0; <span class="comment">//optimistic</span>
+<a name="l00337"></a>00337         va_list args;
+<a name="l00338"></a>00338 
+<a name="l00339"></a>00339         va_start(args, type);
 <a name="l00340"></a>00340 
-<a name="l00341"></a>00341                 <span class="keywordflow">case</span> <span class="charliteral">'s'</span>:
-<a name="l00342"></a>00342                 <span class="keywordflow">case</span> <span class="charliteral">'S'</span>:
-<a name="l00343"></a>00343                         <span class="keywordtype">char</span> *string;
-<a name="l00344"></a>00344                         <span class="keywordtype">string</span>=va_arg(args, <span class="keywordtype">char</span> *);
-<a name="l00345"></a>00345                         result= ei_x_encode_string(b, <span class="keywordtype">string</span>);
-<a name="l00346"></a>00346                         <span class="keywordflow">break</span>;
-<a name="l00347"></a>00347                 <span class="keywordflow">case</span> <span class="charliteral">'a'</span>:
-<a name="l00348"></a>00348                 <span class="keywordflow">case</span> <span class="charliteral">'A'</span>:
-<a name="l00349"></a>00349                         <span class="keywordtype">char</span> *atom;
-<a name="l00350"></a>00350                         atom=va_arg(args, <span class="keywordtype">char</span> *);
-<a name="l00351"></a>00351                         result = ei_x_encode_atom(b, atom);
-<a name="l00352"></a>00352                         <span class="keywordflow">break</span>;
-<a name="l00353"></a>00353                 <span class="keywordflow">case</span> <span class="charliteral">'d'</span>:
-<a name="l00354"></a>00354                 <span class="keywordflow">case</span> <span class="charliteral">'D'</span>:
-<a name="l00355"></a>00355                         <span class="keywordtype">double</span> d;
-<a name="l00356"></a>00356                         d = va_arg(args, <span class="keywordtype">double</span>);
-<a name="l00357"></a>00357                         result = ei_x_encode_double(b, d);
-<a name="l00358"></a>00358                         <span class="keywordflow">break</span>;
-<a name="l00359"></a>00359                 <span class="keywordflow">case</span> <span class="charliteral">'l'</span>:
-<a name="l00360"></a>00360                 <span class="keywordflow">case</span> <span class="charliteral">'L'</span>:
-<a name="l00361"></a>00361                         <span class="keywordtype">long</span> <span class="keywordtype">int</span> lint;
-<a name="l00362"></a>00362                         lint = va_arg(args, <span class="keywordtype">long</span> <span class="keywordtype">int</span>);
-<a name="l00363"></a>00363                         result = ei_x_encode_long(b, lint);
-<a name="l00364"></a>00364                         <span class="keywordflow">break</span>;
-<a name="l00365"></a>00365                 <span class="keywordflow">default</span>:
-<a name="l00366"></a>00366                         <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a> = <a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a81167e981c071ed61aa2634821e9974a6e">EEPAPI_BADFORMAT</a>;
-<a name="l00367"></a>00367                         result = 1;
-<a name="l00368"></a>00368                         <span class="keywordflow">break</span>;
-<a name="l00369"></a>00369                 }<span class="comment">//switch</span>
-<a name="l00370"></a>00370 
-<a name="l00371"></a>00371                 <span class="keywordflow">if</span> (result) {
-<a name="l00372"></a>00372                         <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a> = <a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a81c1e5f7eec16cee2a890ee827a4c4b775">EEPAPI_EIENCODE</a>;
-<a name="l00373"></a>00373                         result = 1; <span class="comment">//precaution</span>
-<a name="l00374"></a>00374                         <span class="keywordflow">break</span>;
-<a name="l00375"></a>00375                 }
-<a name="l00376"></a>00376         }<span class="comment">//for</span>
-<a name="l00377"></a>00377 
-<a name="l00378"></a>00378         va_end(args);
-<a name="l00379"></a>00379 
-<a name="l00380"></a>00380         <span class="keywordflow">if</span> (!result) {
-<a name="l00381"></a>00381                 <span class="keywordtype">int</span> tr = <a class="code" href="classMsgHandler.html#fd3e38ff410b84821844bcc96dfbd717">ph</a>-&gt;<a class="code" href="classPktHandler.html#d6aca6f641ade2123b2e068e4cc9804e">tx</a>( p );
-<a name="l00382"></a>00382                 <span class="keywordflow">if</span> (tr) {
-<a name="l00383"></a>00383 
-<a name="l00384"></a>00384                         <span class="comment">// the PktHandler layer</span>
-<a name="l00385"></a>00385                         <span class="comment">// will tell us what we need...</span>
-<a name="l00386"></a>00386                         result = 1;
-<a name="l00387"></a>00387                         <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a> = p-&gt;<a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a>;
-<a name="l00388"></a>00388                 }
-<a name="l00389"></a>00389         }
-<a name="l00390"></a>00390 
-<a name="l00391"></a>00391         <span class="keyword">delete</span> p;
-<a name="l00392"></a>00392 
-<a name="l00393"></a>00393         <a class="code" href="epapi_8h.html#53b7d4ef6b5cc76b0bce2fd6fe5733ed">DBGLOG</a>(LOG_INFO, <span class="stringliteral">"MsgHandler::send - END, result[%i]"</span>, result);
-<a name="l00394"></a>00394 
-<a name="l00395"></a>00395         <span class="keywordflow">return</span> result;
-<a name="l00396"></a>00396 }<span class="comment">//</span>
-<a name="l00397"></a>00397 <span class="comment"></span>
-<a name="l00398"></a>00398 <span class="comment">/**</span>
-<a name="l00399"></a>00399 <span class="comment"> * Message Receive (blocking)</span>
-<a name="l00400"></a>00400 <span class="comment"> *</span>
-<a name="l00401"></a>00401 <span class="comment"> * @param m pointer to message</span>
-<a name="l00402"></a>00402 <span class="comment"> *</span>
-<a name="l00403"></a>00403 <span class="comment"> * @return 0 SUCCESS</span>
-<a name="l00404"></a>00404 <span class="comment"> * @return 1 FAILURE</span>
-<a name="l00405"></a>00405 <span class="comment"> */</span>
-<a name="l00406"></a>00406 <span class="keywordtype">int</span>
-<a name="l00407"></a><a class="code" href="classMsgHandler.html#d9322ab0abd919cc9908f52bc1aa2169">00407</a> <a class="code" href="classMsgHandler.html#d9322ab0abd919cc9908f52bc1aa2169">MsgHandler::rx</a>(<a class="code" href="classMsg.html">Msg</a> **m) {
-<a name="l00408"></a>00408 
-<a name="l00409"></a>00409         <a class="code" href="classPkt.html">Pkt</a> *p = <span class="keyword">new</span> <a class="code" href="classPkt.html">Pkt</a>();
-<a name="l00410"></a>00410 
-<a name="l00411"></a>00411         <span class="keywordtype">int</span> r = <a class="code" href="classMsgHandler.html#fd3e38ff410b84821844bcc96dfbd717">ph</a>-&gt;<a class="code" href="classPktHandler.html#56748d308510b82fcbcc91a9a54b0634">rx</a>(&amp;p);
-<a name="l00412"></a>00412         <span class="keywordflow">if</span> (r) {
-<a name="l00413"></a>00413                 <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a> = <a class="code" href="classMsgHandler.html#fd3e38ff410b84821844bcc96dfbd717">ph</a>-&gt;<a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a>;
-<a name="l00414"></a>00414                 <span class="keyword">delete</span> p;
-<a name="l00415"></a>00415                 <span class="keywordflow">return</span> 1;
-<a name="l00416"></a>00416         }
-<a name="l00417"></a>00417 
-<a name="l00418"></a>00418         <a class="code" href="epapi__msg_8h.html#24560a68d244bad65fd7470cddb72177">msg_type</a> type;
-<a name="l00419"></a>00419         <span class="keywordtype">char</span> stype[<a class="code" href="classMsgHandler.html#2de74c87a40d31d4d7cf9a3390344c30">MAX_TYPE_LENGTH</a>];
-<a name="l00420"></a>00420         <span class="keywordtype">int</span> version;
-<a name="l00421"></a>00421         <span class="keywordtype">int</span> arity;
-<a name="l00422"></a>00422 
-<a name="l00423"></a>00423         <span class="keywordtype">int</span> index=0;
-<a name="l00424"></a>00424         <span class="keywordtype">char</span> *b = (<span class="keywordtype">char</span> *) p-&gt;<a class="code" href="classPkt.html#faee09963325eda610ed470d594d82ef">getBuf</a>();
+<a name="l00341"></a>00341         <span class="keywordflow">for</span>(;index&lt;len;index++) {
+<a name="l00342"></a>00342                 <span class="keywordflow">switch</span>(sig[index]) {
+<a name="l00343"></a>00343 
+<a name="l00344"></a>00344                 <span class="keywordflow">case</span> <span class="charliteral">'s'</span>:
+<a name="l00345"></a>00345                 <span class="keywordflow">case</span> <span class="charliteral">'S'</span>:
+<a name="l00346"></a>00346                         <span class="keywordtype">char</span> *string;
+<a name="l00347"></a>00347                         <span class="keywordtype">string</span>=va_arg(args, <span class="keywordtype">char</span> *);
+<a name="l00348"></a>00348                         result= ei_x_encode_string(b, <span class="keywordtype">string</span>);
+<a name="l00349"></a>00349                         <span class="keywordflow">break</span>;
+<a name="l00350"></a>00350                 <span class="keywordflow">case</span> <span class="charliteral">'a'</span>:
+<a name="l00351"></a>00351                 <span class="keywordflow">case</span> <span class="charliteral">'A'</span>:
+<a name="l00352"></a>00352                         <span class="keywordtype">char</span> *atom;
+<a name="l00353"></a>00353                         atom=va_arg(args, <span class="keywordtype">char</span> *);
+<a name="l00354"></a>00354                         result = ei_x_encode_atom(b, atom);
+<a name="l00355"></a>00355                         <span class="keywordflow">break</span>;
+<a name="l00356"></a>00356                 <span class="keywordflow">case</span> <span class="charliteral">'d'</span>:
+<a name="l00357"></a>00357                 <span class="keywordflow">case</span> <span class="charliteral">'D'</span>:
+<a name="l00358"></a>00358                         <span class="keywordtype">double</span> d;
+<a name="l00359"></a>00359                         d = va_arg(args, <span class="keywordtype">double</span>);
+<a name="l00360"></a>00360                         result = ei_x_encode_double(b, d);
+<a name="l00361"></a>00361                         <span class="keywordflow">break</span>;
+<a name="l00362"></a>00362                 <span class="keywordflow">case</span> <span class="charliteral">'l'</span>:
+<a name="l00363"></a>00363                 <span class="keywordflow">case</span> <span class="charliteral">'L'</span>:
+<a name="l00364"></a>00364                         <span class="keywordtype">long</span> <span class="keywordtype">int</span> lint;
+<a name="l00365"></a>00365                         lint = va_arg(args, <span class="keywordtype">long</span> <span class="keywordtype">int</span>);
+<a name="l00366"></a>00366                         result = ei_x_encode_long(b, lint);
+<a name="l00367"></a>00367                         <span class="keywordflow">break</span>;
+<a name="l00368"></a>00368                 <span class="keywordflow">default</span>:
+<a name="l00369"></a>00369                         <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a> = <a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a81167e981c071ed61aa2634821e9974a6e">EEPAPI_BADFORMAT</a>;
+<a name="l00370"></a>00370                         result = 1;
+<a name="l00371"></a>00371                         <span class="keywordflow">break</span>;
+<a name="l00372"></a>00372                 }<span class="comment">//switch</span>
+<a name="l00373"></a>00373 
+<a name="l00374"></a>00374                 <span class="keywordflow">if</span> (result) {
+<a name="l00375"></a>00375                         <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a> = <a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a81c1e5f7eec16cee2a890ee827a4c4b775">EEPAPI_EIENCODE</a>;
+<a name="l00376"></a>00376                         result = 1; <span class="comment">//precaution</span>
+<a name="l00377"></a>00377                         <span class="keywordflow">break</span>;
+<a name="l00378"></a>00378                 }
+<a name="l00379"></a>00379         }<span class="comment">//for</span>
+<a name="l00380"></a>00380 
+<a name="l00381"></a>00381         va_end(args);
+<a name="l00382"></a>00382 
+<a name="l00383"></a>00383         <span class="keywordflow">if</span> (!result) {
+<a name="l00384"></a>00384                 <span class="keywordtype">int</span> tr = <a class="code" href="classMsgHandler.html#fd3e38ff410b84821844bcc96dfbd717">ph</a>-&gt;<a class="code" href="classPktHandler.html#d6aca6f641ade2123b2e068e4cc9804e">tx</a>( p );
+<a name="l00385"></a>00385                 <span class="keywordflow">if</span> (tr) {
+<a name="l00386"></a>00386 
+<a name="l00387"></a>00387                         <span class="comment">// the PktHandler layer</span>
+<a name="l00388"></a>00388                         <span class="comment">// will tell us what we need...</span>
+<a name="l00389"></a>00389                         result = 1;
+<a name="l00390"></a>00390                         <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a> = p-&gt;<a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a>;
+<a name="l00391"></a>00391                 }
+<a name="l00392"></a>00392         }
+<a name="l00393"></a>00393 
+<a name="l00394"></a>00394         <span class="keyword">delete</span> p;
+<a name="l00395"></a>00395 
+<a name="l00396"></a>00396         <a class="code" href="epapi_8h.html#53b7d4ef6b5cc76b0bce2fd6fe5733ed">DBGLOG</a>(LOG_INFO, <span class="stringliteral">"MsgHandler::send - END, result[%i]"</span>, result);
+<a name="l00397"></a>00397 
+<a name="l00398"></a>00398         <span class="keywordflow">return</span> result;
+<a name="l00399"></a>00399 }<span class="comment">//</span>
+<a name="l00400"></a>00400 <span class="comment"></span>
+<a name="l00401"></a>00401 <span class="comment">/**</span>
+<a name="l00402"></a>00402 <span class="comment"> * Message Receive (blocking)</span>
+<a name="l00403"></a>00403 <span class="comment"> *</span>
+<a name="l00404"></a>00404 <span class="comment"> * @param m pointer to message</span>
+<a name="l00405"></a>00405 <span class="comment"> *</span>
+<a name="l00406"></a>00406 <span class="comment"> * @return 0 SUCCESS</span>
+<a name="l00407"></a>00407 <span class="comment"> * @return 1 FAILURE</span>
+<a name="l00408"></a>00408 <span class="comment"> */</span>
+<a name="l00409"></a>00409 <span class="keywordtype">int</span>
+<a name="l00410"></a><a class="code" href="classMsgHandler.html#d9322ab0abd919cc9908f52bc1aa2169">00410</a> <a class="code" href="classMsgHandler.html#d9322ab0abd919cc9908f52bc1aa2169">MsgHandler::rx</a>(<a class="code" href="classMsg.html">Msg</a> **m) {
+<a name="l00411"></a>00411 
+<a name="l00412"></a>00412         <a class="code" href="classPkt.html" title="Pkt class declaration.">Pkt</a> *p = <span class="keyword">new</span> <a class="code" href="classPkt.html" title="Pkt class declaration.">Pkt</a>();
+<a name="l00413"></a>00413 
+<a name="l00414"></a>00414         <span class="keywordtype">int</span> r = <a class="code" href="classMsgHandler.html#fd3e38ff410b84821844bcc96dfbd717">ph</a>-&gt;<a class="code" href="classPktHandler.html#56748d308510b82fcbcc91a9a54b0634">rx</a>(&amp;p);
+<a name="l00415"></a>00415         <span class="keywordflow">if</span> (r) {
+<a name="l00416"></a>00416                 <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a> = <a class="code" href="classMsgHandler.html#fd3e38ff410b84821844bcc96dfbd717">ph</a>-&gt;<a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a>;
+<a name="l00417"></a>00417                 <span class="keyword">delete</span> p;
+<a name="l00418"></a>00418                 <span class="keywordflow">return</span> 1;
+<a name="l00419"></a>00419         }
+<a name="l00420"></a>00420 
+<a name="l00421"></a>00421         <a class="code" href="epapi__msg_8h.html#24560a68d244bad65fd7470cddb72177">msg_type</a> type;
+<a name="l00422"></a>00422         <span class="keywordtype">char</span> stype[<a class="code" href="classMsgHandler.html#2de74c87a40d31d4d7cf9a3390344c30">MAX_TYPE_LENGTH</a>];
+<a name="l00423"></a>00423         <span class="keywordtype">int</span> version;
+<a name="l00424"></a>00424         <span class="keywordtype">int</span> arity;
 <a name="l00425"></a>00425 
-<a name="l00426"></a>00426         <span class="comment">//we count on the first element of the</span>
-<a name="l00427"></a>00427         <span class="comment">//received tuple to contain an ATOM</span>
-<a name="l00428"></a>00428         <span class="comment">//which corresponds to the message type</span>
-<a name="l00429"></a>00429         <span class="keywordflow">if</span> (ei_decode_version((<span class="keyword">const</span> <span class="keywordtype">char</span> *) b, &amp;index, &amp;version)) {
-<a name="l00430"></a>00430                 <a class="code" href="epapi_8h.html#53b7d4ef6b5cc76b0bce2fd6fe5733ed">DBGLOG</a>(LOG_ERR, <span class="stringliteral">"ERROR decode VERSION"</span>);
-<a name="l00431"></a>00431                 <span class="keyword">delete</span> p;
-<a name="l00432"></a>00432                 <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a>=<a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a81655f469fa1479d968d5a0c3ce6f079a8">EEPAPI_EIDECODE</a>;
-<a name="l00433"></a>00433                 <span class="keywordflow">return</span> 1;
-<a name="l00434"></a>00434         }
-<a name="l00435"></a>00435         <span class="comment">// arity should be 2 - {msg_type,{Msg}}</span>
-<a name="l00436"></a>00436         <span class="keywordflow">if</span> (ei_decode_tuple_header((<span class="keyword">const</span> <span class="keywordtype">char</span> *)b, &amp;index, &amp;arity)) {
-<a name="l00437"></a>00437                 <a class="code" href="epapi_8h.html#53b7d4ef6b5cc76b0bce2fd6fe5733ed">DBGLOG</a>(LOG_ERR, <span class="stringliteral">"ERROR decode {msg_type...}"</span>);
-<a name="l00438"></a>00438                 <span class="keyword">delete</span> p;
-<a name="l00439"></a>00439                 <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a>=<a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a81655f469fa1479d968d5a0c3ce6f079a8">EEPAPI_EIDECODE</a>;
-<a name="l00440"></a>00440                 <span class="keywordflow">return</span> 1;
-<a name="l00441"></a>00441         }
-<a name="l00442"></a>00442         <span class="keywordflow">if</span> (arity!=2) {
-<a name="l00443"></a>00443                 <a class="code" href="epapi_8h.html#53b7d4ef6b5cc76b0bce2fd6fe5733ed">DBGLOG</a>(LOG_ERR, <span class="stringliteral">"ERROR decode {msg_type,{Msg}}: ARITY"</span>);
-<a name="l00444"></a>00444                 <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a>=<a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a811fed59a74486a1df64c9272525f85c27">EEPAPI_ARITY</a>;
-<a name="l00445"></a>00445                 <span class="keyword">delete</span> p;
-<a name="l00446"></a>00446                 <span class="keywordflow">return</span> 1;
-<a name="l00447"></a>00447         }
-<a name="l00448"></a>00448 
-<a name="l00449"></a>00449         <span class="comment">//msg_type</span>
-<a name="l00450"></a>00450         <span class="keywordflow">if</span> (ei_decode_atom((<span class="keyword">const</span> <span class="keywordtype">char</span> *)b, &amp;index, stype)) {
-<a name="l00451"></a>00451                 <a class="code" href="epapi_8h.html#53b7d4ef6b5cc76b0bce2fd6fe5733ed">DBGLOG</a>(LOG_ERR, <span class="stringliteral">"ERROR decode {msg_type...}: ATOM"</span>);
-<a name="l00452"></a>00452                 <span class="keyword">delete</span> p;
-<a name="l00453"></a>00453                 <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a>=<a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a81655f469fa1479d968d5a0c3ce6f079a8">EEPAPI_EIDECODE</a>;
-<a name="l00454"></a>00454                 <span class="keywordflow">return</span> 1;
-<a name="l00455"></a>00455         }
-<a name="l00456"></a>00456 
-<a name="l00457"></a>00457         <span class="comment">// {msg_type, {Msg}}</span>
-<a name="l00458"></a>00458         <span class="comment">//            ^</span>
-<a name="l00459"></a>00459         <span class="keywordflow">if</span> (ei_decode_tuple_header((<span class="keyword">const</span> <span class="keywordtype">char</span> *)b, &amp;index, &amp;arity)) {
-<a name="l00460"></a>00460                 <a class="code" href="epapi_8h.html#53b7d4ef6b5cc76b0bce2fd6fe5733ed">DBGLOG</a>(LOG_ERR, <span class="stringliteral">"ERROR decode {msg_type,{Msg}}"</span>);
-<a name="l00461"></a>00461                 <span class="keyword">delete</span> p;
-<a name="l00462"></a>00462                 <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a>=<a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a81655f469fa1479d968d5a0c3ce6f079a8">EEPAPI_EIDECODE</a>;
-<a name="l00463"></a>00463                 <span class="keywordflow">return</span> 1;
-<a name="l00464"></a>00464         }
-<a name="l00465"></a>00465 
-<a name="l00466"></a>00466         <span class="keywordflow">if</span> (arity&gt;<a class="code" href="classMsg.html#e128e239c5f3ceac46ac64594fb81b8b">Msg::MAX_PARAMS</a>) {
-<a name="l00467"></a>00467                 <a class="code" href="epapi_8h.html#53b7d4ef6b5cc76b0bce2fd6fe5733ed">DBGLOG</a>(LOG_ERR, <span class="stringliteral">"ERROR decode {msg_type...}:TOO BIG"</span>);
-<a name="l00468"></a>00468                 <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a> = <a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a81057ef0f991879e882ba8c3538efbbb59">EEPAPI_TOOBIG</a>;
-<a name="l00469"></a>00469                 <span class="keyword">delete</span> p;
-<a name="l00470"></a>00470                 <span class="keywordflow">return</span> 1;
-<a name="l00471"></a>00471         }
-<a name="l00472"></a>00472 
-<a name="l00473"></a>00473         *m = <span class="keyword">new</span> <a class="code" href="classMsg.html">Msg</a>();
-<a name="l00474"></a>00474 
-<a name="l00475"></a>00475         <span class="comment">//find a corresponding msg_type</span>
-<a name="l00476"></a>00476         <span class="comment">//so that we can decode the message</span>
-<a name="l00477"></a>00477         <span class="keyword">const</span> <span class="keywordtype">char</span> *sig = <a class="code" href="classMsgHandler.html#83adc9ca4ef0121cc8eea7e86571738e">getSignatureFromTypeText</a>((<span class="keyword">const</span> <span class="keywordtype">char</span> *) stype, &amp;type);
-<a name="l00478"></a>00478         <span class="keywordflow">if</span> (NULL==sig) {
-<a name="l00479"></a>00479                 <a class="code" href="epapi_8h.html#53b7d4ef6b5cc76b0bce2fd6fe5733ed">DBGLOG</a>(LOG_ERR, <span class="stringliteral">"signature NOT FOUND, stype[%s]"</span>, stype);
-<a name="l00480"></a>00480                 <span class="keyword">delete</span> p;
-<a name="l00481"></a>00481                 <span class="comment">//last_error already set</span>
-<a name="l00482"></a>00482                 <span class="keywordflow">return</span> 1;
-<a name="l00483"></a>00483         }
-<a name="l00484"></a>00484 
-<a name="l00485"></a>00485         (*m)-&gt;setType(type);
-<a name="l00486"></a>00486 
-<a name="l00487"></a>00487         <span class="keywordtype">int</span> len = strlen( sig );
-<a name="l00488"></a>00488         <span class="keywordtype">int</span> result;
+<a name="l00426"></a>00426         <span class="keywordtype">int</span> index=0;
+<a name="l00427"></a>00427         <span class="keywordtype">char</span> *b = (<span class="keywordtype">char</span> *) p-&gt;<a class="code" href="classPkt.html#faee09963325eda610ed470d594d82ef">getBuf</a>();
+<a name="l00428"></a>00428 
+<a name="l00429"></a>00429         <span class="comment">//we count on the first element of the</span>
+<a name="l00430"></a>00430         <span class="comment">//received tuple to contain an ATOM</span>
+<a name="l00431"></a>00431         <span class="comment">//which corresponds to the message type</span>
+<a name="l00432"></a>00432         <span class="keywordflow">if</span> (ei_decode_version((<span class="keyword">const</span> <span class="keywordtype">char</span> *) b, &amp;index, &amp;version)) {
+<a name="l00433"></a>00433                 <a class="code" href="epapi_8h.html#53b7d4ef6b5cc76b0bce2fd6fe5733ed">DBGLOG</a>(LOG_ERR, <span class="stringliteral">"ERROR decode VERSION"</span>);
+<a name="l00434"></a>00434                 <span class="keyword">delete</span> p;
+<a name="l00435"></a>00435                 <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a>=<a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a81655f469fa1479d968d5a0c3ce6f079a8">EEPAPI_EIDECODE</a>;
+<a name="l00436"></a>00436                 <span class="keywordflow">return</span> 1;
+<a name="l00437"></a>00437         }
+<a name="l00438"></a>00438         <span class="comment">// arity should be 2 - {msg_type,{Msg}}</span>
+<a name="l00439"></a>00439         <span class="keywordflow">if</span> (ei_decode_tuple_header((<span class="keyword">const</span> <span class="keywordtype">char</span> *)b, &amp;index, &amp;arity)) {
+<a name="l00440"></a>00440                 <a class="code" href="epapi_8h.html#53b7d4ef6b5cc76b0bce2fd6fe5733ed">DBGLOG</a>(LOG_ERR, <span class="stringliteral">"ERROR decode {msg_type...}"</span>);
+<a name="l00441"></a>00441                 <span class="keyword">delete</span> p;
+<a name="l00442"></a>00442                 <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a>=<a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a81655f469fa1479d968d5a0c3ce6f079a8">EEPAPI_EIDECODE</a>;
+<a name="l00443"></a>00443                 <span class="keywordflow">return</span> 1;
+<a name="l00444"></a>00444         }
+<a name="l00445"></a>00445         <span class="keywordflow">if</span> (arity!=2) {
+<a name="l00446"></a>00446                 <a class="code" href="epapi_8h.html#53b7d4ef6b5cc76b0bce2fd6fe5733ed">DBGLOG</a>(LOG_ERR, <span class="stringliteral">"ERROR decode {msg_type,{Msg}}: ARITY"</span>);
+<a name="l00447"></a>00447                 <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a>=<a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a811fed59a74486a1df64c9272525f85c27">EEPAPI_ARITY</a>;
+<a name="l00448"></a>00448                 <span class="keyword">delete</span> p;
+<a name="l00449"></a>00449                 <span class="keywordflow">return</span> 1;
+<a name="l00450"></a>00450         }
+<a name="l00451"></a>00451 
+<a name="l00452"></a>00452         <span class="comment">//msg_type</span>
+<a name="l00453"></a>00453         <span class="keywordflow">if</span> (ei_decode_atom((<span class="keyword">const</span> <span class="keywordtype">char</span> *)b, &amp;index, stype)) {
+<a name="l00454"></a>00454                 <a class="code" href="epapi_8h.html#53b7d4ef6b5cc76b0bce2fd6fe5733ed">DBGLOG</a>(LOG_ERR, <span class="stringliteral">"ERROR decode {msg_type...}: ATOM"</span>);
+<a name="l00455"></a>00455                 <span class="keyword">delete</span> p;
+<a name="l00456"></a>00456                 <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a>=<a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a81655f469fa1479d968d5a0c3ce6f079a8">EEPAPI_EIDECODE</a>;
+<a name="l00457"></a>00457                 <span class="keywordflow">return</span> 1;
+<a name="l00458"></a>00458         }
+<a name="l00459"></a>00459 
+<a name="l00460"></a>00460         <span class="comment">// {msg_type, {Msg}}</span>
+<a name="l00461"></a>00461         <span class="comment">//            ^</span>
+<a name="l00462"></a>00462         <span class="keywordflow">if</span> (ei_decode_tuple_header((<span class="keyword">const</span> <span class="keywordtype">char</span> *)b, &amp;index, &amp;arity)) {
+<a name="l00463"></a>00463                 <a class="code" href="epapi_8h.html#53b7d4ef6b5cc76b0bce2fd6fe5733ed">DBGLOG</a>(LOG_ERR, <span class="stringliteral">"ERROR decode {msg_type,{Msg}}"</span>);
+<a name="l00464"></a>00464                 <span class="keyword">delete</span> p;
+<a name="l00465"></a>00465                 <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a>=<a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a81655f469fa1479d968d5a0c3ce6f079a8">EEPAPI_EIDECODE</a>;
+<a name="l00466"></a>00466                 <span class="keywordflow">return</span> 1;
+<a name="l00467"></a>00467         }
+<a name="l00468"></a>00468 
+<a name="l00469"></a>00469         <span class="keywordflow">if</span> (arity&gt;<a class="code" href="classMsg.html#e128e239c5f3ceac46ac64594fb81b8b">Msg::MAX_PARAMS</a>) {
+<a name="l00470"></a>00470                 <a class="code" href="epapi_8h.html#53b7d4ef6b5cc76b0bce2fd6fe5733ed">DBGLOG</a>(LOG_ERR, <span class="stringliteral">"ERROR decode {msg_type...}:TOO BIG"</span>);
+<a name="l00471"></a>00471                 <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a> = <a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a81057ef0f991879e882ba8c3538efbbb59">EEPAPI_TOOBIG</a>;
+<a name="l00472"></a>00472                 <span class="keyword">delete</span> p;
+<a name="l00473"></a>00473                 <span class="keywordflow">return</span> 1;
+<a name="l00474"></a>00474         }
+<a name="l00475"></a>00475 
+<a name="l00476"></a>00476         *m = <span class="keyword">new</span> <a class="code" href="classMsg.html">Msg</a>();
+<a name="l00477"></a>00477 
+<a name="l00478"></a>00478         <span class="comment">//find a corresponding msg_type</span>
+<a name="l00479"></a>00479         <span class="comment">//so that we can decode the message</span>
+<a name="l00480"></a>00480         <span class="keyword">const</span> <span class="keywordtype">char</span> *sig = <a class="code" href="classMsgHandler.html#83adc9ca4ef0121cc8eea7e86571738e">getSignatureFromTypeText</a>((<span class="keyword">const</span> <span class="keywordtype">char</span> *) stype, &amp;type);
+<a name="l00481"></a>00481         <span class="keywordflow">if</span> (NULL==sig) {
+<a name="l00482"></a>00482                 <a class="code" href="epapi_8h.html#53b7d4ef6b5cc76b0bce2fd6fe5733ed">DBGLOG</a>(LOG_ERR, <span class="stringliteral">"signature NOT FOUND, stype[%s]"</span>, stype);
+<a name="l00483"></a>00483                 <span class="keyword">delete</span> p;
+<a name="l00484"></a>00484                 <span class="comment">//last_error already set</span>
+<a name="l00485"></a>00485                 <span class="keywordflow">return</span> 1;
+<a name="l00486"></a>00486         }
+<a name="l00487"></a>00487 
+<a name="l00488"></a>00488         (*m)-&gt;setType(type);
 <a name="l00489"></a>00489 
-<a name="l00490"></a>00490         <span class="keywordtype">char</span> *string, *atom;
-<a name="l00491"></a>00491         <span class="keywordtype">double</span> d;
-<a name="l00492"></a>00492         <span class="keywordtype">long</span> <span class="keywordtype">int</span> lint;
-<a name="l00493"></a>00493 
-<a name="l00494"></a>00494         <a class="code" href="epapi_8h.html#53b7d4ef6b5cc76b0bce2fd6fe5733ed">DBGLOG</a>(LOG_INFO,<span class="stringliteral">"MsgHandler::rx - expecting sig[%s] len[%i]"</span>, sig, len);
-<a name="l00495"></a>00495 
-<a name="l00496"></a>00496         <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0;i&lt;len;i++) {
-<a name="l00497"></a>00497                 <span class="keywordflow">switch</span>(sig[i]) {
-<a name="l00498"></a>00498                 <span class="keywordflow">case</span> <span class="charliteral">'s'</span>:
-<a name="l00499"></a>00499                 <span class="keywordflow">case</span> <span class="charliteral">'S'</span>:
-<a name="l00500"></a>00500                         <span class="comment">//DBGLOG(LOG_ERR, "decode [STRING]");</span>
-<a name="l00501"></a>00501                         <span class="keywordtype">string</span> = (<span class="keywordtype">char</span> *)malloc(<a class="code" href="classMsgHandler.html#bfd8feadc6f1212cec113f6eb524ff25">MAX_STRING_SIZE</a>);
-<a name="l00502"></a>00502                         <span class="keywordflow">if</span> (NULL==<span class="keywordtype">string</span>) {
-<a name="l00503"></a>00503                                 <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a> = <a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a81dfab2fc6ee8ef974208c4199695c7724">EEPAPI_MALLOC</a>;
-<a name="l00504"></a>00504                                 result = 1;
-<a name="l00505"></a>00505                                 <span class="keywordflow">break</span>;
-<a name="l00506"></a>00506                         }
-<a name="l00507"></a>00507                         result = ei_decode_string(b, &amp;index, <span class="keywordtype">string</span>);
-<a name="l00508"></a>00508                         <span class="keywordflow">break</span>;
-<a name="l00509"></a>00509                 <span class="keywordflow">case</span> <span class="charliteral">'a'</span>:
-<a name="l00510"></a>00510                 <span class="keywordflow">case</span> <span class="charliteral">'A'</span>:
-<a name="l00511"></a>00511                         <span class="comment">//DBGLOG(LOG_ERR, "decode, [ATOM]");</span>
-<a name="l00512"></a>00512                         atom = (<span class="keywordtype">char</span> *)malloc(<a class="code" href="classMsgHandler.html#21b8f8acd6f31a7489451e8fbc68d3a7">MAX_ATOM_SIZE</a>);
-<a name="l00513"></a>00513                         <span class="keywordflow">if</span> (NULL==atom) {
-<a name="l00514"></a>00514                                 <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a> = <a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a81dfab2fc6ee8ef974208c4199695c7724">EEPAPI_MALLOC</a>;
-<a name="l00515"></a>00515                                 result=1;
-<a name="l00516"></a>00516                                 <span class="keywordflow">break</span>;
-<a name="l00517"></a>00517                         }
-<a name="l00518"></a>00518                         result = ei_decode_atom(b, &amp;index, atom);
-<a name="l00519"></a>00519                         <span class="keywordflow">break</span>;
-<a name="l00520"></a>00520                 <span class="keywordflow">case</span> <span class="charliteral">'d'</span>:
-<a name="l00521"></a>00521                 <span class="keywordflow">case</span> <span class="charliteral">'D'</span>:
-<a name="l00522"></a>00522                         result = ei_decode_double(b, &amp;index, &amp;d);
-<a name="l00523"></a>00523                         <span class="comment">//DBGLOG(LOG_ERR, "decode, [DOUBLE][%e]",d);</span>
-<a name="l00524"></a>00524                         <span class="keywordflow">break</span>;
-<a name="l00525"></a>00525                 <span class="keywordflow">case</span> <span class="charliteral">'l'</span>:
-<a name="l00526"></a>00526                 <span class="keywordflow">case</span> <span class="charliteral">'L'</span>:
-<a name="l00527"></a>00527                         result = ei_decode_long(b, &amp;index, &amp;lint);
-<a name="l00528"></a>00528                         <span class="comment">//DBGLOG(LOG_ERR, "decode, [LONG][%li]", lint);</span>
-<a name="l00529"></a>00529                         <span class="keywordflow">break</span>;
-<a name="l00530"></a>00530                 <span class="keywordflow">default</span>:
-<a name="l00531"></a>00531                         <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a> = <a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a81167e981c071ed61aa2634821e9974a6e">EEPAPI_BADFORMAT</a>;
-<a name="l00532"></a>00532                         result = 1;
-<a name="l00533"></a>00533                         <span class="keywordflow">break</span>;
-<a name="l00534"></a>00534                 }<span class="comment">//switch</span>
-<a name="l00535"></a>00535 
-<a name="l00536"></a>00536                 <span class="keywordflow">if</span> (result) {
-<a name="l00537"></a>00537                         <span class="keywordflow">if</span> (NULL!=atom)
-<a name="l00538"></a>00538                                 free(atom);
-<a name="l00539"></a>00539                         <span class="keywordflow">if</span> (NULL!=<span class="keywordtype">string</span>)
-<a name="l00540"></a>00540                                 free(<span class="keywordtype">string</span>);
-<a name="l00541"></a>00541                         <span class="keywordflow">break</span>;
-<a name="l00542"></a>00542                 }
-<a name="l00543"></a>00543 
-<a name="l00544"></a>00544                 <span class="comment">// update message</span>
-<a name="l00545"></a>00545                 <span class="keywordflow">switch</span>(sig[i]) {
-<a name="l00546"></a>00546                 <span class="keywordflow">case</span> <span class="charliteral">'s'</span>:
-<a name="l00547"></a>00547                 <span class="keywordflow">case</span> <span class="charliteral">'S'</span>:
-<a name="l00548"></a>00548                         <span class="comment">//DBGLOG(LOG_ERR, "setting, [STRING]");</span>
-<a name="l00549"></a>00549                         (*m)-&gt;setParam(i, <span class="charliteral">'s'</span>, <span class="keywordtype">string</span>);
-<a name="l00550"></a>00550                         <span class="keywordflow">break</span>;
-<a name="l00551"></a>00551                 <span class="keywordflow">case</span> <span class="charliteral">'a'</span>:
-<a name="l00552"></a>00552                 <span class="keywordflow">case</span> <span class="charliteral">'A'</span>:
-<a name="l00553"></a>00553                         <span class="comment">//DBGLOG(LOG_ERR, "setting, [ATOM]");</span>
-<a name="l00554"></a>00554                         (*m)-&gt;setParam(i,<span class="charliteral">'a'</span>, atom);
-<a name="l00555"></a>00555                         <span class="keywordflow">break</span>;
-<a name="l00556"></a>00556                 <span class="keywordflow">case</span> <span class="charliteral">'d'</span>:
-<a name="l00557"></a>00557                 <span class="keywordflow">case</span> <span class="charliteral">'D'</span>:
-<a name="l00558"></a>00558                         <span class="comment">//DBGLOG(LOG_ERR, "setting, [DOUBLE]");</span>
-<a name="l00559"></a>00559                         (*m)-&gt;setParam(i,<span class="charliteral">'d'</span>, d);
-<a name="l00560"></a>00560                         <span class="keywordflow">break</span>;
-<a name="l00561"></a>00561                 <span class="keywordflow">case</span> <span class="charliteral">'l'</span>:
-<a name="l00562"></a>00562                 <span class="keywordflow">case</span> <span class="charliteral">'L'</span>:
-<a name="l00563"></a>00563                         <span class="comment">//DBGLOG(LOG_ERR, "setting, [LONG]");</span>
-<a name="l00564"></a>00564                         (*m)-&gt;setParam(i,<span class="charliteral">'l'</span>, lint);
-<a name="l00565"></a>00565                         <span class="keywordflow">break</span>;
-<a name="l00566"></a>00566                 }<span class="comment">//switch</span>
-<a name="l00567"></a>00567 
-<a name="l00568"></a>00568         }<span class="comment">//for</span>
-<a name="l00569"></a>00569 
-<a name="l00570"></a>00570         <span class="keyword">delete</span> p;
-<a name="l00571"></a>00571 
-<a name="l00572"></a>00572         <a class="code" href="epapi_8h.html#53b7d4ef6b5cc76b0bce2fd6fe5733ed">DBGLOG</a>(LOG_INFO, <span class="stringliteral">"MsgHandler::rx - END, result[%i]"</span>, result);
-<a name="l00573"></a>00573 
-<a name="l00574"></a>00574         <span class="keywordflow">return</span> result;
-<a name="l00575"></a>00575 }<span class="comment">//</span>
+<a name="l00490"></a>00490         <span class="keywordtype">int</span> len = strlen( sig );
+<a name="l00491"></a>00491         <span class="keywordtype">int</span> result=1;
+<a name="l00492"></a>00492 
+<a name="l00493"></a>00493         <span class="keywordtype">char</span> *<span class="keywordtype">string</span>=NULL, *atom=NULL;
+<a name="l00494"></a>00494         <span class="keywordtype">double</span> d;
+<a name="l00495"></a>00495         <span class="keywordtype">long</span> <span class="keywordtype">int</span> lint;
+<a name="l00496"></a>00496 
+<a name="l00497"></a>00497         <a class="code" href="epapi_8h.html#53b7d4ef6b5cc76b0bce2fd6fe5733ed">DBGLOG</a>(LOG_INFO,<span class="stringliteral">"MsgHandler::rx - expecting sig[%s] len[%i]"</span>, sig, len);
+<a name="l00498"></a>00498 
+<a name="l00499"></a>00499         <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0;i&lt;len;i++) {
+<a name="l00500"></a>00500                 <span class="keywordflow">switch</span>(sig[i]) {
+<a name="l00501"></a>00501                 <span class="keywordflow">case</span> <span class="charliteral">'s'</span>:
+<a name="l00502"></a>00502                 <span class="keywordflow">case</span> <span class="charliteral">'S'</span>:
+<a name="l00503"></a>00503                         <span class="comment">//DBGLOG(LOG_ERR, "decode [STRING]");</span>
+<a name="l00504"></a>00504                         <span class="keywordtype">string</span> = (<span class="keywordtype">char</span> *)malloc(<a class="code" href="classMsgHandler.html#bfd8feadc6f1212cec113f6eb524ff25">MAX_STRING_SIZE</a>);
+<a name="l00505"></a>00505                         <span class="keywordflow">if</span> (NULL==<span class="keywordtype">string</span>) {
+<a name="l00506"></a>00506                                 <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a> = <a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a81dfab2fc6ee8ef974208c4199695c7724">EEPAPI_MALLOC</a>;
+<a name="l00507"></a>00507                                 result = 1;
+<a name="l00508"></a>00508                                 <span class="keywordflow">break</span>;
+<a name="l00509"></a>00509                         }
+<a name="l00510"></a>00510                         result = ei_decode_string(b, &amp;index, <span class="keywordtype">string</span>);
+<a name="l00511"></a>00511                         <span class="keywordflow">break</span>;
+<a name="l00512"></a>00512                 <span class="keywordflow">case</span> <span class="charliteral">'a'</span>:
+<a name="l00513"></a>00513                 <span class="keywordflow">case</span> <span class="charliteral">'A'</span>:
+<a name="l00514"></a>00514                         <span class="comment">//DBGLOG(LOG_ERR, "decode, [ATOM]");</span>
+<a name="l00515"></a>00515                         atom = (<span class="keywordtype">char</span> *)malloc(<a class="code" href="classMsgHandler.html#21b8f8acd6f31a7489451e8fbc68d3a7">MAX_ATOM_SIZE</a>);
+<a name="l00516"></a>00516                         <span class="keywordflow">if</span> (NULL==atom) {
+<a name="l00517"></a>00517                                 <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a> = <a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a81dfab2fc6ee8ef974208c4199695c7724">EEPAPI_MALLOC</a>;
+<a name="l00518"></a>00518                                 result=1;
+<a name="l00519"></a>00519                                 <span class="keywordflow">break</span>;
+<a name="l00520"></a>00520                         }
+<a name="l00521"></a>00521                         result = ei_decode_atom(b, &amp;index, atom);
+<a name="l00522"></a>00522                         <span class="keywordflow">break</span>;
+<a name="l00523"></a>00523                 <span class="keywordflow">case</span> <span class="charliteral">'d'</span>:
+<a name="l00524"></a>00524                 <span class="keywordflow">case</span> <span class="charliteral">'D'</span>:
+<a name="l00525"></a>00525                         result = ei_decode_double(b, &amp;index, &amp;d);
+<a name="l00526"></a>00526                         <span class="comment">//DBGLOG(LOG_ERR, "decode, [DOUBLE][%e]",d);</span>
+<a name="l00527"></a>00527                         <span class="keywordflow">break</span>;
+<a name="l00528"></a>00528                 <span class="keywordflow">case</span> <span class="charliteral">'l'</span>:
+<a name="l00529"></a>00529                 <span class="keywordflow">case</span> <span class="charliteral">'L'</span>:
+<a name="l00530"></a>00530                         result = ei_decode_long(b, &amp;index, &amp;lint);
+<a name="l00531"></a>00531                         <span class="comment">//DBGLOG(LOG_ERR, "decode, [LONG][%li]", lint);</span>
+<a name="l00532"></a>00532                         <span class="keywordflow">break</span>;
+<a name="l00533"></a>00533                 <span class="keywordflow">default</span>:
+<a name="l00534"></a>00534                         <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a> = <a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a81167e981c071ed61aa2634821e9974a6e">EEPAPI_BADFORMAT</a>;
+<a name="l00535"></a>00535                         result = 1;
+<a name="l00536"></a>00536                         <span class="keywordflow">break</span>;
+<a name="l00537"></a>00537                 }<span class="comment">//switch</span>
+<a name="l00538"></a>00538 
+<a name="l00539"></a>00539                 <span class="keywordflow">if</span> (result) {
+<a name="l00540"></a>00540                         <span class="keywordflow">if</span> (NULL!=atom)
+<a name="l00541"></a>00541                                 free(atom);
+<a name="l00542"></a>00542                         <span class="keywordflow">if</span> (NULL!=<span class="keywordtype">string</span>)
+<a name="l00543"></a>00543                                 free(<span class="keywordtype">string</span>);
+<a name="l00544"></a>00544                         <span class="keywordflow">break</span>;
+<a name="l00545"></a>00545                 }
+<a name="l00546"></a>00546 
+<a name="l00547"></a>00547                 <span class="comment">// update message</span>
+<a name="l00548"></a>00548                 <span class="keywordflow">switch</span>(sig[i]) {
+<a name="l00549"></a>00549                 <span class="keywordflow">case</span> <span class="charliteral">'s'</span>:
+<a name="l00550"></a>00550                 <span class="keywordflow">case</span> <span class="charliteral">'S'</span>:
+<a name="l00551"></a>00551                         <span class="comment">//DBGLOG(LOG_ERR, "setting, [STRING]");</span>
+<a name="l00552"></a>00552                         (*m)-&gt;setParam(i, <span class="charliteral">'s'</span>, <span class="keywordtype">string</span>);
+<a name="l00553"></a>00553                         <span class="keywordflow">break</span>;
+<a name="l00554"></a>00554                 <span class="keywordflow">case</span> <span class="charliteral">'a'</span>:
+<a name="l00555"></a>00555                 <span class="keywordflow">case</span> <span class="charliteral">'A'</span>:
+<a name="l00556"></a>00556                         <span class="comment">//DBGLOG(LOG_ERR, "setting, [ATOM]");</span>
+<a name="l00557"></a>00557                         (*m)-&gt;setParam(i,<span class="charliteral">'a'</span>, atom);
+<a name="l00558"></a>00558                         <span class="keywordflow">break</span>;
+<a name="l00559"></a>00559                 <span class="keywordflow">case</span> <span class="charliteral">'d'</span>:
+<a name="l00560"></a>00560                 <span class="keywordflow">case</span> <span class="charliteral">'D'</span>:
+<a name="l00561"></a>00561                         <span class="comment">//DBGLOG(LOG_ERR, "setting, [DOUBLE]");</span>
+<a name="l00562"></a>00562                         (*m)-&gt;setParam(i,<span class="charliteral">'d'</span>, d);
+<a name="l00563"></a>00563                         <span class="keywordflow">break</span>;
+<a name="l00564"></a>00564                 <span class="keywordflow">case</span> <span class="charliteral">'l'</span>:
+<a name="l00565"></a>00565                 <span class="keywordflow">case</span> <span class="charliteral">'L'</span>:
+<a name="l00566"></a>00566                         <span class="comment">//DBGLOG(LOG_ERR, "setting, [LONG]");</span>
+<a name="l00567"></a>00567                         (*m)-&gt;setParam(i,<span class="charliteral">'l'</span>, lint);
+<a name="l00568"></a>00568                         <span class="keywordflow">break</span>;
+<a name="l00569"></a>00569                 }<span class="comment">//switch</span>
+<a name="l00570"></a>00570 
+<a name="l00571"></a>00571         }<span class="comment">//for</span>
+<a name="l00572"></a>00572 
+<a name="l00573"></a>00573         <span class="keyword">delete</span> p;
+<a name="l00574"></a>00574 
+<a name="l00575"></a>00575         <a class="code" href="epapi_8h.html#53b7d4ef6b5cc76b0bce2fd6fe5733ed">DBGLOG</a>(LOG_INFO, <span class="stringliteral">"MsgHandler::rx - END, result[%i]"</span>, result);
 <a name="l00576"></a>00576 
-<a name="l00577"></a>00577 
+<a name="l00577"></a>00577         <span class="keywordflow">return</span> result;
+<a name="l00578"></a>00578 }<span class="comment">//</span>
+<a name="l00579"></a>00579 
+<a name="l00580"></a>00580 
 </pre></div></div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Mon Jun 15 15:28:38 2009 for EPAPI by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Wed Sep 30 09:09:35 2009 for EPAPI by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.8 </small></address>
 </body>

@@ -23,7 +23,10 @@
   </div>
 </div>
 <div class="contents">
-<h1>Pkt Class Reference</h1><!-- doxytag: class="Pkt" --><!-- doxytag: inherits="epapiBase" --><code>#include &lt;<a class="el" href="epapi__pkt_8h-source.html">epapi_pkt.h</a>&gt;</code>
+<h1>Pkt Class Reference</h1><!-- doxytag: class="Pkt" --><!-- doxytag: inherits="epapiBase" --><a class="el" href="classPkt.html" title="Pkt class declaration.">Pkt</a> class declaration.  
+<a href="#_details">More...</a>
+<p>
+<code>#include &lt;<a class="el" href="epapi__pkt_8h-source.html">epapi_pkt.h</a>&gt;</code>
 <p>
 <div class="dynheader">
 Inheritance diagram for Pkt:</div>
@@ -56,6 +59,8 @@ Collaboration diagram for Pkt:</div>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPkt.html#e8543902791bb8ac2ade8e73b45af312">getLength</a> (void)</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPkt.html#ac3b634ee3ea41380da0444c4a4a0d77">clean</a> (void)</td></tr>
+
 <tr><td colspan="2"><br><h2>Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPkt.html#a1d267438b0e86dbe5f1269e567dc68f">sz</a></td></tr>
 
@@ -63,12 +68,12 @@ Collaboration diagram for Pkt:</div>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPkt.html#4fd466eddd4853fbb4a418d650f03271">len</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">ei_x_buff *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPkt.html#82c91009207f5e734ef6f849e0d3bae8">tbuf</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">ei_x_buff&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPkt.html#956700eb10c7f9239d463a81d12eeb0b">tbuf</a></td></tr>
 
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
-Packet class 
-<p>Definition at line <a class="el" href="epapi__pkt_8h-source.html#l00021">21</a> of file <a class="el" href="epapi__pkt_8h-source.html">epapi_pkt.h</a>.</p>
+<a class="el" href="classPkt.html" title="Pkt class declaration.">Pkt</a> class declaration. 
+<p>Definition at line <a class="el" href="epapi__pkt_8h-source.html#l00033">33</a> of file <a class="el" href="epapi__pkt_8h-source.html">epapi_pkt.h</a>.</p>
 <hr><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" name="f801871e253701c73383ad62c6084c10"></a><!-- doxytag: member="Pkt::Pkt" ref="f801871e253701c73383ad62c6084c10" args="()" -->
 <div class="memitem">
@@ -88,9 +93,9 @@ Packet class
 <p>
 Creates a RX packet<p>
 Creates RX packet type 
-<p>Definition at line <a class="el" href="epapi__pkt_8cc-source.html#l00017">17</a> of file <a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a>.</p>
+<p>Definition at line <a class="el" href="epapi__pkt_8cc-source.html#l00021">21</a> of file <a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a>.</p>
 
-<p>References <a class="el" href="epapi__pkt_8h-source.html#l00031">buf</a>, <a class="el" href="epapi_8h-source.html#l00217">epapiBase::last_error</a>, <a class="el" href="epapi__pkt_8h-source.html#l00030">sz</a>, and <a class="el" href="epapi__pkt_8h-source.html#l00035">tbuf</a>.</p>
+<p>References <a class="el" href="epapi__pkt_8h-source.html#l00043">buf</a>, <a class="el" href="epapi_8h-source.html#l00219">epapiBase::last_error</a>, <a class="el" href="epapi__pkt_8h-source.html#l00042">sz</a>, and <a class="el" href="epapi__pkt_8h-source.html#l00047">tbuf</a>.</p>
 
 </div>
 </div><p>
@@ -110,14 +115,39 @@ Creates RX packet type
 <div class="memdoc">
 
 <p>
-Destroys either RX or TX packet types 
-<p>Definition at line <a class="el" href="epapi__pkt_8cc-source.html#l00024">24</a> of file <a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a>.</p>
+Destructor 
+<p>Definition at line <a class="el" href="epapi__pkt_8cc-source.html#l00029">29</a> of file <a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a>.</p>
 
-<p>References <a class="el" href="epapi__pkt_8h-source.html#l00031">buf</a>, and <a class="el" href="epapi__pkt_8h-source.html#l00035">tbuf</a>.</p>
+<p>References <a class="el" href="epapi__pkt_8h-source.html#l00043">buf</a>, and <a class="el" href="epapi__pkt_8h-source.html#l00047">tbuf</a>.</p>
 
 </div>
 </div><p>
 <hr><h2>Member Function Documentation</h2>
+<a class="anchor" name="ac3b634ee3ea41380da0444c4a4a0d77"></a><!-- doxytag: member="Pkt::clean" ref="ac3b634ee3ea41380da0444c4a4a0d77" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Pkt::clean           </td>
+          <td>(</td>
+          <td class="paramtype">void&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Clean the internal buffer (if one is allocated)<p>
+This method helps prepare for reception of new data. 
+<p>Definition at line <a class="el" href="epapi__pkt_8cc-source.html#l00039">39</a> of file <a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a>.</p>
+
+<p>References <a class="el" href="epapi__pkt_8h-source.html#l00043">buf</a>, <a class="el" href="epapi__pkt_8h-source.html#l00042">sz</a>, and <a class="el" href="epapi__pkt_8h-source.html#l00047">tbuf</a>.</p>
+
+</div>
+</div><p>
 <a class="anchor" name="3ba91dca7f6ffdb90be03754fcc1a05d"></a><!-- doxytag: member="Pkt::getBuf" ref="3ba91dca7f6ffdb90be03754fcc1a05d" args="(int size)" -->
 <div class="memitem">
 <div class="memproto">
@@ -143,9 +173,9 @@ Gets the pointer to the internal buffer and reallocs, if necessary, to 'size'<p>
 </dl>
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>buffer </dd></dl>
 
-<p>Definition at line <a class="el" href="epapi__pkt_8cc-source.html#l00056">56</a> of file <a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a>.</p>
+<p>Definition at line <a class="el" href="epapi__pkt_8cc-source.html#l00073">73</a> of file <a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a>.</p>
 
-<p>References <a class="el" href="epapi__pkt_8h-source.html#l00031">buf</a>, <a class="el" href="epapi_8h-source.html#l00201">EEPAPI_MALLOC</a>, <a class="el" href="epapi_8h-source.html#l00202">EEPAPI_REALLOC</a>, <a class="el" href="epapi_8h-source.html#l00217">epapiBase::last_error</a>, and <a class="el" href="epapi__pkt_8h-source.html#l00030">sz</a>.</p>
+<p>References <a class="el" href="epapi__pkt_8h-source.html#l00043">buf</a>, <a class="el" href="epapi_8h-source.html#l00188">DBGLOG</a>, <a class="el" href="epapi_8h-source.html#l00203">EEPAPI_MALLOC</a>, <a class="el" href="epapi_8h-source.html#l00204">EEPAPI_REALLOC</a>, <a class="el" href="epapi_8h-source.html#l00219">epapiBase::last_error</a>, and <a class="el" href="epapi__pkt_8h-source.html#l00042">sz</a>.</p>
 
 </div>
 </div><p>
@@ -166,10 +196,10 @@ Gets the pointer to the internal buffer and reallocs, if necessary, to 'size'<p>
 <div class="memdoc">
 
 <p>
-Gets the pointer to the internal buffer 
-<p>Definition at line <a class="el" href="epapi__pkt_8cc-source.html#l00050">50</a> of file <a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a>.</p>
+Gets the pointer to the internal buffer for the RX process 
+<p>Definition at line <a class="el" href="epapi__pkt_8cc-source.html#l00067">67</a> of file <a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a>.</p>
 
-<p>Referenced by <a class="el" href="epapi__msg_8cc-source.html#l00407">MsgHandler::rx()</a>.</p>
+<p>Referenced by <a class="el" href="epapi__term_8cc-source.html#l00194">TermHandler::iter()</a>, and <a class="el" href="epapi__msg_8cc-source.html#l00410">MsgHandler::rx()</a>.</p>
 
 <p>
 <div class="dynheader">
@@ -177,7 +207,7 @@ Here is the caller graph for this function:</div>
 <div class="dynsection">
 <p><center><img src="classPkt_faee09963325eda610ed470d594d82ef_icgraph.png" border="0" usemap="#classPkt_faee09963325eda610ed470d594d82ef_icgraph_map" alt=""></center>
 <map name="classPkt_faee09963325eda610ed470d594d82ef_icgraph_map">
-<area shape="rect" href="classMsgHandler.html#d9322ab0abd919cc9908f52bc1aa2169" title="MsgHandler::rx" alt="" coords="141,5,251,32"></map>
+<area shape="rect" href="classTermHandler.html#2891ab26dc32e8d5802a9684e352ff8f" title="TermHandler::iter" alt="" coords="141,5,261,32"><area shape="rect" href="classMsgHandler.html#d9322ab0abd919cc9908f52bc1aa2169" title="MsgHandler::rx" alt="" coords="147,56,256,83"></map>
 </div>
 
 </div>
@@ -203,9 +233,9 @@ Returns the length of the packet<p>
 This method really only applies to RX packet type<p>
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>packet length </dd></dl>
 
-<p>Definition at line <a class="el" href="epapi__pkt_8cc-source.html#l00097">97</a> of file <a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a>.</p>
+<p>Definition at line <a class="el" href="epapi__pkt_8cc-source.html#l00119">119</a> of file <a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a>.</p>
 
-<p>References <a class="el" href="epapi__pkt_8h-source.html#l00032">len</a>.</p>
+<p>References <a class="el" href="epapi__pkt_8h-source.html#l00044">len</a>.</p>
 
 </div>
 </div><p>
@@ -226,14 +256,14 @@ This method really only applies to RX packet type<p>
 <div class="memdoc">
 
 <p>
-Returns the Erlang specific TX buffer<p>
+Returns the Erlang specific TX buffer initialized with with version.<p>
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>ei_x_buff buffer </dd></dl>
 
-<p>Definition at line <a class="el" href="epapi__pkt_8cc-source.html#l00035">35</a> of file <a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a>.</p>
+<p>Definition at line <a class="el" href="epapi__pkt_8cc-source.html#l00050">50</a> of file <a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a>.</p>
 
-<p>References <a class="el" href="epapi_8h-source.html#l00201">EEPAPI_MALLOC</a>, <a class="el" href="epapi_8h-source.html#l00217">epapiBase::last_error</a>, and <a class="el" href="epapi__pkt_8h-source.html#l00035">tbuf</a>.</p>
+<p>References <a class="el" href="epapi__pkt_8h-source.html#l00047">tbuf</a>.</p>
 
-<p>Referenced by <a class="el" href="epapi__msg_8cc-source.html#l00270">MsgHandler::send()</a>, and <a class="el" href="epapi__pkt_8cc-source.html#l00194">PktHandler::tx()</a>.</p>
+<p>Referenced by <a class="el" href="epapi__term_8cc-source.html#l00083">TermHandler::append()</a>, <a class="el" href="epapi__msg_8cc-source.html#l00270">MsgHandler::send()</a>, and <a class="el" href="epapi__pkt_8cc-source.html#l00222">PktHandler::tx()</a>.</p>
 
 <p>
 <div class="dynheader">
@@ -241,7 +271,7 @@ Here is the caller graph for this function:</div>
 <div class="dynsection">
 <p><center><img src="classPkt_e4b18454e4706a91e38c219f14676ed5_icgraph.png" border="0" usemap="#classPkt_e4b18454e4706a91e38c219f14676ed5_icgraph_map" alt=""></center>
 <map name="classPkt_e4b18454e4706a91e38c219f14676ed5_icgraph_map">
-<area shape="rect" href="classMsgHandler.html#511d52b5e26c58657c3afcfb4be8450f" title="MsgHandler::send" alt="" coords="311,5,436,32"><area shape="rect" href="classPktHandler.html#d6aca6f641ade2123b2e068e4cc9804e" title="PktHandler::tx" alt="" coords="157,31,261,57"></map>
+<area shape="rect" href="classTermHandler.html#a777360545b3f10a6a8dc84c16ba3203" title="TermHandler::append" alt="" coords="157,5,301,32"><area shape="rect" href="classMsgHandler.html#511d52b5e26c58657c3afcfb4be8450f" title="MsgHandler::send" alt="" coords="351,81,476,108"><area shape="rect" href="classPktHandler.html#d6aca6f641ade2123b2e068e4cc9804e" title="PktHandler::tx" alt="" coords="177,107,281,133"></map>
 </div>
 
 </div>
@@ -264,16 +294,16 @@ Here is the caller graph for this function:</div>
 
 <p>
 Sets the packet length ie. not the buffer length<p>
-This method really only applies to RX packet type and usually manipulated by the <a class="el" href="classPktHandler.html">PktHandler</a>.<p>
+This method really only applies to RX packet type and usually manipulated by the <a class="el" href="classPktHandler.html" title="Packet Handler class declaration.">PktHandler</a>.<p>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>len</em>&nbsp;</td><td>packet length </td></tr>
   </table>
 </dl>
 
-<p>Definition at line <a class="el" href="epapi__pkt_8cc-source.html#l00092">92</a> of file <a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a>.</p>
+<p>Definition at line <a class="el" href="epapi__pkt_8cc-source.html#l00114">114</a> of file <a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a>.</p>
 
-<p>References <a class="el" href="epapi__pkt_8h-source.html#l00032">len</a>.</p>
+<p>References <a class="el" href="epapi__pkt_8h-source.html#l00044">len</a>.</p>
 
 </div>
 </div><p>
@@ -291,9 +321,9 @@ This method really only applies to RX packet type and usually manipulated by the
 
 <p>
 
-<p>Definition at line <a class="el" href="epapi__pkt_8h-source.html#l00031">31</a> of file <a class="el" href="epapi__pkt_8h-source.html">epapi_pkt.h</a>.</p>
+<p>Definition at line <a class="el" href="epapi__pkt_8h-source.html#l00043">43</a> of file <a class="el" href="epapi__pkt_8h-source.html">epapi_pkt.h</a>.</p>
 
-<p>Referenced by <a class="el" href="epapi__pkt_8cc-source.html#l00056">getBuf()</a>, <a class="el" href="epapi__pkt_8cc-source.html#l00017">Pkt()</a>, and <a class="el" href="epapi__pkt_8cc-source.html#l00024">~Pkt()</a>.</p>
+<p>Referenced by <a class="el" href="epapi__pkt_8cc-source.html#l00039">clean()</a>, <a class="el" href="epapi__pkt_8cc-source.html#l00073">getBuf()</a>, <a class="el" href="epapi__pkt_8cc-source.html#l00021">Pkt()</a>, and <a class="el" href="epapi__pkt_8cc-source.html#l00029">~Pkt()</a>.</p>
 
 </div>
 </div><p>
@@ -310,9 +340,9 @@ This method really only applies to RX packet type and usually manipulated by the
 
 <p>
 
-<p>Definition at line <a class="el" href="epapi__pkt_8h-source.html#l00032">32</a> of file <a class="el" href="epapi__pkt_8h-source.html">epapi_pkt.h</a>.</p>
+<p>Definition at line <a class="el" href="epapi__pkt_8h-source.html#l00044">44</a> of file <a class="el" href="epapi__pkt_8h-source.html">epapi_pkt.h</a>.</p>
 
-<p>Referenced by <a class="el" href="epapi__pkt_8cc-source.html#l00097">getLength()</a>, and <a class="el" href="epapi__pkt_8cc-source.html#l00092">setLength()</a>.</p>
+<p>Referenced by <a class="el" href="epapi__pkt_8cc-source.html#l00119">getLength()</a>, and <a class="el" href="epapi__pkt_8cc-source.html#l00114">setLength()</a>.</p>
 
 </div>
 </div><p>
@@ -329,18 +359,18 @@ This method really only applies to RX packet type and usually manipulated by the
 
 <p>
 
-<p>Definition at line <a class="el" href="epapi__pkt_8h-source.html#l00030">30</a> of file <a class="el" href="epapi__pkt_8h-source.html">epapi_pkt.h</a>.</p>
+<p>Definition at line <a class="el" href="epapi__pkt_8h-source.html#l00042">42</a> of file <a class="el" href="epapi__pkt_8h-source.html">epapi_pkt.h</a>.</p>
 
-<p>Referenced by <a class="el" href="epapi__pkt_8cc-source.html#l00056">getBuf()</a>, and <a class="el" href="epapi__pkt_8cc-source.html#l00017">Pkt()</a>.</p>
+<p>Referenced by <a class="el" href="epapi__pkt_8cc-source.html#l00039">clean()</a>, <a class="el" href="epapi__pkt_8cc-source.html#l00073">getBuf()</a>, and <a class="el" href="epapi__pkt_8cc-source.html#l00021">Pkt()</a>.</p>
 
 </div>
 </div><p>
-<a class="anchor" name="82c91009207f5e734ef6f849e0d3bae8"></a><!-- doxytag: member="Pkt::tbuf" ref="82c91009207f5e734ef6f849e0d3bae8" args="" -->
+<a class="anchor" name="956700eb10c7f9239d463a81d12eeb0b"></a><!-- doxytag: member="Pkt::tbuf" ref="956700eb10c7f9239d463a81d12eeb0b" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">ei_x_buff* <a class="el" href="classPkt.html#82c91009207f5e734ef6f849e0d3bae8">Pkt::tbuf</a><code> [protected]</code>          </td>
+          <td class="memname">ei_x_buff <a class="el" href="classPkt.html#956700eb10c7f9239d463a81d12eeb0b">Pkt::tbuf</a><code> [protected]</code>          </td>
         </tr>
       </table>
 </div>
@@ -348,16 +378,16 @@ This method really only applies to RX packet type and usually manipulated by the
 
 <p>
 
-<p>Definition at line <a class="el" href="epapi__pkt_8h-source.html#l00035">35</a> of file <a class="el" href="epapi__pkt_8h-source.html">epapi_pkt.h</a>.</p>
+<p>Definition at line <a class="el" href="epapi__pkt_8h-source.html#l00047">47</a> of file <a class="el" href="epapi__pkt_8h-source.html">epapi_pkt.h</a>.</p>
 
-<p>Referenced by <a class="el" href="epapi__pkt_8cc-source.html#l00035">getTxBuf()</a>, <a class="el" href="epapi__pkt_8cc-source.html#l00017">Pkt()</a>, and <a class="el" href="epapi__pkt_8cc-source.html#l00024">~Pkt()</a>.</p>
+<p>Referenced by <a class="el" href="epapi__pkt_8cc-source.html#l00039">clean()</a>, <a class="el" href="epapi__pkt_8cc-source.html#l00050">getTxBuf()</a>, <a class="el" href="epapi__pkt_8cc-source.html#l00021">Pkt()</a>, and <a class="el" href="epapi__pkt_8cc-source.html#l00029">~Pkt()</a>.</p>
 
 </div>
 </div><p>
 <hr>The documentation for this class was generated from the following files:<ul>
 <li>lib/include/<a class="el" href="epapi__pkt_8h-source.html">epapi_pkt.h</a><li>lib/src/<a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a></ul>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Mon Jun 15 15:28:44 2009 for EPAPI by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Wed Sep 30 09:09:35 2009 for EPAPI by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.8 </small></address>
 </body>

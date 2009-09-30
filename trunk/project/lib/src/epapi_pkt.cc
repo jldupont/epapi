@@ -1,8 +1,12 @@
 /**
  * @file epapi_pkt.cc
+ * @brief Implementation for @see Pkt and @see PktHandler
  *
  * @date   2009-06-06
  * @author Jean-Lou Dupont
+ *
+ * \see {epapi_pkt.h}
+ *
  */
 #include "epapi.h"
 
@@ -27,8 +31,7 @@ Pkt::~Pkt() {
 	if (NULL!=buf)
 		free(buf);
 
-	//if (NULL!=tbuf)
-	//	ei_x_free(tbuf);
+	ei_x_free(&tbuf);
 
 }//
 

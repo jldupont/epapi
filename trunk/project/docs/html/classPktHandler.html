@@ -23,7 +23,10 @@
   </div>
 </div>
 <div class="contents">
-<h1>PktHandler Class Reference</h1><!-- doxytag: class="PktHandler" --><!-- doxytag: inherits="epapiBase" --><code>#include &lt;<a class="el" href="epapi__pkt_8h-source.html">epapi_pkt.h</a>&gt;</code>
+<h1>PktHandler Class Reference</h1><!-- doxytag: class="PktHandler" --><!-- doxytag: inherits="epapiBase" -->Packet Handler class declaration.  
+<a href="#_details">More...</a>
+<p>
+<code>#include &lt;<a class="el" href="epapi__pkt_8h-source.html">epapi_pkt.h</a>&gt;</code>
 <p>
 <div class="dynheader">
 Inheritance diagram for PktHandler:</div>
@@ -64,9 +67,11 @@ Collaboration diagram for PktHandler:</div>
 
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
-Packet Handler<p>
-This class enables customization of the packet handling layer by providing the capability to configure the input file descriptor and output file descriptor. The defaults are "stdin" and "stdout". 
-<p>Definition at line <a class="el" href="epapi__pkt_8h-source.html#l00107">107</a> of file <a class="el" href="epapi__pkt_8h-source.html">epapi_pkt.h</a>.</p>
+Packet Handler class declaration. 
+<p>
+This class enables customization of the packet handling layer by providing the capability to configure the input file descriptor and output file descriptor. The defaults are "stdin" and "stdout".<p>
+The only state maintained in this class is the 'last_error' variable thus an instance of this class can be reused easily. 
+<p>Definition at line <a class="el" href="epapi__pkt_8h-source.html#l00141">141</a> of file <a class="el" href="epapi__pkt_8h-source.html">epapi_pkt.h</a>.</p>
 <hr><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" name="ab4d1fe6e7b6750dff081aab0b95781c"></a><!-- doxytag: member="PktHandler::PktHandler" ref="ab4d1fe6e7b6750dff081aab0b95781c" args="()" -->
 <div class="memitem">
@@ -86,9 +91,9 @@ This class enables customization of the packet handling layer by providing the c
 <p>
 Constructor<p>
 Standard input and output descriptors ie. stdin and stdout 
-<p>Definition at line <a class="el" href="epapi__pkt_8cc-source.html#l00105">105</a> of file <a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a>.</p>
+<p>Definition at line <a class="el" href="epapi__pkt_8cc-source.html#l00131">131</a> of file <a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a>.</p>
 
-<p>References <a class="el" href="epapi__pkt_8h-source.html#l00110">ifd</a>, <a class="el" href="epapi_8h-source.html#l00217">epapiBase::last_error</a>, and <a class="el" href="epapi__pkt_8h-source.html#l00111">ofd</a>.</p>
+<p>References <a class="el" href="epapi__pkt_8h-source.html#l00144">ifd</a>, <a class="el" href="epapi_8h-source.html#l00219">epapiBase::last_error</a>, and <a class="el" href="epapi__pkt_8h-source.html#l00145">ofd</a>.</p>
 
 </div>
 </div><p>
@@ -126,9 +131,9 @@ Constructor<p>
   </table>
 </dl>
 
-<p>Definition at line <a class="el" href="epapi__pkt_8cc-source.html#l00111">111</a> of file <a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a>.</p>
+<p>Definition at line <a class="el" href="epapi__pkt_8cc-source.html#l00137">137</a> of file <a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a>.</p>
 
-<p>References <a class="el" href="epapi__pkt_8h-source.html#l00110">ifd</a>, <a class="el" href="epapi_8h-source.html#l00217">epapiBase::last_error</a>, and <a class="el" href="epapi__pkt_8h-source.html#l00111">ofd</a>.</p>
+<p>References <a class="el" href="epapi__pkt_8h-source.html#l00144">ifd</a>, <a class="el" href="epapi_8h-source.html#l00219">epapiBase::last_error</a>, and <a class="el" href="epapi__pkt_8h-source.html#l00145">ofd</a>.</p>
 
 </div>
 </div><p>
@@ -149,7 +154,7 @@ Constructor<p>
 
 <p>
 
-<p>Definition at line <a class="el" href="epapi__pkt_8cc-source.html#l00117">117</a> of file <a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a>.</p>
+<p>Definition at line <a class="el" href="epapi__pkt_8cc-source.html#l00143">143</a> of file <a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a>.</p>
 
 </div>
 </div><p>
@@ -183,11 +188,11 @@ Waits for a complete packet<p>
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>0 SUCCESS <p>
 1 FAILURE </dd></dl>
 
-<p>Definition at line <a class="el" href="epapi__pkt_8cc-source.html#l00154">154</a> of file <a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a>.</p>
+<p>Definition at line <a class="el" href="epapi__pkt_8cc-source.html#l00180">180</a> of file <a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a>.</p>
 
-<p>References <a class="el" href="epapi_8h-source.html#l00186">DBGLOG</a>, <a class="el" href="epapi_8h-source.html#l00197">EEPAPI_ERRNO</a>, <a class="el" href="epapi_8h-source.html#l00217">epapiBase::last_error</a>, and <a class="el" href="epapi__pkt_8cc-source.html#l00130">rx_exact()</a>.</p>
+<p>References <a class="el" href="epapi_8h-source.html#l00188">DBGLOG</a>, <a class="el" href="epapi_8h-source.html#l00199">EEPAPI_ERRNO</a>, <a class="el" href="epapi_8h-source.html#l00219">epapiBase::last_error</a>, and <a class="el" href="epapi__pkt_8cc-source.html#l00156">rx_exact()</a>.</p>
 
-<p>Referenced by <a class="el" href="epapi__msg_8cc-source.html#l00407">MsgHandler::rx()</a>.</p>
+<p>Referenced by <a class="el" href="epapi__msg_8cc-source.html#l00410">MsgHandler::rx()</a>.</p>
 
 <p>
 <div class="dynheader">
@@ -249,11 +254,11 @@ Waits for 'len' bytes from the input pipe<p>
 &lt;0 ERROR eg. EPIPE <p>
 0 ERROR / EOF </dd></dl>
 
-<p>Definition at line <a class="el" href="epapi__pkt_8cc-source.html#l00130">130</a> of file <a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a>.</p>
+<p>Definition at line <a class="el" href="epapi__pkt_8cc-source.html#l00156">156</a> of file <a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a>.</p>
 
-<p>References <a class="el" href="epapi__pkt_8h-source.html#l00110">ifd</a>.</p>
+<p>References <a class="el" href="epapi__pkt_8h-source.html#l00144">ifd</a>.</p>
 
-<p>Referenced by <a class="el" href="epapi__pkt_8cc-source.html#l00154">rx()</a>.</p>
+<p>Referenced by <a class="el" href="epapi__pkt_8cc-source.html#l00180">rx()</a>.</p>
 
 <p>
 <div class="dynheader">
@@ -295,9 +300,9 @@ Transmits a packet<p>
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>0 SUCCESS <p>
 1 FAILURE </dd></dl>
 
-<p>Definition at line <a class="el" href="epapi__pkt_8cc-source.html#l00194">194</a> of file <a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a>.</p>
+<p>Definition at line <a class="el" href="epapi__pkt_8cc-source.html#l00222">222</a> of file <a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a>.</p>
 
-<p>References <a class="el" href="epapi_8h-source.html#l00197">EEPAPI_ERRNO</a>, <a class="el" href="epapi__pkt_8cc-source.html#l00035">Pkt::getTxBuf()</a>, <a class="el" href="epapi_8h-source.html#l00217">epapiBase::last_error</a>, and <a class="el" href="epapi__pkt_8cc-source.html#l00234">tx_exact()</a>.</p>
+<p>References <a class="el" href="epapi_8h-source.html#l00188">DBGLOG</a>, <a class="el" href="epapi_8h-source.html#l00199">EEPAPI_ERRNO</a>, <a class="el" href="epapi_8h-source.html#l00203">EEPAPI_MALLOC</a>, <a class="el" href="epapi_8h-source.html#l00200">EEPAPI_NULL</a>, <a class="el" href="epapi__pkt_8cc-source.html#l00050">Pkt::getTxBuf()</a>, <a class="el" href="epapi_8h-source.html#l00219">epapiBase::last_error</a>, and <a class="el" href="epapi__pkt_8cc-source.html#l00273">tx_exact()</a>.</p>
 
 <p>Referenced by <a class="el" href="epapi__msg_8cc-source.html#l00270">MsgHandler::send()</a>.</p>
 
@@ -357,11 +362,11 @@ Transmits (blocking) a packet<p>
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>&gt;0 LEN written <p>
 &lt;=0 ERROR, check errno </dd></dl>
 
-<p>Definition at line <a class="el" href="epapi__pkt_8cc-source.html#l00234">234</a> of file <a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a>.</p>
+<p>Definition at line <a class="el" href="epapi__pkt_8cc-source.html#l00273">273</a> of file <a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a>.</p>
 
-<p>References <a class="el" href="epapi__pkt_8h-source.html#l00111">ofd</a>.</p>
+<p>References <a class="el" href="epapi__pkt_8h-source.html#l00145">ofd</a>.</p>
 
-<p>Referenced by <a class="el" href="epapi__pkt_8cc-source.html#l00194">tx()</a>.</p>
+<p>Referenced by <a class="el" href="epapi__pkt_8cc-source.html#l00222">tx()</a>.</p>
 
 <p>
 <div class="dynheader">
@@ -388,9 +393,9 @@ Here is the caller graph for this function:</div>
 
 <p>
 
-<p>Definition at line <a class="el" href="epapi__pkt_8h-source.html#l00110">110</a> of file <a class="el" href="epapi__pkt_8h-source.html">epapi_pkt.h</a>.</p>
+<p>Definition at line <a class="el" href="epapi__pkt_8h-source.html#l00144">144</a> of file <a class="el" href="epapi__pkt_8h-source.html">epapi_pkt.h</a>.</p>
 
-<p>Referenced by <a class="el" href="epapi__pkt_8cc-source.html#l00105">PktHandler()</a>, and <a class="el" href="epapi__pkt_8cc-source.html#l00130">rx_exact()</a>.</p>
+<p>Referenced by <a class="el" href="epapi__pkt_8cc-source.html#l00131">PktHandler()</a>, and <a class="el" href="epapi__pkt_8cc-source.html#l00156">rx_exact()</a>.</p>
 
 </div>
 </div><p>
@@ -407,16 +412,16 @@ Here is the caller graph for this function:</div>
 
 <p>
 
-<p>Definition at line <a class="el" href="epapi__pkt_8h-source.html#l00111">111</a> of file <a class="el" href="epapi__pkt_8h-source.html">epapi_pkt.h</a>.</p>
+<p>Definition at line <a class="el" href="epapi__pkt_8h-source.html#l00145">145</a> of file <a class="el" href="epapi__pkt_8h-source.html">epapi_pkt.h</a>.</p>
 
-<p>Referenced by <a class="el" href="epapi__pkt_8cc-source.html#l00105">PktHandler()</a>, and <a class="el" href="epapi__pkt_8cc-source.html#l00234">tx_exact()</a>.</p>
+<p>Referenced by <a class="el" href="epapi__pkt_8cc-source.html#l00131">PktHandler()</a>, and <a class="el" href="epapi__pkt_8cc-source.html#l00273">tx_exact()</a>.</p>
 
 </div>
 </div><p>
 <hr>The documentation for this class was generated from the following files:<ul>
 <li>lib/include/<a class="el" href="epapi__pkt_8h-source.html">epapi_pkt.h</a><li>lib/src/<a class="el" href="epapi__pkt_8cc-source.html">epapi_pkt.cc</a></ul>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Mon Jun 15 15:28:45 2009 for EPAPI by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Wed Sep 30 09:09:35 2009 for EPAPI by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.8 </small></address>
 </body>

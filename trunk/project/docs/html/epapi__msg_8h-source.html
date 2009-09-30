@@ -169,7 +169,7 @@
 <a name="l00148"></a>00148 
 <a name="l00149"></a>00149         <span class="keyword">protected</span>:
 <a name="l00150"></a>00150 
-<a name="l00151"></a><a class="code" href="classMsgHandler.html#fd3e38ff410b84821844bcc96dfbd717">00151</a>                 <a class="code" href="classPktHandler.html">PktHandler</a> *<a class="code" href="classMsgHandler.html#fd3e38ff410b84821844bcc96dfbd717">ph</a>;
+<a name="l00151"></a><a class="code" href="classMsgHandler.html#fd3e38ff410b84821844bcc96dfbd717">00151</a>                 <a class="code" href="classPktHandler.html" title="Packet Handler class declaration.">PktHandler</a> *<a class="code" href="classMsgHandler.html#fd3e38ff410b84821844bcc96dfbd717">ph</a>;
 <a name="l00152"></a><a class="code" href="classMsgHandler.html#e7a28bcea54b32afd3bd06c9db23312c">00152</a>                 <a class="code" href="epapi__msg_8h.html#d6a56b7ffadc04dfebc9f5e444e298a0">TypeMap</a>     <a class="code" href="classMsgHandler.html#e7a28bcea54b32afd3bd06c9db23312c">tmap</a>;
 <a name="l00153"></a><a class="code" href="classMsgHandler.html#bea0a03714b30a0a80a46c0294ad91e9">00153</a>                 <a class="code" href="epapi__msg_8h.html#ad06692e1b7785acd276d363abdb7ae8">TypeTextMap</a> <a class="code" href="classMsgHandler.html#bea0a03714b30a0a80a46c0294ad91e9">ttmap</a>;
 <a name="l00154"></a>00154 
@@ -180,7 +180,7 @@
 <a name="l00159"></a>00159 <span class="comment">                 *</span>
 <a name="l00160"></a>00160 <span class="comment">                 * @param ph PktHandler instance</span>
 <a name="l00161"></a>00161 <span class="comment">                 */</span>
-<a name="l00162"></a>00162                 <a class="code" href="classMsgHandler.html#a639691ed149b303b2fbd90bb4d55d52">MsgHandler</a>(<a class="code" href="classPktHandler.html">PktHandler</a> *<a class="code" href="classMsgHandler.html#fd3e38ff410b84821844bcc96dfbd717">ph</a>);
+<a name="l00162"></a>00162                 <a class="code" href="classMsgHandler.html#a639691ed149b303b2fbd90bb4d55d52">MsgHandler</a>(<a class="code" href="classPktHandler.html" title="Packet Handler class declaration.">PktHandler</a> *<a class="code" href="classMsgHandler.html#fd3e38ff410b84821844bcc96dfbd717">ph</a>);
 <a name="l00163"></a>00163 <span class="comment"></span>
 <a name="l00164"></a>00164 <span class="comment">                /**</span>
 <a name="l00165"></a>00165 <span class="comment">                 * Destructor</span>
@@ -205,7 +205,7 @@
 <a name="l00184"></a>00184 <span class="comment">                /**</span>
 <a name="l00185"></a>00185 <span class="comment">                 * Generic send message</span>
 <a name="l00186"></a>00186 <span class="comment">                 *</span>
-<a name="l00187"></a>00187 <span class="comment">                 * @param msg_type message type (integer)</span>
+<a name="l00187"></a>00187 <span class="comment">                 * @param type msg_type message type (integer)</span>
 <a name="l00188"></a>00188 <span class="comment">                 *</span>
 <a name="l00189"></a>00189 <span class="comment">                 * @return 0 SUCCESS</span>
 <a name="l00190"></a>00190 <span class="comment">                 * @return 1 FAILURE</span>
@@ -240,35 +240,36 @@
 <a name="l00219"></a>00219 <span class="comment">                 *</span>
 <a name="l00220"></a>00220 <span class="comment">                 * Used during message reception/decoding.</span>
 <a name="l00221"></a>00221 <span class="comment">                 *</span>
-<a name="l00222"></a>00222 <span class="comment">                 * @param ttype msg_type_text</span>
-<a name="l00223"></a>00223 <span class="comment">                 * @return signature NULL on FAILURE</span>
-<a name="l00224"></a>00224 <span class="comment">                 */</span>
-<a name="l00225"></a>00225                 <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="classMsgHandler.html#83adc9ca4ef0121cc8eea7e86571738e">getSignatureFromTypeText</a>(<a class="code" href="epapi__msg_8h.html#1d630f39b1ff6aa3a46655391e4a2e8e">msg_type_text</a> ttype, <a class="code" href="epapi__msg_8h.html#24560a68d244bad65fd7470cddb72177">msg_type</a> *type);
-<a name="l00226"></a>00226 <span class="comment"></span>
-<a name="l00227"></a>00227 <span class="comment">                /**</span>
-<a name="l00228"></a>00228 <span class="comment">                 * Returns the ATOM text from a msg_type</span>
-<a name="l00229"></a>00229 <span class="comment">                 *</span>
-<a name="l00230"></a>00230 <span class="comment">                 * @param type msg_type (integer)</span>
-<a name="l00231"></a>00231 <span class="comment">                 * @return string representing the ATOM corresponding to message type</span>
-<a name="l00232"></a>00232 <span class="comment">                 */</span>
-<a name="l00233"></a>00233                 <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="classMsgHandler.html#ed7e2f903be5bb29cb3c59711431732e">getTextFromType</a>(<a class="code" href="epapi__msg_8h.html#24560a68d244bad65fd7470cddb72177">msg_type</a> type);
-<a name="l00234"></a>00234 
-<a name="l00235"></a>00235 <span class="comment"></span>
-<a name="l00236"></a>00236 <span class="comment">                /**</span>
-<a name="l00237"></a>00237 <span class="comment">                 * Retrieves the msg_type from msg_type_text</span>
-<a name="l00238"></a>00238 <span class="comment">                 *</span>
-<a name="l00239"></a>00239 <span class="comment">                 * @param ttype msg_type_text</span>
-<a name="l00240"></a>00240 <span class="comment">                 * @return type msg_type</span>
-<a name="l00241"></a>00241 <span class="comment">                 * @return -1 ERROR</span>
-<a name="l00242"></a>00242 <span class="comment">                 */</span>
-<a name="l00243"></a>00243                 <a class="code" href="epapi__msg_8h.html#24560a68d244bad65fd7470cddb72177">msg_type</a> <a class="code" href="classMsgHandler.html#03873899683962b7b57c5b495369ac61">getTypeFromTypeText</a>(<a class="code" href="epapi__msg_8h.html#1d630f39b1ff6aa3a46655391e4a2e8e">msg_type_text</a> ttype);
-<a name="l00244"></a>00244 
-<a name="l00245"></a>00245         };
-<a name="l00246"></a>00246 
+<a name="l00222"></a>00222 <span class="comment">                 * @param type msg_type</span>
+<a name="l00223"></a>00223 <span class="comment">                 * @param ttype msg_type_text</span>
+<a name="l00224"></a>00224 <span class="comment">                 * @return signature NULL on FAILURE</span>
+<a name="l00225"></a>00225 <span class="comment">                 */</span>
+<a name="l00226"></a>00226                 <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="classMsgHandler.html#83adc9ca4ef0121cc8eea7e86571738e">getSignatureFromTypeText</a>(<a class="code" href="epapi__msg_8h.html#1d630f39b1ff6aa3a46655391e4a2e8e">msg_type_text</a> ttype, <a class="code" href="epapi__msg_8h.html#24560a68d244bad65fd7470cddb72177">msg_type</a> *type);
+<a name="l00227"></a>00227 <span class="comment"></span>
+<a name="l00228"></a>00228 <span class="comment">                /**</span>
+<a name="l00229"></a>00229 <span class="comment">                 * Returns the ATOM text from a msg_type</span>
+<a name="l00230"></a>00230 <span class="comment">                 *</span>
+<a name="l00231"></a>00231 <span class="comment">                 * @param type msg_type (integer)</span>
+<a name="l00232"></a>00232 <span class="comment">                 * @return string representing the ATOM corresponding to message type</span>
+<a name="l00233"></a>00233 <span class="comment">                 */</span>
+<a name="l00234"></a>00234                 <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="classMsgHandler.html#ed7e2f903be5bb29cb3c59711431732e">getTextFromType</a>(<a class="code" href="epapi__msg_8h.html#24560a68d244bad65fd7470cddb72177">msg_type</a> type);
+<a name="l00235"></a>00235 
+<a name="l00236"></a>00236 <span class="comment"></span>
+<a name="l00237"></a>00237 <span class="comment">                /**</span>
+<a name="l00238"></a>00238 <span class="comment">                 * Retrieves the msg_type from msg_type_text</span>
+<a name="l00239"></a>00239 <span class="comment">                 *</span>
+<a name="l00240"></a>00240 <span class="comment">                 * @param ttype msg_type_text</span>
+<a name="l00241"></a>00241 <span class="comment">                 * @return type msg_type</span>
+<a name="l00242"></a>00242 <span class="comment">                 * @return -1 ERROR</span>
+<a name="l00243"></a>00243 <span class="comment">                 */</span>
+<a name="l00244"></a>00244                 <a class="code" href="epapi__msg_8h.html#24560a68d244bad65fd7470cddb72177">msg_type</a> <a class="code" href="classMsgHandler.html#03873899683962b7b57c5b495369ac61">getTypeFromTypeText</a>(<a class="code" href="epapi__msg_8h.html#1d630f39b1ff6aa3a46655391e4a2e8e">msg_type_text</a> ttype);
+<a name="l00245"></a>00245 
+<a name="l00246"></a>00246         };
 <a name="l00247"></a>00247 
-<a name="l00248"></a>00248 <span class="preprocessor">#endif </span><span class="comment">/* MSG_H_ */</span>
+<a name="l00248"></a>00248 
+<a name="l00249"></a>00249 <span class="preprocessor">#endif </span><span class="comment">/* MSG_H_ */</span>
 </pre></div></div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Mon Jun 15 15:28:38 2009 for EPAPI by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Wed Sep 30 09:09:35 2009 for EPAPI by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.8 </small></address>
 </body>
