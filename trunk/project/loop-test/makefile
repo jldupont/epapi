@@ -1,7 +1,7 @@
 # @author Jean-Lou Dupont
 #
 
-ERLC=erlc -o ebin
+ERLC=erlc -o ebin -I include
 SOURCES=src/test.erl
 
 all:
