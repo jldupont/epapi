@@ -22,7 +22,6 @@ Pkt::Pkt() {
 	last_error=0;
 	sz=0;
 	buf=NULL;
-	//tbuf=NULL;
 	ei_x_new_with_version(&tbuf);
 }//
 
@@ -48,17 +47,6 @@ Pkt::clean(void) {
 
 ei_x_buff *
 Pkt::getTxBuf(void) {
-
-	//if (NULL==tbuf) {
-	//	tbuf = (ei_x_buff *) malloc(sizeof(ei_x_buff));
-	//	if (NULL!=tbuf)
-	//		ei_x_new_with_version(tbuf);
-	//}
-
-	//if (NULL==tbuf) {
-	//	last_error = EEPAPI_MALLOC;
-	//	return NULL;
-	//}
 
 	return &tbuf;
 }//

@@ -14,6 +14,12 @@
  *
  *   Pkt instances can be recycled by using the 'clean'
  *
+ *   \subsection PktHandler Class
+ *
+ *   This class uses instances of Pkt class for receiving/transmitting data packets
+ *   from/to Erlang.  Pkt instances are loaned to PktHandler: it is the responsibility
+ *   of the client to manage them.
+ *
  */
 
 #ifndef PKT_H_

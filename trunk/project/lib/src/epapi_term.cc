@@ -70,8 +70,10 @@ TermHandler::clean(TermStruct *ts) {
 	case TERMTYPE_ATOM:
 	case TERMTYPE_STRING:
 	case TERMTYPE_BINARY:
-		if (NULL!=ts->Value.string)
+		if (NULL!=ts->Value.string) {
 			free(ts->Value.string);
+			ts->Value.string = NULL;
+		}
 		break;
 	default:
 		break;
@@ -83,26 +85,27 @@ int
 TermHandler::append(TermStruct *ts) {
 
 	if (NULL==ts) {
+		DBGLOG(LOG_INFO, "TermHandler::append - need a valid TermStruct!");
 		last_error=EEPAPI_NULL;
 		return 1;
 	}
-
-	int result;
-	ei_x_buff *b; //local shortcut
 
 	if (NULL==p) {
 		DBGLOG(LOG_INFO, "TermHandler::append - need a packet!");
-		last_error=EEPAPI_NULL;
+		last_error = EEPAPI_NULL;
 		return 1;
 	}
 
-	b = p->getTxBuf();
+	 //local shortcut
+	ei_x_buff *b = p->getTxBuf();
 	if (NULL==b) {
+		DBGLOG(LOG_INFO, "TermHandler::append - need a TX packet!");
 		last_error = EEPAPI_MALLOC;
 		return 1;
 	}
 
 	//DBGLOG(LOG_INFO, "TermHandler::append: type: %i", ts->type);
+	int result;
 
 	switch(ts->type) {
 
@@ -115,7 +118,6 @@ TermHandler::append(TermStruct *ts) {
 		DBGLOG(LOG_INFO, "TermHandler::append: LIST_HEADER, size: %i", ts->size);
 		result=ei_x_encode_list_header(b, ts->size);
 		break;
-
 
 	case TERMTYPE_NIL:
 	case TERMTYPE_END_LIST:
@@ -173,7 +175,6 @@ TermHandler::append(TermStruct *ts) {
 		result=1;
 		break;
 
-
 	}//switch
 
 	return result;
@@ -194,6 +195,7 @@ int
 TermHandler::iter(TermStruct *ptr) {
 
 	if ((NULL==p) || (NULL==ptr)){
+		DBGLOG(LOG_INFO, "TermHandler::iter - need a valid TermStruct / Pkt!");
 		last_error=EEPAPI_NULL;
 		return 1;
 	}
@@ -202,6 +204,7 @@ TermHandler::iter(TermStruct *ptr) {
 
 	buf=p->getBuf();
 	if (NULL==buf) {
+		DBGLOG(LOG_INFO, "TermHandler::iter - need a valid RX Pkt!");
 		last_error=EEPAPI_NULL;
 		return 1;
 	}
@@ -216,7 +219,6 @@ TermHandler::iter(TermStruct *ptr) {
 			last_error=EEPAPI_EIDECODE;
 			return 1;
 		}
-
 		DBGLOG(LOG_INFO, "TermHandler::iter: Version: %i", version);
 	}//if
 
@@ -228,6 +230,7 @@ TermHandler::iter(TermStruct *ptr) {
 	int size;
 	result=ei_get_type((const char *)buf, &index, &type, &size);
 	if (result) {
+		DBGLOG(LOG_INFO, "TermHandler::iter: get_type ERROR");
 		last_error=EEPAPI_EIDECODE;
 		return 1;
 	}
