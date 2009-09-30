@@ -14,16 +14,25 @@ DOCMAIN=./docs/html/main.html
 IDIST=../../dists/stable/main/binary-i386
 
 
-all: 
+all:
 	@echo "Version: ${VERSION}"
-	@make -C lib
-	@make -C loop-drv
-	@make -C loop-test
+	@make -C lib        
+	@make -C loop-drv   
+	@make -C loop-test  
+
+clean:
+	@echo "Version: ${VERSION}"
+	@make -C lib       clean        
+	@make -C loop-drv  clean 
+	@make -C loop-test clean
 	
 doc:
 	@echo "Version: ${VERSION}"
 	@cd docs && doxygen
 	@./.tools/adjust_version.py $(VERSION) $(DOCMAIN) $(DOCMAIN)	
+
+
+rel: doc deb up
 
 
 deb:

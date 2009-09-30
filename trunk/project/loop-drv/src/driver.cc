@@ -25,13 +25,6 @@ int main(int argc, char **argv) {
 	int result;
 
 	do {
-		/*
-		if (NULL==p)
-			p=new Pkt();
-		else
-			p->clean(); // recycle!
-		*/
-
 		r = ph->rx(&ipkt);
 		if (r) {
 			last_error = ph->last_error;
@@ -42,22 +35,16 @@ int main(int argc, char **argv) {
 		DBGLOG(LOG_INFO, "epapi_loop_drv: got packet");
 
 		// SETUP before iteration
-		ith->clean(&ts);
 		ith->init(ipkt);
-
-		//Pkt *opkt = new Pkt(); //can't recycle those...
 		oth->init(opkt);
 
+		//DBGLOG(LOG_INFO, "epapi_loop_drv: starting decode & adapt loop");
 
-		DBGLOG(LOG_INFO, "epapi_loop_drv: starting decode & adapt loop");
 		// Loop through the received Term
 		do {
-			result=ith->iter( &ts );
+			ith->clean(&ts);
 
-			// we get an error of 'badtype' when the
-			// end of the term is reached... I know this
-			// is ugly but I couldn't find another way looking
-			// through the Erlang erl_interface code...
+			result=ith->iter( &ts );
 			if (result) {
 				last_error=ith->last_error;
 					break;
@@ -95,7 +82,6 @@ int main(int argc, char **argv) {
 			result=ph->tx(opkt);
 			opkt->clean(); //recycle
 
-			//delete opkt; // we won't be needed this regardless
 			if (result) {
 				last_error=oth->last_error;
 				break;
@@ -112,5 +98,6 @@ int main(int argc, char **argv) {
 	delete ph;
 	delete ith;
 	delete oth;
+
 	exit(last_error);
 }//

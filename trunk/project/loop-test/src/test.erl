@@ -6,7 +6,7 @@
 -define(TIMEOUT, 100).
 -define(DRV, "epapi_loop_drv").
 
--define(TESTDATA, {test, "test", [test, "test777", 1.0]}).
+-define(TESTDATA, {test, "test", [test, "test777", 1.0, "long string to possibly detect memory leaks faster............................................................................................................................................................................."]}).
 %-define(TESTDATA, {test, "test"}).
 %-define(TESTDATA, {test, [1,2,3,4,5]}).
 %-define(TESTDATA, {test, [test]}).            %% generates NIL at the end
