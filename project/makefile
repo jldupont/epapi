@@ -42,6 +42,8 @@ src:
 	@mkdir /tmp/$(PRJ)_sources
 	@mkdir /tmp/$(PRJ)_sources/$(PRJ)
 	@cp -R ../project/* /tmp/$(PRJ)_sources/$(PRJ)
+	@echo "> removing .svn"
+	@cd /tmp/$(PRJ) && find . -name ".svn" -type d -exec rm -rf {} \;
 
 	@echo "> zipping"
 	cd /tmp/$(PRJ)_sources && zip -r $(PRJ).zip $(PRJ) -x *.svn* *.so *.o *.os *html* *.old*
@@ -60,6 +62,9 @@ deb:
 	@rm -rf /tmp/$(PRJ)
 	@mkdir /tmp/$(PRJ)
 	@cp -r packages/debian /tmp/$(PRJ)
+	@echo "> removing .svn"
+	@cd /tmp/$(PRJ) && find . -name ".svn" -type d -exec rm -rf {} \;
+
 	
 	@echo "> cloning required files"
 	@cp lib/include/epapi.h                 /tmp/$(PRJ)/debian/usr/include/epapi.h
