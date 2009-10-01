@@ -43,7 +43,7 @@ src:
 	@mkdir /tmp/$(PRJ)_sources/$(PRJ)
 	@cp -R ../project/* /tmp/$(PRJ)_sources/$(PRJ)
 	@echo "> removing .svn"
-	@cd /tmp/$(PRJ) && find . -name ".svn" -type d -exec rm -rf {} \;
+	@./.tools/nsvn.py -F /tmp/$(PRJ)
 
 	@echo "> zipping"
 	cd /tmp/$(PRJ)_sources && zip -r $(PRJ).zip $(PRJ) -x *.svn* *.so *.o *.os *html* *.old*
@@ -63,7 +63,7 @@ deb:
 	@mkdir /tmp/$(PRJ)
 	@cp -r packages/debian /tmp/$(PRJ)
 	@echo "> removing .svn"
-	@cd /tmp/$(PRJ) && find . -name ".svn" -type d -exec rm -rf {} \;
+	@./.tools/nsvn.py -F /tmp/$(PRJ)
 
 	
 	@echo "> cloning required files"
@@ -82,8 +82,22 @@ deb:
 	@./.tools/adjust_version.py $(VERSION) $(UPREFIX)/include/epapi.h $(UPREFIX)/lib/pkgconfig/epapi.pc
 	@./.tools/adjust_version.py $(VERSION) $(CTLFILES)
 
-	@echo "> adjusting DEBIAN control files permissions"
-	@chmod 0775 $(CTLFILES)
+	@echo "> adjusting files permissions"
+	@chmod 0755 $(CTLFILES)
+	@chmod 0755 /tmp/$(PRJ)/debian/usr/include
+	@chmod 0755 /tmp/$(PRJ)/debian/usr/lib
+	@chmod -R 0755 /tmp/$(PRJ)/debian/usr/lib/erlang/lib/$(PRJ)/ebin
+
+	@echo "> adjusting file owner & group"
+	@chown -R root /tmp/$(PRJ)
+	@chgrp -R root /tmp/$(PRJ)
+	
+	@echo "> stripping binaries & libraries"
+	@strip --strip-unneeded /tmp/$(PRJ)/debian/usr/lib/erlang/lib/$(PRJ)/ebin/epapi_loop_drv_debug
+	@strip --strip-unneeded /tmp/$(PRJ)/debian/usr/lib/erlang/lib/$(PRJ)/ebin/epapi_loop_drv
+	@strip --strip-unneeded /tmp/$(PRJ)/debian/usr/lib/libepapi_debug.so.$(VERSION)
+	@strip --strip-unneeded /tmp/$(PRJ)/debian/usr/lib/libepapi.so.$(VERSION)
+	
 
 	@echo "> running dpkg-deb"
 	@dpkg-deb --build /tmp/$(PRJ)/debian /tmp/$(PRJ)/$(PRJ).deb
