@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 """
 	@author: Jean-Lou Dupont
 	
@@ -25,6 +25,15 @@
 		There should be symbolic links to them from /usr/share/doc/package/examples if they are examples, 
 		and should be perfectly ordinary dpkg-handled files (not configuration files).
 
+	NOTES:
+		This script typically completes any required configuration of the package foo once foo has been unpacked 
+		from its Debian archive (".deb") file.
+		 
+		Often, 'postinst' scripts ask the user for input, and/or warn the user that if he accepts default values, 
+		he should remember to go back and re-configure that package as the situation warrants. 
+		Many 'postinst' scripts then execute any commands necessary to start or restart a service 
+		once a new package has been installed or upgraded.
+	
 """
 
 import os
@@ -52,8 +61,6 @@ if command == 'configure':
 	ddst = '/usr/lib/lib%s_debug.so' % this_lib
 	dsrc = '/usr/lib/lib%s_debug.so.%s' % (this_lib, this_version)
 	
-	hdrs = ['%s.h', '%s_msg.h', '%s_pkt.h', '%s_term.h'] 
-	
 	code = 0
 	try:
 		#KEEP THIS WAY
@@ -68,20 +75,10 @@ if command == 'configure':
 		print """EPAPI: creating symlink src[%s] ==> dst[%s]""" % (dsrc, ddst)
 		os.symlink(dsrc, ddst)
 			
-		#print """EPAPI: chmod's"""
-		#os.chmod(src,  0644)
-		#os.chmod(dst,  0644)
-		#os.chmod(dsrc, 0644)
-		#os.chmod(ddst, 0644)
-		
-		#for hdr in hdrs:
-		#	path = "/usr/include/%s" % hdr
-		#	os.chmod(path % this_lib,  0644)
 		
 	except Exception,e:
 		print "Exception [%s]" % e
 		code = 1
 	
-	os.system("ldconfig")
 	sys.exit( code )
 	
