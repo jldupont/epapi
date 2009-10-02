@@ -121,7 +121,7 @@ stop() ->
 init(ExtPrg, Param) ->
     register(?MODULE, self()),
     process_flag(trap_exit, true),
-    Port = open_port({spawn, ExtPrg++" "++Param}, [{packet, 2}, binary, exit_status]),
+    Port = open_port({spawn, ExtPrg++" "++Param}, [{packet, 4}, binary, exit_status]),
     loop(Port).
 
 loop(Port) ->
@@ -155,9 +155,10 @@ loop(Port) ->
  *  \li 0.1 - Initial Release
  *  \li 0.2 - Set the msg_type correctly
  *  \li 0.3 - Add TermHandler functionality (required by erlang-dbus)
+ *  \li 0.5 - BREAKING: packet length=4 only (required by erlang-dbus)
  *
  *
- * \note Only packet header with length field=2 is supported.
+ * \note Only packet header with length field=4 is supported.
  */
 
 #ifndef EPAPI_H_

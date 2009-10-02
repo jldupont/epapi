@@ -4,7 +4,7 @@
 -module(test).
 
 -define(TIMEOUT, 100).
--define(DRV, "epapi_loop_drv").
+-define(DRV, "/usr/bin/epapi_loop_drv").
 
 -define(TESTDATA, {test, "test", [test, "test777", 1.0, "long string to possibly detect memory leaks faster............................................................................................................................................................................."]}).
 %-define(TESTDATA, {test, "test"}).
@@ -25,8 +25,6 @@
 		 ]).
 
 go() ->
-	{ok, Cwd}=file:get_cwd(),
-	io:format("expecting driver in path: ~p~n", [Cwd]),
 	start_drv(),
 	loop().
 
@@ -58,9 +56,7 @@ loop() ->
 	
 
 start_drv() ->
-	{ok, Cwd}=file:get_cwd(),
-	Drv=Cwd++"/"++?DRV,
-	Port = open_port({spawn, Drv}, [{packet, 2}, binary, exit_status]),
+	Port = open_port({spawn, ?DRV}, [{packet, 4}, binary, exit_status]),
 	self() ! {port, Port}.	
 
 
