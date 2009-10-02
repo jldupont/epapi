@@ -170,16 +170,23 @@ PktHandler::rx(Pkt **p) {
 	DBGLOG(LOG_INFO,"PktHandler::rx - start");
 
 	//read length field first
-	int result=PktHandler::rx_exact(p, 2);
+	//int result=PktHandler::rx_exact(p, 2);
+	int result=PktHandler::rx_exact(p, 4);
 	if (result<=0) {
 		DBGLOG(LOG_ERR,"PktHandler::rx - ERROR reading length field in header");
 		last_error = EEPAPI_ERRNO; //check errno
 		return 1;
 	}
 
-	// length field on 2bytes format
+
 	unsigned char (*buf)[] = (unsigned char (*)[])(*p)->getBuf();
-	int l = ((*buf)[0] << 8) | (*buf)[1];
+
+	// length field on 2bytes format
+	//int l = ((*buf)[0] << 8) | (*buf)[1];
+
+	// length field on 4bytes format
+	int l = ((*buf)[0] << 24) |  ((*buf)[1] << 16)  |  ((*buf)[2] << 8)  |  (*buf)[3];
+
 
 	DBGLOG(LOG_INFO, "PktHandler::rx - header len[%i]", l);
 
@@ -225,7 +232,12 @@ PktHandler::tx(Pkt *p) {
 
 	//write packet length on 2bytes
 	//=============================
-	li = (buf->index >> 8) & 0xff;
+	//li = (buf->index >> 8) & 0xff;
+
+	//write packet length on 4bytes
+	//=============================
+	li = (buf->index >> 24) & 0xff;
+
 	DBGLOG(LOG_INFO, "PktHandler::tx: size byte 1: %i", (int)li);
 	result = PktHandler::tx_exact((char *)&li, 1);
 	if (result<=0) {
@@ -233,8 +245,24 @@ PktHandler::tx(Pkt *p) {
 		return 1;
 	}
 
-	li = (buf->index) & 0xff;
+	li = (buf->index >> 16) & 0xff;
 	DBGLOG(LOG_INFO, "PktHandler::tx: size byte 2: %i", (int)li);
+	result = PktHandler::tx_exact((char *)&li, 1);
+	if (result<=0) {
+		last_error = EEPAPI_ERRNO;
+		return 1;
+	}
+
+	li = (buf->index >> 8) & 0xff;
+	DBGLOG(LOG_INFO, "PktHandler::tx: size byte 3: %i", (int)li);
+	result = PktHandler::tx_exact((char *)&li, 1);
+	if (result<=0) {
+		last_error = EEPAPI_ERRNO;
+		return 1;
+	}
+
+	li = (buf->index) & 0xff;
+	DBGLOG(LOG_INFO, "PktHandler::tx: size byte 4: %i", (int)li);
 	result = PktHandler::tx_exact((char *)&li, 1);
 	if (result<=0) {
 		last_error = EEPAPI_ERRNO;
@@ -247,12 +275,6 @@ PktHandler::tx(Pkt *p) {
 		last_error = EEPAPI_ERRNO;
 		return 1;
 	}
-
-	//result = fsync(ofd);
-	//if (0==result) {
-	//	last_error = EEPAPI_ERRNO;
-	//	return 1;
-	//}
 
 	return 0;
 }//
