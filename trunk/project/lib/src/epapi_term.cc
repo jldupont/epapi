@@ -134,7 +134,7 @@ TermHandler::append(TermStruct *ts) {
 
 	case TERMTYPE_START_TUPLE:
 		DBGLOG(LOG_INFO, "TermHandler::append: TUPLE, size: %i", ts->size);
-		result=ei_x_encode_tuple_header(b, (int) ts->size);
+		result=ei_x_encode_tuple_header(b, ts->size);
 		break;
 
 	case TERMTYPE_DOUBLE:
@@ -329,8 +329,10 @@ TermHandler::iter(TermStruct *ptr) {
 		// With proper buffer initialization,
 		// NULL will be caught instead.
 	case ERL_NIL_EXT:
-		DBGLOG(LOG_INFO, "TermHandler::iter: NIL");
+		result=ei_decode_list_header((const char *)buf, &index, &size);
+		ptr->size=(long) size;
 		ptr->type=TERMTYPE_NIL;
+		DBGLOG(LOG_INFO, "TermHandler::iter: NIL, size: %i", size);
 		result=0;
 		break;
 

@@ -27,8 +27,10 @@ Pkt::Pkt() {
 
 Pkt::~Pkt() {
 
-	if (NULL!=buf)
+	if (NULL!=buf) {
 		free(buf);
+		buf=NULL;
+	}
 
 	ei_x_free(&tbuf);
 
@@ -86,10 +88,11 @@ Pkt::getBuf(int _size) {
 	if (_size>sz) {
 		DBGLOG(LOG_INFO,"Pkt::getBuf: reallocating to size: %i, current: %i", _size, sz);
 		tmp = (unsigned char *) realloc(buf, _size);
-		bzero((void *)(buf+sz), (_size-sz));
+
 		if (NULL!=tmp) {
 			sz = _size;
 			buf=(char *)tmp;
+			bzero((void *)(buf+sz), (_size-sz));
 		} else {
 			last_error = EEPAPI_REALLOC;
 		}

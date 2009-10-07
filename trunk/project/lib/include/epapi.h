@@ -222,6 +222,10 @@ loop(Port) ->
 	public:
 		static const char *errors[];
 
+		epapiBase() { last_error=0; };
+
+		virtual ~epapiBase() {};
+
 		/**
 		 * Returns a human readable string
 		 * corresponding to the last error

@@ -155,7 +155,7 @@
 <a name="l00134"></a>00134 
 <a name="l00135"></a>00135         <span class="keywordflow">case</span> <a class="code" href="epapi__term_8h.html#67edd9a04814c247a553dfde047e6f624850c20931d39911f1590e3a5b052d3f">TERMTYPE_START_TUPLE</a>:
 <a name="l00136"></a>00136                 <a class="code" href="epapi_8h.html#53b7d4ef6b5cc76b0bce2fd6fe5733ed">DBGLOG</a>(LOG_INFO, <span class="stringliteral">"TermHandler::append: TUPLE, size: %i"</span>, ts-&gt;<a class="code" href="struct__TermStruct.html#59029a4ce047a6b2c3f37286416be44e">size</a>);
-<a name="l00137"></a>00137                 result=ei_x_encode_tuple_header(b, (<span class="keywordtype">int</span>) ts-&gt;<a class="code" href="struct__TermStruct.html#59029a4ce047a6b2c3f37286416be44e">size</a>);
+<a name="l00137"></a>00137                 result=ei_x_encode_tuple_header(b, ts-&gt;<a class="code" href="struct__TermStruct.html#59029a4ce047a6b2c3f37286416be44e">size</a>);
 <a name="l00138"></a>00138                 <span class="keywordflow">break</span>;
 <a name="l00139"></a>00139 
 <a name="l00140"></a>00140         <span class="keywordflow">case</span> <a class="code" href="epapi__term_8h.html#67edd9a04814c247a553dfde047e6f629818e882921716400cbfafedb97f03b0">TERMTYPE_DOUBLE</a>:
@@ -350,43 +350,45 @@
 <a name="l00329"></a>00329                 <span class="comment">// With proper buffer initialization,</span>
 <a name="l00330"></a>00330                 <span class="comment">// NULL will be caught instead.</span>
 <a name="l00331"></a>00331         <span class="keywordflow">case</span> ERL_NIL_EXT:
-<a name="l00332"></a>00332                 <a class="code" href="epapi_8h.html#53b7d4ef6b5cc76b0bce2fd6fe5733ed">DBGLOG</a>(LOG_INFO, <span class="stringliteral">"TermHandler::iter: NIL"</span>);
-<a name="l00333"></a>00333                 ptr-&gt;<a class="code" href="struct__TermStruct.html#a366de99a6a2e9195304d5dff77ae8a6">type</a>=<a class="code" href="epapi__term_8h.html#67edd9a04814c247a553dfde047e6f62d5f8e8ea9a11f8a672b29857b6b1abf2">TERMTYPE_NIL</a>;
-<a name="l00334"></a>00334                 result=0;
-<a name="l00335"></a>00335                 <span class="keywordflow">break</span>;
-<a name="l00336"></a>00336 
-<a name="l00337"></a>00337 
-<a name="l00338"></a>00338         <span class="comment">// If the receive memory was properly zero'ed</span>
-<a name="l00339"></a>00339         <span class="comment">// (e.g. using the "clean" method on the Pkt instance)</span>
-<a name="l00340"></a>00340         <span class="keywordflow">case</span> 0:
-<a name="l00341"></a>00341                 <a class="code" href="epapi_8h.html#53b7d4ef6b5cc76b0bce2fd6fe5733ed">DBGLOG</a>(LOG_INFO, <span class="stringliteral">"TermHandler::iter: NULL"</span>);
-<a name="l00342"></a>00342                 ptr-&gt;<a class="code" href="struct__TermStruct.html#a366de99a6a2e9195304d5dff77ae8a6">type</a>=<a class="code" href="epapi__term_8h.html#67edd9a04814c247a553dfde047e6f62b6aeef6f8728297b91d5b61a59935d12">TERMTYPE_END</a>;
-<a name="l00343"></a>00343                 result=0;
-<a name="l00344"></a>00344                 <span class="keywordflow">break</span>;
-<a name="l00345"></a>00345 
-<a name="l00346"></a>00346         <span class="comment">// Unsupported types</span>
-<a name="l00347"></a>00347         <span class="comment">// ^^^^^^^^^^^^^^^^^</span>
-<a name="l00348"></a>00348         <span class="keywordflow">case</span> ERL_REFERENCE_EXT:
-<a name="l00349"></a>00349         <span class="keywordflow">case</span> ERL_NEW_REFERENCE_EXT:
-<a name="l00350"></a>00350         <span class="keywordflow">case</span> ERL_PORT_EXT:
-<a name="l00351"></a>00351         <span class="keywordflow">case</span> ERL_PID_EXT:
-<a name="l00352"></a>00352         <span class="keywordflow">case</span> ERL_NEW_FUN_EXT:
-<a name="l00353"></a>00353         <span class="keywordflow">case</span> ERL_FUN_EXT:
-<a name="l00354"></a>00354         <span class="keywordflow">default</span>:
-<a name="l00355"></a>00355                 ptr-&gt;<a class="code" href="struct__TermStruct.html#a366de99a6a2e9195304d5dff77ae8a6">type</a>=<a class="code" href="epapi__term_8h.html#67edd9a04814c247a553dfde047e6f62ad5374f7fd14aa77f87462c0e81536c3">TERMTYPE_UNSUPPORTED</a>;
-<a name="l00356"></a>00356                 <a class="code" href="epapi_8h.html#53b7d4ef6b5cc76b0bce2fd6fe5733ed">DBGLOG</a>(LOG_ERR, <span class="stringliteral">"TermHandler::iter: UNSUPPORTED (type: %i)"</span>, ptr-&gt;<a class="code" href="struct__TermStruct.html#a366de99a6a2e9195304d5dff77ae8a6">type</a>);
-<a name="l00357"></a>00357                 result=1;
-<a name="l00358"></a>00358                 <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a>=<a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a811b51763f6c9b03dfd41b41fc1c3c79c6">EEPAPI_BADTYPE</a>;
-<a name="l00359"></a>00359                 <span class="keywordflow">break</span>;
-<a name="l00360"></a>00360         }<span class="comment">//switch</span>
-<a name="l00361"></a>00361 
-<a name="l00362"></a>00362         <a class="code" href="epapi_8h.html#53b7d4ef6b5cc76b0bce2fd6fe5733ed">DBGLOG</a>(LOG_INFO, <span class="stringliteral">"TermHandler::iter: Result: %i"</span>, result);
+<a name="l00332"></a>00332                 result=ei_decode_list_header((<span class="keyword">const</span> <span class="keywordtype">char</span> *)buf, &amp;<a class="code" href="classTermHandler.html#04331a632792b3c692bb5496a951b7c5">index</a>, &amp;size);
+<a name="l00333"></a>00333                 ptr-&gt;<a class="code" href="struct__TermStruct.html#59029a4ce047a6b2c3f37286416be44e">size</a>=(long) size;
+<a name="l00334"></a>00334                 ptr-&gt;<a class="code" href="struct__TermStruct.html#a366de99a6a2e9195304d5dff77ae8a6">type</a>=<a class="code" href="epapi__term_8h.html#67edd9a04814c247a553dfde047e6f62d5f8e8ea9a11f8a672b29857b6b1abf2">TERMTYPE_NIL</a>;
+<a name="l00335"></a>00335                 <a class="code" href="epapi_8h.html#53b7d4ef6b5cc76b0bce2fd6fe5733ed">DBGLOG</a>(LOG_INFO, <span class="stringliteral">"TermHandler::iter: NIL, size: %i"</span>, size);
+<a name="l00336"></a>00336                 result=0;
+<a name="l00337"></a>00337                 <span class="keywordflow">break</span>;
+<a name="l00338"></a>00338 
+<a name="l00339"></a>00339 
+<a name="l00340"></a>00340         <span class="comment">// If the receive memory was properly zero'ed</span>
+<a name="l00341"></a>00341         <span class="comment">// (e.g. using the "clean" method on the Pkt instance)</span>
+<a name="l00342"></a>00342         <span class="keywordflow">case</span> 0:
+<a name="l00343"></a>00343                 <a class="code" href="epapi_8h.html#53b7d4ef6b5cc76b0bce2fd6fe5733ed">DBGLOG</a>(LOG_INFO, <span class="stringliteral">"TermHandler::iter: NULL"</span>);
+<a name="l00344"></a>00344                 ptr-&gt;<a class="code" href="struct__TermStruct.html#a366de99a6a2e9195304d5dff77ae8a6">type</a>=<a class="code" href="epapi__term_8h.html#67edd9a04814c247a553dfde047e6f62b6aeef6f8728297b91d5b61a59935d12">TERMTYPE_END</a>;
+<a name="l00345"></a>00345                 result=0;
+<a name="l00346"></a>00346                 <span class="keywordflow">break</span>;
+<a name="l00347"></a>00347 
+<a name="l00348"></a>00348         <span class="comment">// Unsupported types</span>
+<a name="l00349"></a>00349         <span class="comment">// ^^^^^^^^^^^^^^^^^</span>
+<a name="l00350"></a>00350         <span class="keywordflow">case</span> ERL_REFERENCE_EXT:
+<a name="l00351"></a>00351         <span class="keywordflow">case</span> ERL_NEW_REFERENCE_EXT:
+<a name="l00352"></a>00352         <span class="keywordflow">case</span> ERL_PORT_EXT:
+<a name="l00353"></a>00353         <span class="keywordflow">case</span> ERL_PID_EXT:
+<a name="l00354"></a>00354         <span class="keywordflow">case</span> ERL_NEW_FUN_EXT:
+<a name="l00355"></a>00355         <span class="keywordflow">case</span> ERL_FUN_EXT:
+<a name="l00356"></a>00356         <span class="keywordflow">default</span>:
+<a name="l00357"></a>00357                 ptr-&gt;<a class="code" href="struct__TermStruct.html#a366de99a6a2e9195304d5dff77ae8a6">type</a>=<a class="code" href="epapi__term_8h.html#67edd9a04814c247a553dfde047e6f62ad5374f7fd14aa77f87462c0e81536c3">TERMTYPE_UNSUPPORTED</a>;
+<a name="l00358"></a>00358                 <a class="code" href="epapi_8h.html#53b7d4ef6b5cc76b0bce2fd6fe5733ed">DBGLOG</a>(LOG_ERR, <span class="stringliteral">"TermHandler::iter: UNSUPPORTED (type: %i)"</span>, ptr-&gt;<a class="code" href="struct__TermStruct.html#a366de99a6a2e9195304d5dff77ae8a6">type</a>);
+<a name="l00359"></a>00359                 result=1;
+<a name="l00360"></a>00360                 <a class="code" href="classepapiBase.html#0fd4bec3b99f54e47869b7942cd0d363">last_error</a>=<a class="code" href="epapi_8h.html#9bed1b53fcb36146ef95dbe001370a811b51763f6c9b03dfd41b41fc1c3c79c6">EEPAPI_BADTYPE</a>;
+<a name="l00361"></a>00361                 <span class="keywordflow">break</span>;
+<a name="l00362"></a>00362         }<span class="comment">//switch</span>
 <a name="l00363"></a>00363 
-<a name="l00364"></a>00364         <span class="keywordflow">return</span> result;
-<a name="l00365"></a>00365 }<span class="comment">//</span>
-<a name="l00366"></a>00366 
+<a name="l00364"></a>00364         <a class="code" href="epapi_8h.html#53b7d4ef6b5cc76b0bce2fd6fe5733ed">DBGLOG</a>(LOG_INFO, <span class="stringliteral">"TermHandler::iter: Result: %i"</span>, result);
+<a name="l00365"></a>00365 
+<a name="l00366"></a>00366         <span class="keywordflow">return</span> result;
+<a name="l00367"></a>00367 }<span class="comment">//</span>
+<a name="l00368"></a>00368 
 </pre></div></div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Thu Oct 1 06:39:41 2009 for EPAPI by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Wed Oct 7 19:05:14 2009 for EPAPI by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.8 </small></address>
 </body>
