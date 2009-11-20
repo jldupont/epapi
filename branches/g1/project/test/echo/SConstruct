@@ -1,0 +1,16 @@
+"""
+scons build file
+
+	p
+
+@author: Jean-Lou Dupont
+"""
+
+env = Environment()
+
+libs=['ei','epapi_debug']
+pr = env.Program('decho', Glob("src/*.cc"), LIBS=libs )	
+Default(pr)
+
+env.Install('/tmp', 'decho')
+env.Alias('install', '/tmp/decho')

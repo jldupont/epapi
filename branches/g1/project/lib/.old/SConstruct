@@ -1,0 +1,25 @@
+"""
+scons file for building & installing epapi from sources 
+
+@author: Jean-Lou Dupont
+"""
+
+env = Environment(CPPPATH="#include")
+
+libs=['ei',]
+pr = env.SharedLibrary('epapi', Glob("src/*.cc"), LIBS=libs )
+Default(pr)
+
+env.Install('/usr/lib',     '#libepapi.so')	
+env.Install('/usr/include', '#lib/include/epapi.h')
+env.Alias('install',        '/usr/lib')
+
+if 'install' in COMMAND_LINE_TARGETS:
+	import shutil
+	
+	print "scons: installing 'epapi.h' in /usr/include"
+	shutil.copy("./include/epapi.h", "/usr/include")
+	
+	import os
+	os.chmod("/usr/lib/libepapi.so", mode=0644)
+	os.chmod("/usr/include/epapi.h", mode=0644)

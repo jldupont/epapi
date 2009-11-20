@@ -1,0 +1,10 @@
+Package: epapi
+Version: $version
+Priority: optional
+Architecture: i386
+Section: devel
+Depends: python (>= 2.5), dbus (>= 1.2.12)
+Maintainer: Jean-Lou Dupont <epapi@jldupont.com>
+Description: Erlang Port driver API shared library
+ EPAPI is a shared library for implementing C/C++ port driver clients.
+ .

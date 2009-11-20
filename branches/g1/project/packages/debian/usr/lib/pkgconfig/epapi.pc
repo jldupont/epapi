@@ -1,0 +1,10 @@
+prefix=/usr
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: epapi
+Description: Erlang Port API library
+URL: http://epapi.googlecode.com/
+Version: $version
+Libs: -lei  
+Cflags: -I${includedir}

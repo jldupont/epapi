@@ -1,0 +1,84 @@
+#!/usr/bin/python
+"""
+	@author: Jean-Lou Dupont
+	
+	from: http://www.debian.org/doc/debian-policy/ch-maintainerscripts.html
+	Cases:
+	
+		postinst configure most-recently-configured-version
+	
+		old-postinst abort-upgrade new-version
+		
+		conflictor's-postinst abort-remove in-favour package new-version
+		
+		postinst abort-remove
+		
+		deconfigured's-postinst abort-deconfigure in-favour failed-install-package version [removing conflicting-package version]
+		
+		
+	Policy 10.7.3
+	
+		A common practice is to create a script called package-configure and have the package's postinst call it 
+		if and only if the configuration file does not already exist. 
+		In certain cases it is useful for there to be an example or template file which the maintainer scripts use. 
+		Such files should be in /usr/share/package or /usr/lib/package (depending on whether they are architecture-independent or not). 
+		There should be symbolic links to them from /usr/share/doc/package/examples if they are examples, 
+		and should be perfectly ordinary dpkg-handled files (not configuration files).
+
+	NOTES:
+		This script typically completes any required configuration of the package foo once foo has been unpacked 
+		from its Debian archive (".deb") file.
+		 
+		Often, 'postinst' scripts ask the user for input, and/or warn the user that if he accepts default values, 
+		he should remember to go back and re-configure that package as the situation warrants. 
+		Many 'postinst' scripts then execute any commands necessary to start or restart a service 
+		once a new package has been installed or upgraded.
+	
+"""
+
+import os
+import sys
+
+this_lib     = "epapi"
+this_version = "$version"
+
+command = sys.argv[1]
+version = sys.argv[2]
+cwd     = os.getcwd()
+
+print "EPAPI: postinst: command[%s] configured version [%s] this version[%s]" % (command, version, this_version)
+
+
+if command == 'configure':
+
+	#configured version
+	cv  = '/usr/lib/lib%s.so.%s' % (this_lib, version)
+	cvd = '/usr/lib/lib%s_debug.so.%s' % (this_lib, version)
+
+	dst = '/usr/lib/lib%s.so' % this_lib
+	src = '/usr/lib/lib%s.so.%s' % (this_lib, this_version)
+	
+	ddst = '/usr/lib/lib%s_debug.so' % this_lib
+	dsrc = '/usr/lib/lib%s_debug.so.%s' % (this_lib, this_version)
+	
+	code = 0
+	try:
+		#KEEP THIS WAY
+		try:    os.remove(dst)
+		except: pass
+		try:    os.remove(ddst)
+		except: pass
+
+		print """EPAPI: creating symlink src[%s] ==> dst[%s]""" % (src, dst)
+		os.symlink(src,  dst)
+		
+		print """EPAPI: creating symlink src[%s] ==> dst[%s]""" % (dsrc, ddst)
+		os.symlink(dsrc, ddst)
+			
+		
+	except Exception,e:
+		print "Exception [%s]" % e
+		code = 1
+	
+	sys.exit( code )
+	
