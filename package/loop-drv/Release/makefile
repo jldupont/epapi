@@ -44,7 +44,7 @@ all: epapi_loop_drv
 epapi_loop_drv: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++ -L"/home/jldupont/workspace/epapi/trunk/project/lib/Release" -o"epapi_loop_drv" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -L"../../lib/Release" -o"epapi_loop_drv" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 

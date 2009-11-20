@@ -44,7 +44,7 @@ all: epapi_loop_drv_debug
 epapi_loop_drv_debug: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++ -L"/home/jldupont/workspace/epapi/trunk/project/lib/Debug" -o"epapi_loop_drv_debug" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -L"../../lib/Debug" -o"epapi_loop_drv_debug" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
