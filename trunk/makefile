@@ -21,6 +21,12 @@ deb:
 	@rsync -r --exclude=*.svn* packages/debian "/tmp/$(PRJ)/$(PRJ)-$(VERSION)"
 	@echo "Updating Version"
 	
+	
+doc:
+	@echo "Version: ${VERSION}"
+	@cd docs && doxygen
+	@./.tools/adjust_version.py $(VERSION) $(DOCMAIN) $(DOCMAIN)	
+	
 
 .PHONY: deb clean
 	
