@@ -8,7 +8,7 @@ Homepage: http://jldupont.blogspot.com/
 
 Package: epapi
 Architecture: i386
-Depends: ${misc:Depends}
+Depends: erlang-dev (>= 1:12.b.5), ${misc:Depends}
 Description: Erlang Port driver API shared library
  EPAPI is a shared library for implementing C/C++ port driver clients.
  .
