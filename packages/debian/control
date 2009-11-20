@@ -1,7 +1,7 @@
 Source: epapi
 Priority: optional
 Section: devel
-Build-Depends: debhelper (>= 7)
+Build-Depends: erlang-dev (>= 1:12.b.5), debhelper (>= 7)
 Standards-Version: 3.8.0
 Maintainer: Jean-Lou Dupont (Debian repositories) <jl@jldupont.com>
 Homepage: http://jldupont.blogspot.com/
