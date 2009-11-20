@@ -4,6 +4,10 @@
 #
 PRJ=epapi
 
+ifndef DESTDIR
+	DESTDIR=/usr/local
+endif
+
 all:
 	@make -C lib        
 	@make -C loop-drv   
@@ -15,18 +19,19 @@ clean:
 	@make -C loop-test clean
 	
 install:
-	@echo "> copying driver files in /usr/bin"
-	@cp loop-drv/Debug/epapi_loop_drv_debug  /usr/bin/epapi_loop_drv_debug
-	@cp loop-drv/Release/epapi_loop_drv      /usr/bin/epapi_loop_drv
 	
-	@echo "> copying lib files in /usr/lib"
-	@cp lib/Debug/libepapi_debug.so   /usr/lib/libepapi_debug.so
-	@cp lib/Release/libepapi.so       /usr/lib/libepapi.so
+	@echo "> installing driver files in $(DESTDIR)/bin"
+	@install -D $(CURDIR)/loop-drv/Debug/epapi_loop_drv_debug  $(DESTDIR)/bin/epapi_loop_drv_debug
+	@install -D $(CURDIR)/loop-drv/Release/epapi_loop_drv      $(DESTDIR)/bin/epapi_loop_drv
+	
+	@echo "> installing lib files in $(DESTDIR)/lib"
+	@install -D $(CURDIR)/lib/Debug/libepapi_debug.so   $(DESTDIR)/lib/libepapi_debug.so
+	@install -D $(CURDIR)/lib/Release/libepapi.so       $(DESTDIR)/lib/libepapi.so
 
-	@echo "> copying include files in /usr/include"
-	@cp lib/include/epapi.h           /usr/include/epapi.h
-	@cp lib/include/epapi_msg.h       /usr/include/epapi_msg.h
-	@cp lib/include/epapi_pkt.h       /usr/include/epapi_pkt.h
-	@cp lib/include/epapi_term.h      /usr/include/epapi_term.h
+	@echo "> installing include files in $(DESTDIR)/include"
+	@install -D $(CURDIR)/lib/include/epapi.h           $(DESTDIR)/include/epapi.h
+	@install -D $(CURDIR)/lib/include/epapi_msg.h       $(DESTDIR)/include/epapi_msg.h
+	@install -D $(CURDIR)/lib/include/epapi_pkt.h       $(DESTDIR)/include/epapi_pkt.h
+	@install -D $(CURDIR)/lib/include/epapi_term.h      $(DESTDIR)/include/epapi_term.h
 	
 .PHONY: all clean install
