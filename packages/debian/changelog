@@ -1,6 +1,5 @@
-epapi (0.7-0jldupont1~jaunty2)  jaunty; urgency=low
+epapi (0.7-0jldupont1~_DIST_2)  _DIST_; urgency=low
 
-  NMU
   * repackaging with primary key.
  
  -- Jean-Lou Dupont <jl@jldupont.com>  Sat, 21 Nov 2009 07:17:00 -0500
